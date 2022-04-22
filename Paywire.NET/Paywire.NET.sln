@@ -5,6 +5,8 @@ VisualStudioVersion = 17.2.32414.248
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Paywire.NET", "Paywire.NET.csproj", "{770844D0-D77D-4FE5-AD60-578E2D6281DC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Paywire.NET.Tests", "..\Paywire.NET.Tests\Paywire.NET.Tests.csproj", "{ECF75BC4-0F29-4D47-8CA2-FF0703B985B8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{770844D0-D77D-4FE5-AD60-578E2D6281DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{770844D0-D77D-4FE5-AD60-578E2D6281DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{770844D0-D77D-4FE5-AD60-578E2D6281DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ECF75BC4-0F29-4D47-8CA2-FF0703B985B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECF75BC4-0F29-4D47-8CA2-FF0703B985B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECF75BC4-0F29-4D47-8CA2-FF0703B985B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECF75BC4-0F29-4D47-8CA2-FF0703B985B8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

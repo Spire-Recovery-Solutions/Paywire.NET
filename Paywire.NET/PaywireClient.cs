@@ -1,4 +1,6 @@
-﻿using RestSharp;
+﻿using System.Xml.Serialization;
+using RestSharp;
+using RestSharp.Serializers.Xml;
 
 namespace Paywire.NET
 {
@@ -8,7 +10,6 @@ namespace Paywire.NET
         private string _endpointUrl;
         private RestClient _restClient;
         private readonly RestClientOptions _restClientOptions;
-        private readonly TransactionHeader _transactionHeader;
 
         public PaywireClient(PaywireClientOptions options)
         {
@@ -18,24 +19,25 @@ namespace Paywire.NET
             {
                 ThrowOnAnyError = true,
                 ThrowOnDeserializationError = true,
-                Timeout = 2000
+                Timeout = 20000,
+
             };
             _restClient = new RestClient(_restClientOptions);
-            _transactionHeader = new TransactionHeader()
-            {
-                PWCLIENTID = options.AuthenticationClientId, PWKEY = options.AuthenticationKey,
-                PWUSER = options.AuthenticationUsername, PWPASS = options.AuthenticationPassword
-            };
         }
 
-        public async Task<RestResponse> Test(BasePaymentRequest input)
+        public async Task<BasePaywireResponse?> SendRequest(BasePaywireRequest input)
         {
+            input.TransactionHeader.PWCLIENTID = _options.AuthenticationClientId;
+            input.TransactionHeader.PWUSER = _options.AuthenticationUsername;
+            input.TransactionHeader.PWKEY = _options.AuthenticationKey;
+            input.TransactionHeader.PWPASS = _options.AuthenticationPassword;
+
             var request = new RestRequest("/API/pwapi", Method.Post);
             request.AddHeader("Content-Type", "text/xml");
             request.AddHeader("Content-Type", "text/xml");
             request.AddXmlBody(input);
 
-            var response = await _restClient.PostAsync(request);
+            var response = await _restClient.PostAsync<GetAuthTokenResponse>(request);
             return response;
         }
         
@@ -44,13 +46,15 @@ namespace Paywire.NET
         {
             return endpoint switch
             {
-                PaywireEndpoint.Staging => "https://dbstage1.paywire.com",
+                PaywireEndpoint.Staging => 
+                    "https://a7f8d8c59328.ngrok.io",
+                    //"https://dbstage1.paywire.com",
                 PaywireEndpoint.Production => "https://dbtranz.paywire.com",
                 _ => throw new ArgumentOutOfRangeException(nameof(endpoint), endpoint, null)
             };
         }
     }
-
+    
     public class PaywireClientOptions
     {
         public PaywireEndpoint Endpoint { get; set; }
@@ -66,6 +70,7 @@ namespace Paywire.NET
         Production //Production    https://dbtranz.paywire.com
     }
 
+    [XmlType("TRANSACTIONHEADER")]
     public class TransactionHeader
     {
         public string PWCLIENTID { get; set; }
@@ -75,16 +80,36 @@ namespace Paywire.NET
         public string PWTRANSACTIONTYPE { get; set; }
     }
 
-    public class BasePaymentRequest
+    public class BasePaywireRequest
     {
         public TransactionHeader TransactionHeader { get; set; }
     }
 
-    public class GetAuthTokenRequest : BasePaymentRequest
+    public class BasePaywireResponse
+    {
+        public string RESULT { get; set; }
+    }
+
+    [XmlType("PAYMENTREQUEST")]
+    public class GetAuthTokenRequest : BasePaywireRequest
     {
         public GetAuthTokenRequest()
         {
-            TransactionHeader.PWTRANSACTIONTYPE = "GETAUTHTOKEN";
+            TransactionHeader = new TransactionHeader
+            {
+                PWTRANSACTIONTYPE = "GETAUTHTOKEN"
+            };
         }
+    }
+    
+    [XmlRoot("PAYMENTRESPONSE")]
+    public class GetAuthTokenResponse : BasePaywireResponse
+    {
+
+        //[XmlElement(ElementName="PWCLIENTID")] 
+        public int PWCLIENTID { get; set; }
+
+        //[XmlElement(ElementName="AUTHTOKEN")] 
+        public string AUTHTOKEN { get; set; }
     }
 }
