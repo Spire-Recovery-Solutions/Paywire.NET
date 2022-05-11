@@ -15,7 +15,7 @@ namespace Paywire.NET.Models.Verification
         }
 
         [XmlElement("CUSTOMER")]
-        public Customer Customer { get; set; }
+        public VerificationCustomer VerificationCustomer { get; set; }
         /*
         
          * PWSALEAMOUNT	int/decimal	Amount of the transaction. [In TransactionHeader]
@@ -36,7 +36,7 @@ namespace Paywire.NET.Models.Verification
          */
     }
 
-    public class Customer
+    public class VerificationCustomer
     {
         public string REQUESTTOKEN { get; set; } = "FALSE";
         public string PWMEDIA { get; set; } = "CC";

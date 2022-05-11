@@ -51,7 +51,7 @@ namespace Paywire.NET
             return endpoint switch
             {
                 PaywireEndpoint.Staging => 
-                    //"https://53b9-72-180-100-82.ngrok.io",
+                    //"https://f7cc-72-180-100-82.ngrok.io",
                     "https://dbstage1.paywire.com",
                 PaywireEndpoint.Production => "https://dbtranz.paywire.com",
                 _ => throw new ArgumentOutOfRangeException(nameof(endpoint), endpoint, null)

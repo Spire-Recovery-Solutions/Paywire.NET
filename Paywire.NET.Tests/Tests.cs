@@ -3,6 +3,7 @@ using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using Paywire.NET.Models.GetAuthToken;
+using Paywire.NET.Models.GetConsumerFee;
 using Paywire.NET.Models.Verification;
 
 namespace Paywire.NET.Tests
@@ -34,8 +35,10 @@ namespace Paywire.NET.Tests
         {
             var response = await _client.SendRequest<VerificationResponse>(new VerificationRequest
             {
-                Customer = new Customer()
+                VerificationCustomer = new VerificationCustomer
                 {
+                    REQUESTTOKEN = "FALSE",
+                    PWMEDIA = "CC",
                     CARDNUMBER = 4761739001010267,
                     CVV2 = 999,
                     EXP_YY = "22",
@@ -46,12 +49,28 @@ namespace Paywire.NET.Tests
                     EMAIL = "john@doe.com",
                     ADDRESS1 = "123 John St",
                     ZIP = "14094",
-                    
-
                 }
             });
             Assert.True(response.RESULT == "APPROVAL");
 
+        }
+
+        [Test]
+        public async Task ConsumerFeeTest()
+        {
+            var response = await _client.SendRequest<GetConsumerFeeResponse>(new GetConsumerFeeRequest
+            {
+                ConsumerFeeCustomer = new ConsumerFeeCustomer
+                {
+                    PWMEDIA = "CC",
+                    DISABLECF = false,
+                    ADJTAXRATE = 0,
+                    //PWTOKEN = null,
+                    STATE = "TX"
+                }
+            });
+
+            Assert.True(1 == 1);
         }
     }
 }

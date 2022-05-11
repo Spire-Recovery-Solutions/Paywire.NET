@@ -14,5 +14,6 @@ public class TransactionHeader
     public string PWUSER { get; set; }
     public string PWPASS { get; set; }
     public string PWTRANSACTIONTYPE { get; set; }
+    public string PWINVOICENUMBER { get; set; }
     public double PWSALEAMOUNT { get; set; }
 }
