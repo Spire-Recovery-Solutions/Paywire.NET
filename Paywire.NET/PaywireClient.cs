@@ -1,6 +1,9 @@
 ﻿using System.Security.Cryptography.X509Certificates;
 using Paywire.NET.Models.Base;
 using Paywire.NET.Models.GetAuthToken;
+using Paywire.NET.Models.GetConsumerFee;
+using Paywire.NET.Models.Sale;
+using Paywire.NET.Models.Verification;
 using RestSharp;
 
 namespace Paywire.NET
@@ -19,17 +22,27 @@ namespace Paywire.NET
                 ThrowOnAnyError = true,
                 ThrowOnDeserializationError = true,
                 Timeout = 20000,
-
             };
             _restClient = new RestClient(restClientOptions);
         }
 
         public async Task<T?> SendRequest<T>(BasePaywireRequest request) where T : BasePaywireResponse
         {
-            request.TransactionHeader.ClientId = _paywireClientOptions.AuthenticationClientId;
+            request.TransactionHeader ??= new TransactionHeader();
+
+            request.TransactionHeader.PWCLIENTID = _paywireClientOptions.AuthenticationClientId;
             request.TransactionHeader.PWKEY = _paywireClientOptions.AuthenticationKey;
             request.TransactionHeader.PWUSER = _paywireClientOptions.AuthenticationUsername;
             request.TransactionHeader.PWPASS = _paywireClientOptions.AuthenticationPassword;
+
+            request.TransactionHeader.PWTRANSACTIONTYPE = request switch
+            {
+                GetAuthTokenRequest => PaywireTransactionType.GetAuthToken,
+                VerificationRequest => PaywireTransactionType.Verification,
+                GetConsumerFeeRequest => PaywireTransactionType.GetConsumerFee,
+                SaleRequest => PaywireTransactionType.Sale,
+                _ => request.TransactionHeader.PWTRANSACTIONTYPE
+            };
 
             var restRequest = new RestRequest("/API/pwapi", Method.Post);
 

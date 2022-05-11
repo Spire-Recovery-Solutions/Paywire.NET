@@ -6,16 +6,8 @@ namespace Paywire.NET.Models.Verification
     [XmlRoot("PAYMENTREQUEST")]
     public class VerificationRequest : BasePaywireRequest
     {
-        public VerificationRequest()
-        {
-            TransactionHeader = new TransactionHeader
-            {
-                PWTRANSACTIONTYPE = PaywireTransactionType.Verification
-            };
-        }
-
         [XmlElement("CUSTOMER")]
-        public VerificationCustomer VerificationCustomer { get; set; }
+        public Customer Customer { get; set; }
         /*
         
          * PWSALEAMOUNT	int/decimal	Amount of the transaction. [In TransactionHeader]
@@ -34,22 +26,5 @@ namespace Paywire.NET.Models.Verification
          * EMAIL		string	Account Holder's email address.
          * PRIMARYPHONE		string	Account Holder's primary phone number.
          */
-    }
-
-    public class VerificationCustomer
-    {
-        public string REQUESTTOKEN { get; set; } = "FALSE";
-        public string PWMEDIA { get; set; } = "CC";
-        public long CARDNUMBER { get; set; }
-        public string FIRSTNAME { get; set; }
-        public string LASTNAME { get; set; }
-        public string EMAIL { get; set; }
-        public string PRIMARYPHONE { get; set; }
-        public string EXP_MM { get; set; }
-        public string EXP_YY { get; set; }
-        public int CVV2 { get; set; }
-        public string ADDRESS1 { get; set; }
-        public string ZIP { get; set; }
-
     }
 }

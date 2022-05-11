@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Paywire.NET.Models.Base;
-using Paywire.NET.Models.Verification;
 
 namespace Paywire.NET.Models.GetConsumerFee
 {
@@ -15,20 +14,10 @@ namespace Paywire.NET.Models.GetConsumerFee
     [XmlRoot("PAYMENTREQUEST")]
     public class GetConsumerFeeRequest : BasePaywireRequest
     {
-        public GetConsumerFeeRequest()
-        {
-            TransactionHeader = new TransactionHeader
-            {
-                PWTRANSACTIONTYPE = PaywireTransactionType.GetConsumerFee,
-                PWSALEAMOUNT = 100.00
-            };
-        }
-
         public string PWINVOICENUMBER { get; set; }
 
         //Customer Object
-        [XmlElement("CUSTOMER")]
-        public ConsumerFeeCustomer ConsumerFeeCustomer { get; set; } // Put the shit below into this... 
+        [XmlElement("CUSTOMER")] public Customer Customer { get; set; } // Put the shit below into this... 
 
 
         /*
@@ -41,14 +30,5 @@ namespace Paywire.NET.Models.GetConsumerFee
          * PWTOKEN		                    string	    When submitted, returns customer or token details in the response.
          * STATE	            x           string	    Account Holder's state of residence. Required if configured with Convenience Fees.	
          */
-    }
-
-    public class ConsumerFeeCustomer
-    {
-        public string PWMEDIA { get; set; } = "CC";
-        public bool DISABLECF { get; set; }
-        public double ADJTAXRATE { get; set; }
-        public string PWTOKEN { get; set; }
-        public string STATE { get; set; }   
     }
 }
