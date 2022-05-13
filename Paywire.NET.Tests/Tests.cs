@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using NUnit.Framework;
+using Paywire.NET.Factories;
 using Paywire.NET.Models.Base;
 using Paywire.NET.Models.GetAuthToken;
 using Paywire.NET.Models.GetConsumerFee;
@@ -36,25 +37,9 @@ namespace Paywire.NET.Tests
         [Test]
         public async Task VerificationTest()
         {
-            var response = await _client.SendRequest<VerificationResponse>(
-                new VerificationRequest
-                {
-                    Customer = new Customer()
-                    {
-                        REQUESTTOKEN = "FALSE",
-                        PWMEDIA = "CC",
-                        CARDNUMBER = 4761739001010267,
-                        CVV2 = 999,
-                        EXP_YY = "22",
-                        EXP_MM = "07",
-                        FIRSTNAME = "John",
-                        LASTNAME = "Doe",
-                        PRIMARYPHONE = "7168675309",
-                        EMAIL = "john@doe.com",
-                        ADDRESS1 = "123 John St",
-                        ZIP = "14094",
-                    }
-                });
+            var request = PaywireRequestFactory.Verification();
+
+            var response = await _client.SendRequest<VerificationResponse>(request);
 
             Assert.True(response.RESULT == "APPROVAL");
 
@@ -85,33 +70,9 @@ namespace Paywire.NET.Tests
         [Test]
         public async Task OneTimeSaleTest()
         {
-            var response = await _client.SendRequest<SaleResponse>(
-                new SaleRequest()
-                {
-                    TransactionHeader = new TransactionHeader()
-                    {
-                        PWSALEAMOUNT = 0.00,
-                        DISABLECF = "TRUE"
-                    },
-                    Customer = new Customer()
-                    {
-                        //4111 1111 1111 1111, cvv 123, exp 12/25
-                        REQUESTTOKEN = "FALSE",
-                        PWMEDIA = "CC",
-                        CARDNUMBER = 4012301230123010,
-                        CVV2 = 123,
-                        EXP_YY = "22",
-                        EXP_MM = "07",
-                        FIRSTNAME = "CHRIS",
-                        LASTNAME = "FROST",
-                        PRIMARYPHONE = "7035551212",
-                        EMAIL = "CFFROST@EMAILADDRESS.COM",
-                        ADDRESS1 = "123",
-                        CITY = "LOCKPORT",
-                        STATE = "NY",
-                        ZIP = "55555",
-                    }
-                });
+            var request = PaywireRequestFactory.Sale();
+
+            var response = await _client.SendRequest<SaleResponse>(request);
 
             Assert.True(response.RESULT == "APPROVAL");
         }
