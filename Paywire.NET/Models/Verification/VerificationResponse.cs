@@ -11,23 +11,55 @@ namespace Paywire.NET.Models.Verification
     [XmlRoot("PAYMENTRESPONSE")]
     public class VerificationResponse : BasePaywireResponse
     {
+        /// <summary>
+        /// Batch number
+        /// </summary>
         public int BATCHID { get; set; }
 
+        /// <summary>
+        /// Authorization code associated with the transaction
+        /// </summary>
         public string AUTHCODE { get; set; }
 
+        /// <summary>
+        /// Transaction AVS code result. Refer to the AVS Codes table.
+        /// </summary>
+        /// <see cref="https://project.paywire.com/dbtranz/docs/OSBP/files/Development.html?csharp#avs-codes"/>
         public string AVSCODE { get; set; }
 
+        /// <summary>
+        /// CVV response code.
+        /// </summary>
         public string CVVCODE { get; set; }
 
+        /// <summary>
+        /// Payment method.
+        /// </summary>
         public string PAYMETH { get; set; }
 
+        /// <summary>
+        /// The Paywire Unique ID returned in the Initialize response.
+        /// </summary>
         public string PWUNIQUEID { get; set; }
 
+        /// <summary>
+        /// Payment amount.
+        /// </summary>
         public double AMOUNT { get; set; }
 
+        /// <summary>
+        /// Masked credit card number.
+        /// </summary>
         public string MACCOUNT { get; set; }
 
+        /// <summary>
+        /// Credit card type.
+        /// </summary>
         public string CCTYPE { get; set; } 
+
+        /// <summary>
+        /// Client custom ID.
+        /// </summary>
         public string PWCUSTIMID2 { get; set; }
 
         /*
