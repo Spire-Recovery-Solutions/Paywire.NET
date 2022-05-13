@@ -19,4 +19,10 @@ public class BasePaywireResponse
     /// Contains the error message.
     /// </summary>
     public string RESTEXT { get; set; }
+
+    public string PWCUSTOMERID { get; set; }
+
+    public string PWCID { get; set; }
+
+    public string PWTOKEN { get; set; }
 }

@@ -60,7 +60,7 @@ namespace Paywire.NET.Models.Verification
         /// <summary>
         /// Client custom ID.
         /// </summary>
-        public string PWCUSTIMID2 { get; set; }
+        public string PWCUSTOMID2 { get; set; }
 
         /*
          * RESULT	string	China UnionPay transaction result.	

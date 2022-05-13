@@ -1,5 +1,6 @@
 ﻿using System.Xml.Serialization;
 using Paywire.NET.Models.Base;
+using Paywire.NET.Models.GetConsumerFee;
 
 namespace Paywire.NET.Models.Sale;
 
@@ -35,4 +36,7 @@ public class SaleResponse : BasePaywireResponse
     public string AVSCODE { get; set; }
     public string CVVCODE { get; set; }
     public string RECURRING { get; set; }
+
+
+    [XmlElement("CDSUMMARY")] public ConsumerFeeSummary CDSUMMARY { get; set; }
 }           
