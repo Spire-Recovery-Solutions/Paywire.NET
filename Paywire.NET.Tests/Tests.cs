@@ -90,22 +90,26 @@ namespace Paywire.NET.Tests
                 {
                     TransactionHeader = new TransactionHeader()
                     {
-                        PWSALEAMOUNT = 125.99,
+                        PWSALEAMOUNT = 0.00,
+                        DISABLECF = "TRUE"
                     },
                     Customer = new Customer()
                     {
+                        //4111 1111 1111 1111, cvv 123, exp 12/25
                         REQUESTTOKEN = "FALSE",
                         PWMEDIA = "CC",
-                        CARDNUMBER = 4761739001010267,
-                        CVV2 = 999,
+                        CARDNUMBER = 4012301230123010,
+                        CVV2 = 123,
                         EXP_YY = "22",
                         EXP_MM = "07",
-                        FIRSTNAME = "John",
-                        LASTNAME = "Doe",
-                        PRIMARYPHONE = "7168675309",
-                        EMAIL = "john@doe.com",
-                        ADDRESS1 = "123 John St",
-                        ZIP = "14094",
+                        FIRSTNAME = "CHRIS",
+                        LASTNAME = "FROST",
+                        PRIMARYPHONE = "7035551212",
+                        EMAIL = "CFFROST@EMAILADDRESS.COM",
+                        ADDRESS1 = "123",
+                        CITY = "LOCKPORT",
+                        STATE = "NY",
+                        ZIP = "55555",
                     }
                 });
 

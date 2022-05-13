@@ -39,6 +39,9 @@ public class TransactionHeader
     public string FORCESAVETOKEN { get; set; }
     public string NONSECUREPLUS { get; set; }
     public string URL { get; set; }
+    /// <summary>
+    /// Overrides applying a Convenience Fee or Cash Discount when set to TRUE, if configured. Note that Sales Tax will also be disabled.
+    /// </summary>
     public string DISABLECF { get; set; }
 
 }
