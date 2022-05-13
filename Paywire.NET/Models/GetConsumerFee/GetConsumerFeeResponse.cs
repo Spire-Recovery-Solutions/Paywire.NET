@@ -15,7 +15,7 @@ namespace Paywire.NET.Models.GetConsumerFee
 
 
         [XmlElement("CDSUMMARY")]
-        public ConsumeFeeSummary CDSUMMARY { get; set; }
+        public ConsumerFeeSummary CDSUMMARY { get; set; }
         /*
          * Response Parameters
 Parameter	Type	Description	Options
@@ -32,88 +32,109 @@ PWINVOICENUMBER	string	The merchant's unique invoice number associated with this
     }
 
 
-    public class ConsumeFeeSummary
+    public class ConsumerFeeSummary
     {
+        /// <summary>
+        /// Name of the merchant as set in the merchant configuration.	
+        /// </summary>
         public string MERCHANTNAME { get; set; }
 
+        /// <summary>
+        /// The processor's merchant identifier.	
+        /// </summary>
         public string MID { get; set; }
 
+        /// <summary>
+        /// The type of merchant as set in the merchant configuration. A: General + Single SAP, B: Medical, C: General + Split SAP, D: Remote Check + SAP Invoices, E: Cash Discount, F: Convenience Fees
+        /// </summary>
         public string MERCHANTTYPE { get; set; }
 
+        /// <summary>
+        /// The Sales Tax rate as set in the merchant configuration or submitted in the request.	
+        /// </summary>
         public double ADJTAXRATE { get; set; }
-
+        /// <summary>
+        /// The Card Sale amount before tax and any adjustments. Relevant for Cash Discount.
+        /// </summary>
         public double CARDSALESAMOUNT { get; set; }
-
+        /// <summary>
+        /// The Adjustment amount for a Card transaction. Relevant for Cash Discount.	
+        /// </summary>
         public double CARDADJAMOUNT { get; set; }
-
+        /// <summary>
+        /// The calculated Sales Tax amount for a Card transaction. Relevant for Cash Discount.	
+        /// </summary>
         public double CARDTAXAMOUNT { get; set; }
-
+        /// <summary>
+        /// The total amount for a Card transaction after tax and any adjustments. Relevant for Cash Discount.
+        /// </summary>
         public double CARDTRANSACTIONAMOUNT { get; set; }
-
+        /// <summary>
+        /// The adjusted amount for a Card transaction before adding tax. Relevant for Cash Discount.	
+        /// </summary>
         public double CARDAMOUNTBEFORETAX { get; set; }
-
+        /// <summary>
+        /// The Cash Sale amount before tax and any adjustments. Relevant for Cash Discount.	
+        /// </summary>
         public double CASHSALESAMOUNT { get; set; }
-
+        /// <summary>
+        /// The calculated Sales Tax amount for a Cash transaction. Relevant for Cash Discount.	
+        /// </summary>
         public double CASHTAXAMOUNT { get; set; }
-
+        /// <summary>
+        /// The total amount for a Cash transaction after tax and any adjustments. Relevant for Cash Discount.	
+        /// </summary>
         public double CASHTRANSACTIONAMOUNT { get; set; }
-
+        /// <summary>
+        /// The adjusted amount for a Cash transaction before adding tax. Relevant for Cash Discount.	
+        /// </summary>
         public double CASHAMOUNTBEFORETAX { get; set; }
 
+        /// <summary>
+        /// The descriptive text set in the merchant configuration. To be displayed on the VPOS payment page.	
+        /// </summary>
         [XmlIgnore]
+        [Obsolete("The line breaks contained in the response break XML parsing.")]
         public string CDDESCRIPTIONVPOS { get; set; }
-
+        /// <summary>
+        /// The descriptive text set in the merchant config. to be displayed on the OSBP payment page.	
+        /// </summary>
         [XmlIgnore]
+        [Obsolete("The line breaks contained in the response break XML parsing.")]
         public string CDDESCRIPTIONOSBP { get; set; }
-
+        /// <summary>
+        /// ACH Account Holder full name. Returned only when ECHECK in PWMEDIA and a valid PWTOKEN are submitted in the request.	
+        /// </summary>
         public string AHNAME { get; set; }
-
+        /// <summary>
+        /// Masked Card or Account number. Returned only when a valid PWTOKEN is submitted in the request.	
+        /// </summary>
         public string MACCOUNT { get; set; }
-
+        /// <summary>
+        /// U.S. Bank Account routing number. Returned only when ECHECK in PWMEDIA and a valid PWTOKEN are submitted in the request.	
+        /// </summary>
         public string ROUTINGNUMBER { get; set; }
-
+        /// <summary>
+        /// Type of Bank Account. Returned only when ECHECK in PWMEDIA and a valid PWTOKEN are submitted in the request.
+        /// </summary>
         public string BANKACCTTYPE { get; set; }
-
+        /// <summary>
+        /// Expiry month. Returned only when CC in PWMEDIA and a valid PWTOKEN are submitted in the request.	
+        /// </summary>
         public string EXP_MM { get; set; }
-
+        /// <summary>
+        /// Card Expiry year. Returned only when CC in PWMEDIA and a valid PWTOKEN are submitted in the request.
+        /// </summary>
         public string EXP_YY { get; set; }
-
+        /// <summary>
+        /// 	Account Holder first name. Returned only when a valid PWTOKEN is submitted in the request.	
+        /// </summary>
         public string FIRSTNAME { get; set; }
-
+        /// <summary>
+        /// Account Holder last name. Returned only when a valid PWTOKEN is submitted in the request.
+        /// </summary>
         public string LASTNAME { get; set; }
 
-        /*
-         *   // CDSUMMARY ELEMENT
-MERCHANTNAME	string	Name of the merchant as set in the merchant configuration.	
-MID	string	The processor's merchant identifier.	
-MERCHANTTYPE	string	The type of merchant as set in the merchant configuration.
-        A: General + Single SAP,
-        B: Medical,
-        C: General + Split SAP,
-        D: Remote Check + SAP Invoices,
-        E: Cash Discount,
-        F: Convenience Fees
-ADJTAXRATE	decimal	The Sales Tax rate as set in the merchant configuration or submitted in the request.	
-CARDSALESAMOUNT	decimal	The Card Sale amount before tax and any adjustments. Relevant for Cash Discount.	
-CARDADJAMOUNT	decimal	The Adjustment amount for a Card transaction. Relevant for Cash Discount.	
-CARDTAXAMOUNT	decimal	The calculated Sales Tax amount for a Card transaction. Relevant for Cash Discount.	
-CARDTRANSACTIONAMOUNT	decimal	The total amount for a Card transaction after tax and any adjustments. Relevant for Cash Discount.	
-CARDAMOUNTBEFORETAX	decimal	The adjusted amount for a Card transaction before adding tax. Relevant for Cash Discount.	
-CASHSALESAMOUNT	decimal	The Cash Sale amount before tax and any adjustments. Relevant for Cash Discount.	
-CASHTAXAMOUNT	decimal	The calculated Sales Tax amount for a Cash transaction. Relevant for Cash Discount.	
-CASHTRANSACTIONAMOUNT	decimal	The total amount for a Cash transaction after tax and any adjustments. Relevant for Cash Discount.	
-CASHAMOUNTBEFORETAX	decimal	The adjusted amount for a Cash transaction before adding tax. Relevant for Cash Discount.	
-CDDESCRIPTIONVPOS	string	The descriptive text set in the merchant configuration. To be displayed on the VPOS payment page.	
-CDDESCRIPTIONOSBP	string	The descriptive text set in the merchant config. to be displayed on the OSBP payment page.	
-AHNAME	string	ACH Account Holder full name. Returned only when ECHECK in PWMEDIA and a valid PWTOKEN are submitted in the request.	
-MACCOUNT	string	Masked Card or Account number. Returned only when a valid PWTOKEN is submitted in the request.	
-ROUTINGNUMBER	string	U.S. Bank Account routing number. Returned only when ECHECK in PWMEDIA and a valid PWTOKEN are submitted in the request.	
-BANKACCTTYPE	string	Type of Bank Account. Returned only when ECHECK in PWMEDIA and a valid PWTOKEN are submitted in the request.	CHECKING, SAVINGS
-EXP_MM	string	Card Expiry month. Returned only when CC in PWMEDIA and a valid PWTOKEN are submitted in the request.	
-EXP_YY	string	Card Expiry year. Returned only when CC in PWMEDIA and a valid PWTOKEN are submitted in the request.	
-FIRSTNAME	string	Account Holder first name. Returned only when a valid PWTOKEN is submitted in the request.	
-LASTNAME	string	Account Holder last name. Returned only when a valid PWTOKEN is submitted in the request.
-         */
     }
 
 }
