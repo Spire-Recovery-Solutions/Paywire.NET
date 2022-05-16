@@ -3,7 +3,8 @@
 public class BasePaywireResponse
 {
     /// <summary>
-    /// Status for the request.	SUCCESS, ERROR
+    /// Status for the request.	APPROVAL, DECLINED, ERROR, SUCCESS, CAPTURED, CHARGEBACK
+
     /// </summary>
     public string RESULT { get; set; }
     /// <summary>
