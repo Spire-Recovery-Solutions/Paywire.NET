@@ -52,7 +52,7 @@ namespace Paywire.NET.Factories
                     REQUESTTOKEN = "TRUE",
                     PWMEDIA = "CC",
                     CARDNUMBER = 4012301230123010,
-                    CVV2 = 123,
+                    CVV2 = "123",
                     EXP_YY = "22",
                     EXP_MM = "07",
                     FIRSTNAME = "CHRIS",
@@ -88,7 +88,7 @@ namespace Paywire.NET.Factories
                     REQUESTTOKEN = "TRUE",
                     PWMEDIA = "CC",
                     CARDNUMBER = 4761739001010267,
-                    CVV2 = 999,
+                    CVV2 = "999",
                     EXP_YY = "22",
                     EXP_MM = "07",
                     FIRSTNAME = "John",
@@ -130,15 +130,16 @@ namespace Paywire.NET.Factories
                 TransactionHeader = new TransactionHeader()
                 {
                     PWSALEAMOUNT = 0.01,
-                    DISABLECF = "FALSE"
+                    DISABLECF = "FALSE",
+                    PWINVOICENUMBER = "TEST001"
                 },
                 Customer = new Customer()
                 {
                     //4111 1111 1111 1111, cvv 123, exp 12/25
-                    REQUESTTOKEN = "TRUE",
+                    REQUESTTOKEN = "FALSE",
                     PWMEDIA = "CC",
                     CARDNUMBER = 4111111111111111,
-                    CVV2 = 123,
+                    CVV2 = "123",
                     EXP_YY = "33",
                     EXP_MM = "11",
                     FIRSTNAME = "CHRIS",
