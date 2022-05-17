@@ -1,12 +1,15 @@
-﻿namespace Paywire.NET.Models.Base;
+﻿using System.Xml.Serialization;
+
+namespace Paywire.NET.Models.Base;
 
 public class BasePaywireResponse
 {
     /// <summary>
     /// Status for the request.	APPROVAL, DECLINED, ERROR, SUCCESS, CAPTURED, CHARGEBACK
-
     /// </summary>
-    public string RESULT { get; set; }
+    [XmlElement("RESULT")]
+    public PaywireResult Result { get; set; }
+
     /// <summary>
     /// Paywire-generated unique merchant identifier.	
     /// </summary>

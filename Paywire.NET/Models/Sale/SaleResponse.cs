@@ -40,24 +40,6 @@ public class SaleResponse : BasePaywireResponse
     /// The card type used. This field is blank if PAYMETH is E.
     /// </summary>
     public string CCTYPE { get; set; }
-
-
-    /// <summary>
-    /// ID associated with merchant
-    /// </summary>
-    public string PWCLIENTID { get; set; }
-    /// <summary>
-    /// The Merchant's unique invoice number submitted in the transaction request.
-    /// </summary>
-    public string PWINVOICENUMBER { get; set; }
-    /// <summary>
-    /// The result of the transaction: APPROVAL, SUCCESS, DECLINED, ERROR.
-    /// </summary>
-    public string RESULT { get; set; }
-    /// <summary>
-    /// Contains the error message.
-    /// </summary>
-    public string RESTEXT { get; set; }
     /// <summary>
     /// 'Consumer Fee'-enabled merchants only: The description for the service adjustment as set in the merchant configuration.
     /// </summary>
@@ -90,10 +72,6 @@ public class SaleResponse : BasePaywireResponse
     /// Authorization code associated with the transaction, if applicable.
     /// </summary>
     public string AUTHCODE { get; set; }
-    /// <summary>
-    /// Paywire Customer Identifier associated with a transaction. If the original request was to create a customer, then this will be the new customer ID.
-    /// </summary>
-    public string PWCID { get; set; }
     /// <summary>
     /// Transaction AVS code result. Refer to AVS Codes table.
     /// </summary>

@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 using Paywire.NET.Models.Base;
+using Paywire.NET.Models.BatchInquiry;
 using Paywire.NET.Models.GetAuthToken;
 using Paywire.NET.Models.GetConsumerFee;
 using Paywire.NET.Models.Sale;
+using Paywire.NET.Models.SearchTransactions;
 using Paywire.NET.Models.Verification;
 
 namespace Paywire.NET.Factories
@@ -104,18 +107,42 @@ namespace Paywire.NET.Factories
         /// <summary>
         /// Query the database for transaction results.
         /// </summary>
-        public static void SearchTransactions()
+        public static SearchTransactionsRequest SearchTransactions()
         {
-
+            return new SearchTransactionsRequest()
+            {
+                TransactionHeader = new TransactionHeader()
+                {
+                    XOPTION = "TRUE"
+                },
+                SearchCondition = new SearchCondition()
+                {
+                    DateFrom = DateTime.Now.AddDays(-1),   //COND_DATEFROM			DateTime	Search date range from.	Date Format yyyy-mm-dd HH:MM.
+                    DateTo = DateTime.Now.AddDays(1),      //COND_DATETO			DateTime	Search date range to.	Date Format yyyy-mm-dd HH:MM.
+                    COND_PWCID = "",                       //COND_PWCID			    string	    Paywire Customer Identifier. When submitted, the created token will be associated with this customer.
+                    COND_USERNAME = "",                    //COND_USERNAME			String	    Search by the USERNAME initiating the transaction.	
+                    COND_UNIQUEID = "",                    //COND_UNIQUEID			int	        Search by transaction Unique ID returned by the gateway.	
+                    COND_BATCHID = "",                     //COND_BATCHID			string	    Search by Batch ID returned by the gateway.	
+                    COND_TRANSAMT = "",                    //COND_TRANSAMT			int/decimal	Search by transaction amount.	
+                    COND_TRANSTYPE = "ALL",                //COND_TRANSTYPE         string	    Search by transaction type.	Fixed options: ALL, SALE, CREDIT, VOID
+                    COND_RESULT = "",                      //COND_RESULT			string	    Search by transaction result returned by the gateway.	See Transaction Result values.
+                    COND_CARDTYPE = "",                    //COND_CARDTYPE			string	    Search by the card type used for the transaction.	Fixed options: ALL, VISA, MC, DISC, AMEX, ACH, REMOTE
+                    COND_LASTFOUR = "",                    //COND_LASTFOUR			int	        Search by the last four digits of the account or card used in the transaction searched.	4/4
+                    COND_CUSTOMERID = "",                  //COND_CUSTOMERID		string	    Search by the Paywire customer identifier returned when creating a token.	
+                    COND_RECURRINGID = "",                 //COND_RECURRINGID		int	        Search by the periodic identifier returned when creating a periodic plan.	
+                    COND_PWINVOICENUMBER = "",             //COND_PWINVOICENUMBER	string	    Search by the merchant-submitted or Paywire-generated unique invoice number associated with the transaction.	0/20, Alphanumeric
+                    COND_PWCUSTOMID1 = "",                 //COND_PWCUSTOMID1		string	    Search by the custom third-party identifier associated with the transaction.	
+                }   
+            };
 
         }
 
         /// <summary>
         /// Get the current open batch summary.
         /// </summary>
-        public static void BatchInquiry()
+        public static BatchInquiryRequest BatchInquiry()
         {
-
+            return new BatchInquiryRequest();
         }
 
 
@@ -123,7 +150,7 @@ namespace Paywire.NET.Factories
         /// Charge a card or bank account (if applicable).
         /// </summary>
         /// <returns></returns>
-        public static SaleRequest Sale()
+        public static SaleRequest CardSale()
         {
             return new SaleRequest()
             {
@@ -133,10 +160,11 @@ namespace Paywire.NET.Factories
                     DISABLECF = "FALSE",
                     PWINVOICENUMBER = "TEST001"
                 },
-                Customer = new Customer()
+                Customer = new Customer
                 {
                     //4111 1111 1111 1111, cvv 123, exp 12/25
                     REQUESTTOKEN = "FALSE",
+                    DESCRIPTION = "Description",
                     PWMEDIA = "CC",
                     CARDNUMBER = 4111111111111111,
                     CVV2 = "123",
@@ -147,8 +175,10 @@ namespace Paywire.NET.Factories
                     PRIMARYPHONE = "7035551212",
                     EMAIL = "CFFROST@EMAILADDRESS.COM",
                     ADDRESS1 = "123",
+                    ADDRESS2 = "",
                     CITY = "LOCKPORT",
                     STATE = "NY",
+                    COUNTRY = "US",
                     ZIP = "55555",
                 }
             };

@@ -115,11 +115,8 @@ public class Customer
     /// The unique ID assigned by Paywire associated with this transaction.
     /// </summary>
     public string PWUNIQUEID { get; set; }
-    /// <summary>
-    /// The SMS code returned in the Initialize response.	
-    /// </summary>
-    public string SECURECODE { get; set; }
-    
+
+
     public string POSINDICATOR { get; set; }
 
     /// <summary>

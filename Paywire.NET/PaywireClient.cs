@@ -1,8 +1,10 @@
 ﻿using System.Security.Cryptography.X509Certificates;
 using Paywire.NET.Models.Base;
+using Paywire.NET.Models.BatchInquiry;
 using Paywire.NET.Models.GetAuthToken;
 using Paywire.NET.Models.GetConsumerFee;
 using Paywire.NET.Models.Sale;
+using Paywire.NET.Models.SearchTransactions;
 using Paywire.NET.Models.Verification;
 using RestSharp;
 
@@ -41,6 +43,8 @@ namespace Paywire.NET
                 VerificationRequest => PaywireTransactionType.Verification,
                 GetConsumerFeeRequest => PaywireTransactionType.GetConsumerFee,
                 SaleRequest => PaywireTransactionType.Sale,
+                BatchInquiryRequest => PaywireTransactionType.BatchInquiry,
+                SearchTransactionsRequest => PaywireTransactionType.SearchTransactions,
                 _ => request.TransactionHeader.PWTRANSACTIONTYPE
             };
 
