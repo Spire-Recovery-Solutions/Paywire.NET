@@ -25,10 +25,11 @@ public class TransactionHeader
     /// The Authentication Token to be used when calling the OSBP.
     /// </summary>
     public string AUTHTOKEN { get; set; }
+
     /// <summary>
     /// The Paywire Gateway version number.
     /// </summary>
-    public string PWVERSION { get; set; }
+    public string PWVERSION { get; set; } = "3";
     /// <summary>
     /// Defines what transaction to process.
     /// </summary>

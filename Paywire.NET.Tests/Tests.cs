@@ -1,10 +1,13 @@
+using System.Diagnostics;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using Paywire.NET.Factories;
 using Paywire.NET.Models.Base;
+using Paywire.NET.Models.BatchInquiry;
 using Paywire.NET.Models.GetAuthToken;
 using Paywire.NET.Models.GetConsumerFee;
 using Paywire.NET.Models.Sale;
+using Paywire.NET.Models.SearchTransactions;
 using Paywire.NET.Models.Verification;
 
 namespace Paywire.NET.Tests
@@ -58,40 +61,43 @@ namespace Paywire.NET.Tests
         [Test]
         public async Task OneTimeSaleTest()
         {
-            var request = PaywireRequestFactory.CardSale();
-            //return new SaleRequest()
-            //{
-            //    TransactionHeader = new TransactionHeader()
-            //    {
-            //        PWSALEAMOUNT = 0.01,
-            //        DISABLECF = "FALSE",
-            //        PWINVOICENUMBER = "TEST001"
-            //    },
-            //    Customer = new Customer()
-            //    {
-            //        //4111 1111 1111 1111, cvv 123, exp 12/25
-            //        REQUESTTOKEN = "FALSE",
-            //        PWMEDIA = "CC",
-            //        CARDNUMBER = 4111111111111111,
-            //        CVV2 = "123",
-            //        EXP_YY = "33",
-            //        EXP_MM = "11",
-            //        FIRSTNAME = "CHRIS",
-            //        LASTNAME = "FROSTY",
-            //        PRIMARYPHONE = "7035551212",
-            //        EMAIL = "CFFROST@EMAILADDRESS.COM",
-            //        ADDRESS1 = "123",
-            //        CITY = "LOCKPORT",
-            //        STATE = "NY",
-            //        ZIP = "55555",
-            //    }
-            //};
+            var approvalRequest = PaywireRequestFactory.CardSale();
+            var nsfRequest = new SaleRequest()
+            {
+                TransactionHeader = new TransactionHeader()
+                {
+                    PWSALEAMOUNT = 0.51,
+                    DISABLECF = "FALSE",
+                    //PWINVOICENUMBER = "TEST001"
+                },
+                Customer = new Customer()
+                {
+                    //4111 1111 1111 1111, cvv 123, exp 12/25
+                    REQUESTTOKEN = "FALSE",
+                    PWMEDIA = "CC",
+                    CARDNUMBER = 4012301230123010,
+                    CVV2 = "123",
+                    EXP_YY = "33",
+                    EXP_MM = "11",
+                    FIRSTNAME = "CHRIS",
+                    LASTNAME = "FROSTY",
+                    PRIMARYPHONE = "7035551212",
+                    EMAIL = "CFFROST@EMAILADDRESS.COM",
+                    ADDRESS1 = "123",
+                    CITY = "LOCKPORT",
+                    STATE = "NY",
+                    ZIP = "55555",
+                }
+            };
             var sw = Stopwatch.StartNew();
-            var response = await _client.SendRequest<SaleResponse>(request);
+            var approval = await _client.SendRequest<SaleResponse>(approvalRequest);
+            var decline = await _client.SendRequest<SaleResponse>(nsfRequest);
+
             sw.Stop();
             var elapsed = sw.ElapsedMilliseconds;
 
-            Assert.True(response.Result == PaywireResult.Approval);
+            Assert.True(approval.Result == PaywireResult.Approval);
+            Assert.True(decline.Result == PaywireResult.Declined);
         }
 
 

@@ -152,7 +152,7 @@ namespace Paywire.NET.Factories
         /// <returns></returns>
         public static SaleRequest CardSale()
         {
-            return new SaleRequest()
+            return new SaleRequest
             {
                 TransactionHeader = new TransactionHeader()
                 {
