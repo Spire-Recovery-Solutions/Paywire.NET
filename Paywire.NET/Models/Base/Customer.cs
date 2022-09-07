@@ -70,7 +70,7 @@ public class Customer
     /// <summary>
     /// Card Verification Value. Required only when CC is submitted in PWMEDIA.	
     /// </summary>
-    public string CVV2 { get; set; }
+    public int CVV2 { get; set; }
     /// <summary>
     /// Type of Bank Account to process payment with. Required only when ECHECK is submitted in PWMEDIA.	CHECKING, SAVINGS
     /// </summary>
@@ -131,6 +131,10 @@ public class Customer
     /// Available for PWCTRANSTYPE = 2 or 4, default is TRUE, Set to FALSE to allow the customer to decide to save the token or not.	
     /// </summary>
     public string FORCESAVETOKEN { get; set; }
+    /// <summary>
+    /// For store token - if TRUE will create a customer in the Paywire Vault asociated with the returned token and return the corresponding PWCID.
+    /// </summary>
+    public string ADDCUSTOMER { get; set; }
 
 
 }

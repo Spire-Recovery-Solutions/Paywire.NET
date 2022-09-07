@@ -29,7 +29,7 @@ public class TransactionHeader
     /// <summary>
     /// The Paywire Gateway version number.
     /// </summary>
-    public string PWVERSION { get; set; } = "3";
+    public int PWVERSION { get; set; }
     /// <summary>
     /// Defines what transaction to process.
     /// </summary>
