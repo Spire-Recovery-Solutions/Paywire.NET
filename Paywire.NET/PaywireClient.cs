@@ -1,11 +1,16 @@
 ﻿using System.Security.Cryptography.X509Certificates;
 using Paywire.NET.Models.Base;
 using Paywire.NET.Models.BatchInquiry;
+using Paywire.NET.Models.Credit;
 using Paywire.NET.Models.GetAuthToken;
 using Paywire.NET.Models.GetConsumerFee;
+using Paywire.NET.Models.PreAuth;
 using Paywire.NET.Models.Sale;
 using Paywire.NET.Models.SearchTransactions;
+using Paywire.NET.Models.StoreToken;
+using Paywire.NET.Models.TokenSale;
 using Paywire.NET.Models.Verification;
+using Paywire.NET.Models.Void;
 using RestSharp;
 
 namespace Paywire.NET
@@ -36,6 +41,7 @@ namespace Paywire.NET
             request.TransactionHeader.PWKEY = _paywireClientOptions.AuthenticationKey;
             request.TransactionHeader.PWUSER = _paywireClientOptions.AuthenticationUsername;
             request.TransactionHeader.PWPASS = _paywireClientOptions.AuthenticationPassword;
+            request.TransactionHeader.PWVERSION = 3;
 
             request.TransactionHeader.PWTRANSACTIONTYPE = request switch
             {
@@ -45,6 +51,11 @@ namespace Paywire.NET
                 SaleRequest => PaywireTransactionType.Sale,
                 BatchInquiryRequest => PaywireTransactionType.BatchInquiry,
                 SearchTransactionsRequest => PaywireTransactionType.SearchTransactions,
+                CreditRequest => PaywireTransactionType.Credit,
+                PreAuthRequest => PaywireTransactionType.PreAuth,
+                VoidRequest => PaywireTransactionType.Void,
+                StoreTokenRequest => PaywireTransactionType.StoreToken,
+                TokenSaleRequest => PaywireTransactionType.Sale,
                 _ => request.TransactionHeader.PWTRANSACTIONTYPE
             };
 
@@ -67,11 +78,9 @@ namespace Paywire.NET
         {
             return endpoint switch
             {
-                PaywireEndpoint.Staging => 
-                    //"https://f7cc-72-180-100-82.ngrok.io",
-                    "https://dbstage1.paywire.com",
+                PaywireEndpoint.Staging => "https://dbstage1.paywire.com",
                 PaywireEndpoint.Production => "https://dbtranz.paywire.com",
-                _ => throw new ArgumentOutOfRangeException(nameof(endpoint), endpoint, null)
+                _ => throw new ArgumentOutOfRangeException(nameof(endpoint), endpoint, "Endpoint URL type enum out of range")
             };
         }
     }
