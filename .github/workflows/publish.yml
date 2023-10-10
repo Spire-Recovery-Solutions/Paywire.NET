@@ -18,13 +18,13 @@ jobs:
         
     - name: Build and Test
       run: |
-        cd UsaEPay.NET
+        cd Paywire.NET
         dotnet restore
         dotnet build --configuration Release --no-restore
 
     - name: Pack
       run: |
-        cd UsaEPay.NET
+        cd Paywire.NET
         dotnet pack --configuration Release --no-restore --output nupkg
 
     - name: Push to NuGet
