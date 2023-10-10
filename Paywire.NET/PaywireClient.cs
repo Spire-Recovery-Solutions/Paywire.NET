@@ -1,6 +1,7 @@
 ﻿using System.Security.Cryptography.X509Certificates;
 using Paywire.NET.Models.Base;
 using Paywire.NET.Models.BatchInquiry;
+using Paywire.NET.Models.BinValidation;
 using Paywire.NET.Models.Credit;
 using Paywire.NET.Models.GetAuthToken;
 using Paywire.NET.Models.GetConsumerFee;
@@ -58,6 +59,7 @@ namespace Paywire.NET
                 StoreTokenRequest => PaywireTransactionType.StoreToken,
                 TokenSaleRequest => PaywireTransactionType.Sale,
                 SendReceiptRequest => PaywireTransactionType.SendReceipt,
+                BinValidationRequest => PaywireTransactionType.BinValidation,
                 _ => request.TransactionHeader.PWTRANSACTIONTYPE
             };
 
