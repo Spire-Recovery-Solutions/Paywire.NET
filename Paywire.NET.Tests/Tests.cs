@@ -9,6 +9,7 @@ using Paywire.NET.Models.Credit;
 using Paywire.NET.Models.GetAuthToken;
 using Paywire.NET.Models.GetConsumerFee;
 using Paywire.NET.Models.PreAuth;
+using Paywire.NET.Models.Receipt;
 using Paywire.NET.Models.Sale;
 using Paywire.NET.Models.SearchTransactions;
 using Paywire.NET.Models.StoreToken;
@@ -353,5 +354,21 @@ namespace Paywire.NET.Tests
             Assert.True(response.Result == PaywireResult.Approval);
         }
 
+        [Test]
+        public async Task SendReceipt()
+        {
+            var request = PaywireRequestFactory.SendReceipt(
+                 new TransactionHeader()
+                 {
+                 },
+                 new Customer()
+                 {
+                     EMAIL = "CFFROST@EMAILADDRESS.COM"
+                 }
+             );
+            var response = await _client.SendRequest<SendReceiptResponse>(request);
+
+            Assert.True(response.Result == PaywireResult.Success);
+        }
     }
 }
