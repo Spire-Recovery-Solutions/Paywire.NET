@@ -11,6 +11,7 @@ using Paywire.NET.Models.Credit;
 using Paywire.NET.Models.GetAuthToken;
 using Paywire.NET.Models.GetConsumerFee;
 using Paywire.NET.Models.PreAuth;
+using Paywire.NET.Models.Receipt;
 using Paywire.NET.Models.Sale;
 using Paywire.NET.Models.SearchTransactions;
 using Paywire.NET.Models.StoreToken;
@@ -370,5 +371,21 @@ namespace Paywire.NET.Factories
                 }
             };
         }
+
+        /// <summary>
+        /// Send a receipt for an existing transaction.
+        /// </summary>
+        /// <param name="header"
+        /// <param name="customer"
+        /// <returns></returns>
+        public static SendReceiptRequest SendReceipt(TransactionHeader header, Customer customer)
+        {
+            return new SendReceiptRequest
+            {
+                TransactionHeader = header,
+                Customer = customer
+            };
+        }
+
     }
 }
