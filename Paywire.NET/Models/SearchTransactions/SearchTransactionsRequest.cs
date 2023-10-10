@@ -33,4 +33,6 @@ public class SearchCondition
     public string COND_RESULT { get; set; }
     public string COND_PWCUSTOMID1 { get; set; }
     public string COND_PWCUSTOMID3 { get; set; }
+    public string COND_CBTYPE { get; set; }
+    public string COND_INSTITUTION { get; set; }
 }

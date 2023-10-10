@@ -13,6 +13,7 @@ using Paywire.NET.Models.GetConsumerFee;
 using Paywire.NET.Models.PreAuth;
 using Paywire.NET.Models.Receipt;
 using Paywire.NET.Models.Sale;
+using Paywire.NET.Models.SearchChargebacks;
 using Paywire.NET.Models.SearchTransactions;
 using Paywire.NET.Models.StoreToken;
 using Paywire.NET.Models.TokenSale;
@@ -384,6 +385,27 @@ namespace Paywire.NET.Factories
             {
                 TransactionHeader = header,
                 Customer = customer
+            };
+        }
+
+        /// <summary>
+        /// Query the database for Chargeback transactions.
+        /// </summary>
+        public static SearchChargebackRequest SearchChargeback(TransactionHeader header, SearchCondition search)
+        {
+            return new SearchChargebackRequest()
+            {
+                TransactionHeader = header,
+                SearchCondition = search
+            };
+        }
+
+        public static SearchChargebackRequest SearchChargeback(SearchCondition search)
+        {
+            return new SearchChargebackRequest()
+            {
+                TransactionHeader = new TransactionHeader { XOPTION = "TRUE" },
+                SearchCondition = search
             };
         }
 

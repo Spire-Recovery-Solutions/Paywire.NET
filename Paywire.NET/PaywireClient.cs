@@ -7,6 +7,7 @@ using Paywire.NET.Models.GetConsumerFee;
 using Paywire.NET.Models.PreAuth;
 using Paywire.NET.Models.Receipt;
 using Paywire.NET.Models.Sale;
+using Paywire.NET.Models.SearchChargebacks;
 using Paywire.NET.Models.SearchTransactions;
 using Paywire.NET.Models.StoreToken;
 using Paywire.NET.Models.TokenSale;
@@ -58,6 +59,7 @@ namespace Paywire.NET
                 StoreTokenRequest => PaywireTransactionType.StoreToken,
                 TokenSaleRequest => PaywireTransactionType.Sale,
                 SendReceiptRequest => PaywireTransactionType.SendReceipt,
+                SearchChargebackRequest => PaywireTransactionType.SearchChargeback,
                 _ => request.TransactionHeader.PWTRANSACTIONTYPE
             };
 
