@@ -135,6 +135,8 @@ public class Customer
     /// For store token - if TRUE will create a customer in the Paywire Vault asociated with the returned token and return the corresponding PWCID.
     /// </summary>
     public string ADDCUSTOMER { get; set; }
-
-
+    /// <summary>
+    /// The first 6 ~ 8 digits of the card number.
+    /// </summary>
+    public string BINNUMBER { get; set; }
 }

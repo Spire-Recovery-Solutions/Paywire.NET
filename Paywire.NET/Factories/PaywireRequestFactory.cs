@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Paywire.NET.Models.Base;
 using Paywire.NET.Models.BatchInquiry;
+using Paywire.NET.Models.BinValidation;
 using Paywire.NET.Models.Credit;
 using Paywire.NET.Models.GetAuthToken;
 using Paywire.NET.Models.GetConsumerFee;
@@ -409,5 +410,19 @@ namespace Paywire.NET.Factories
             };
         }
 
+        /// <summary>
+        /// Bin Validation.
+        /// </summary>
+        /// <param name="header"
+        /// <param name="customer"
+        /// <returns></returns>
+        public static BinValidationRequest BinValidation(TransactionHeader header, Customer customer)
+        {
+            return new BinValidationRequest
+            {
+                TransactionHeader = header,
+                Customer = customer
+            };
+        }
     }
 }
