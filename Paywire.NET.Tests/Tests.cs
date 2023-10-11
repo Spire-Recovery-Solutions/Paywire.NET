@@ -6,6 +6,7 @@ using Paywire.NET.Factories;
 using Paywire.NET.Models.Base;
 using Paywire.NET.Models.BatchInquiry;
 using Paywire.NET.Models.BinValidation;
+using Paywire.NET.Models.CloseBatch;
 using Paywire.NET.Models.Credit;
 using Paywire.NET.Models.GetAuthToken;
 using Paywire.NET.Models.GetConsumerFee;
@@ -410,6 +411,20 @@ namespace Paywire.NET.Tests
                  }
              );
             var response = await _client.SendRequest<BinValidationResponse>(request);
+
+            Assert.True(response.Result == PaywireResult.Success);
+        }
+
+        [Test]
+        public async Task CloseBatchTest()
+        {
+            var request = PaywireRequestFactory.CloseBatch(
+                 new TransactionHeader()
+                 {
+                     PWINVOICENUMBER = ""
+                 }
+             );
+            var response = await _client.SendRequest<CloseBatchResponse>(request);
 
             Assert.True(response.Result == PaywireResult.Success);
         }

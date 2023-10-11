@@ -8,6 +8,7 @@ using System.Xml.Serialization;
 using Paywire.NET.Models.Base;
 using Paywire.NET.Models.BatchInquiry;
 using Paywire.NET.Models.BinValidation;
+using Paywire.NET.Models.CloseBatch;
 using Paywire.NET.Models.Credit;
 using Paywire.NET.Models.GetAuthToken;
 using Paywire.NET.Models.GetConsumerFee;
@@ -424,5 +425,18 @@ namespace Paywire.NET.Factories
                 Customer = customer
             };
         }
+        /// <summary>
+        /// Close an open batch. 
+        /// </summary>
+        /// <param name="header"
+        /// <returns></returns>
+        public static CloseBatchRequest CloseBatch(TransactionHeader header)
+        {
+            return new CloseBatchRequest
+            {
+                TransactionHeader = header
+            };
+        }
+
     }
 }

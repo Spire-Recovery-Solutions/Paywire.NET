@@ -56,7 +56,7 @@ public static class PaywireTransactionType
     /// <summary>
     /// Close the current open batch.
     /// </summary>
-    public static readonly string Close = "CLOSE";
+    public static readonly string CloseBatch = "CLOSE";
     /// <summary>
     /// Query the database for transaction results.
     /// </summary>
