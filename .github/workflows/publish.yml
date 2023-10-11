@@ -25,7 +25,8 @@ jobs:
     - name: Pack
       run: |
         cd Paywire.NET
-        dotnet pack --configuration Release --no-restore --output nupkg
+        # Use GitHub Run Number as the Build number in the version
+        dotnet pack --configuration Release --no-restore --output nupkg /p:Version=1.0.0.${{ github.run_number }}
 
     - name: Push to NuGet
       run: |
