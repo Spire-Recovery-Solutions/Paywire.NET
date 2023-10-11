@@ -78,4 +78,8 @@ public static class PaywireTransactionType
     /// </summary>
     public static readonly string SearchChargeback = "SEARCHCB";
 
+    /// <summary>
+    /// Bin Validation
+    /// </summary>
+    public static readonly string BinValidation = "BINVALIDATION";
 }
