@@ -14,6 +14,7 @@ using Paywire.NET.Models.GetAuthToken;
 using Paywire.NET.Models.GetConsumerFee;
 using Paywire.NET.Models.PreAuth;
 using Paywire.NET.Models.Receipt;
+using Paywire.NET.Models.RemoveToken;
 using Paywire.NET.Models.Sale;
 using Paywire.NET.Models.SearchChargebacks;
 using Paywire.NET.Models.SearchTransactions;
@@ -435,6 +436,21 @@ namespace Paywire.NET.Factories
             return new CloseBatchRequest
             {
                 TransactionHeader = header
+            };
+        }
+
+        /// <summary>
+        /// Remove a token
+        /// </summary>
+        /// <param name="header"
+        /// <param name="customer"
+        /// <returns></returns>
+        public static RemoveTokenRequest RemoveToken(TransactionHeader header, Customer customer)
+        {
+            return new RemoveTokenRequest
+            {
+                TransactionHeader = header,
+                Customer = customer
             };
         }
 

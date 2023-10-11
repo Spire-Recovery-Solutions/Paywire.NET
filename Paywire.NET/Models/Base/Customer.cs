@@ -139,4 +139,10 @@ public class Customer
     /// The first 6 ~ 8 digits of the card number.
     /// </summary>
     public string BINNUMBER { get; set; }
+
+    /// <summary>
+    ///
+    /// </summary>
+    public string PWCTRANSTYPE { get; set; }
+
 }

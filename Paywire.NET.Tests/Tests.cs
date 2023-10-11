@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using Paywire.NET.Factories;
 using Paywire.NET.Models.Base;
@@ -12,6 +13,7 @@ using Paywire.NET.Models.GetAuthToken;
 using Paywire.NET.Models.GetConsumerFee;
 using Paywire.NET.Models.PreAuth;
 using Paywire.NET.Models.Receipt;
+using Paywire.NET.Models.RemoveToken;
 using Paywire.NET.Models.Sale;
 using Paywire.NET.Models.SearchChargebacks;
 using Paywire.NET.Models.SearchTransactions;
@@ -427,6 +429,27 @@ namespace Paywire.NET.Tests
             var response = await _client.SendRequest<CloseBatchResponse>(request);
 
             Assert.True(response.Result == PaywireResult.Success);
+        }
+
+        [Test]
+        public async Task RemoveTokenTest()
+        {
+            var request = PaywireRequestFactory.RemoveToken(
+                 new TransactionHeader()
+                 {
+                     PWSALEAMOUNT = 0.0,
+                     PWINVOICENUMBER = ""
+                 },
+                 new Customer()
+                 {
+                     PWCTRANSTYPE = "",
+                     PWMEDIA = "",
+                     PWTOKEN = ""
+                 }
+             );
+            var response = await _client.SendRequest<RemoveTokenResponse>(request);
+
+            Assert.True(response.Result == PaywireResult.Approval);
         }
     }
 }

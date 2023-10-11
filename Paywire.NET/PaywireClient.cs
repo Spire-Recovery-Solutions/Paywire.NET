@@ -8,6 +8,7 @@ using Paywire.NET.Models.GetAuthToken;
 using Paywire.NET.Models.GetConsumerFee;
 using Paywire.NET.Models.PreAuth;
 using Paywire.NET.Models.Receipt;
+using Paywire.NET.Models.RemoveToken;
 using Paywire.NET.Models.Sale;
 using Paywire.NET.Models.SearchChargebacks;
 using Paywire.NET.Models.SearchTransactions;
@@ -64,6 +65,7 @@ namespace Paywire.NET
                 SearchChargebackRequest => PaywireTransactionType.SearchChargeback,
                 BinValidationRequest => PaywireTransactionType.BinValidation,
                 CloseBatchRequest => PaywireTransactionType.CloseBatch,
+                RemoveTokenRequest => PaywireTransactionType.RemoveToken,
                 _ => request.TransactionHeader.PWTRANSACTIONTYPE
             };
 
