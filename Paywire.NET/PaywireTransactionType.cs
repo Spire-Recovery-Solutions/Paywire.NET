@@ -73,4 +73,9 @@ public static class PaywireTransactionType
     /// Sends a receipt for a given transaction.
     /// </summary>
     public static readonly string SendReceipt = "SENDRECEIPT";
+    /// <summary>
+    /// Sends a receipt for a given transaction.
+    /// </summary>
+    public static readonly string SearchChargeback = "SEARCHCB";
+
 }

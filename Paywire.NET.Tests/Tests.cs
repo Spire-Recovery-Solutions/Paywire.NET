@@ -11,6 +11,7 @@ using Paywire.NET.Models.GetConsumerFee;
 using Paywire.NET.Models.PreAuth;
 using Paywire.NET.Models.Receipt;
 using Paywire.NET.Models.Sale;
+using Paywire.NET.Models.SearchChargebacks;
 using Paywire.NET.Models.SearchTransactions;
 using Paywire.NET.Models.StoreToken;
 using Paywire.NET.Models.TokenSale;
@@ -355,7 +356,7 @@ namespace Paywire.NET.Tests
         }
 
         [Test]
-        public async Task SendReceipt()
+        public async Task SendReceiptTest()
         {
             var request = PaywireRequestFactory.SendReceipt(
                  new TransactionHeader()
@@ -367,6 +368,30 @@ namespace Paywire.NET.Tests
                  }
              );
             var response = await _client.SendRequest<SendReceiptResponse>(request);
+
+            Assert.True(response.Result == PaywireResult.Success);
+        }
+
+        [Test]
+        public async Task SearchChargebackTest()
+        {
+            var request = PaywireRequestFactory.SearchChargeback(new TransactionHeader()
+            {
+                XOPTION = "TRUE"
+            },
+            new SearchCondition()
+            {
+                DateFrom = DateTime.Now.AddDays(-1),   //COND_DATEFROM			DateTime	Search date range from.	Date Format yyyy-mm-dd HH:MM.
+                DateTo = DateTime.Now.AddDays(1),      //COND_DATETO			DateTime	Search date range to.	Date Format yyyy-mm-dd HH:MM.
+                COND_CBTYPE = "ALL",
+                COND_INSTITUTION = "ALL",
+                COND_UNIQUEID = ""
+            });
+
+            var sw = Stopwatch.StartNew();
+            var response = await _client.SendRequest<SearchChargebackResponse>(request);
+            sw.Stop();
+            var elapsed = sw.ElapsedMilliseconds;
 
             Assert.True(response.Result == PaywireResult.Success);
         }
