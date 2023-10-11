@@ -63,7 +63,7 @@ namespace Paywire.NET
                 SendReceiptRequest => PaywireTransactionType.SendReceipt,
                 SearchChargebackRequest => PaywireTransactionType.SearchChargeback,
                 BinValidationRequest => PaywireTransactionType.BinValidation,
-                CloseBatchRequest => PaywireTransactionType.Close,
+                CloseBatchRequest => PaywireTransactionType.CloseBatch,
                 _ => request.TransactionHeader.PWTRANSACTIONTYPE
             };
 
