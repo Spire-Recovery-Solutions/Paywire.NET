@@ -1,6 +1,9 @@
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using Microsoft.VisualStudio.TestPlatform.CoreUtilities.Helpers;
+using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using Paywire.NET.Factories;
 using Paywire.NET.Models.Base;
@@ -12,6 +15,7 @@ using Paywire.NET.Models.GetAuthToken;
 using Paywire.NET.Models.GetConsumerFee;
 using Paywire.NET.Models.PreAuth;
 using Paywire.NET.Models.Receipt;
+using Paywire.NET.Models.RemoveToken;
 using Paywire.NET.Models.Sale;
 using Paywire.NET.Models.SearchChargebacks;
 using Paywire.NET.Models.SearchTransactions;
@@ -29,14 +33,20 @@ namespace Paywire.NET.Tests
         [SetUp]
         public void Setup()
         {
+            var config = new ConfigurationBuilder()
+                .AddEnvironmentVariables()
+                .AddUserSecrets<Tests>()
+                .Build();
+           
             _client = new PaywireClient(new PaywireClientOptions()
             {
-                AuthenticationClientId = "",
-                AuthenticationUsername = "",
-                AuthenticationKey = "",
-                AuthenticationPassword = "",
+                AuthenticationClientId = config["PWCLIENTID"],
+                AuthenticationUsername = config["PWUSER"],
+                AuthenticationKey = config["PWKEY"],
+                AuthenticationPassword = config["PWPASS"],
                 Endpoint = PaywireEndpoint.Staging
             });
+            
         }
 
         [Test]
@@ -203,7 +213,7 @@ namespace Paywire.NET.Tests
                     PWMEDIA = "CC",
                     CARDNUMBER = 349999999999991,
                     CVV2 = 5678,
-                    EXP_YY = "22",
+                    EXP_YY = "23",
                     EXP_MM = "12",
                     FIRSTNAME = "CHRIS",
                     LASTNAME = "FROSTY",
@@ -225,12 +235,13 @@ namespace Paywire.NET.Tests
                 },
                 new Customer()
                 {
+                    //10.00, "CT", 4012301230123010, "12", "25", 123
                     //4111 1111 1111 1111, cvv 123, exp 12/25
-                    REQUESTTOKEN = "FALSE",
+                    REQUESTTOKEN = "TRUE",
                     PWMEDIA = "CC",
                     CARDNUMBER = 4012301230123010,
                     CVV2 = 123,
-                    EXP_YY = "22",
+                    EXP_YY = "25",
                     EXP_MM = "12",
                     FIRSTNAME = "CHRIS",
                     LASTNAME = "FROSTY",
@@ -304,7 +315,7 @@ namespace Paywire.NET.Tests
         [Test]
         public async Task PreAuthTest()
         {
-            var request = PaywireRequestFactory.PreAuth(10.00, "CT", 4012301230123010, "12", "22", 123);
+            var request = PaywireRequestFactory.PreAuth(10.00, "CT", 4012301230123010, "12", "25", 123);
             var response = await _client.SendRequest<PreAuthResponse>(request);
 
             Assert.True(response.Result == PaywireResult.Approval);
@@ -333,7 +344,7 @@ namespace Paywire.NET.Tests
         [Test]
         public async Task VerificationTestNew()
         {
-            var request = PaywireRequestFactory.Verification(10.00, 4761739001010267, "12", "25", 999);
+            var request = PaywireRequestFactory.Verification(10.00, 4761739001010267, "12", "23", 999);
             var response = await _client.SendRequest<VerificationResponse>(request);
 
             Assert.True(response.Result == PaywireResult.Approval);
@@ -342,9 +353,9 @@ namespace Paywire.NET.Tests
         [Test]
         public async Task StoreTokenTest()
         {
-            var request = PaywireRequestFactory.StoreCreditCardToken(10.00, 4012301230123010, "12", "22", 123);
+            var request = PaywireRequestFactory.StoreCreditCardToken(10.00, 4012301230123010, "12", "25", 123);
             var response = await _client.SendRequest<StoreTokenResponse>(request);
-
+            
             Assert.True(response.Result == PaywireResult.Approval);
         }
 
@@ -363,6 +374,7 @@ namespace Paywire.NET.Tests
             var request = PaywireRequestFactory.SendReceipt(
                  new TransactionHeader()
                  {
+                     PWUNIQUEID= "4480117"
                  },
                  new Customer()
                  {
@@ -387,7 +399,7 @@ namespace Paywire.NET.Tests
                 DateTo = DateTime.Now.AddDays(1),      //COND_DATETO			DateTime	Search date range to.	Date Format yyyy-mm-dd HH:MM.
                 COND_CBTYPE = "ALL",
                 COND_INSTITUTION = "ALL",
-                COND_UNIQUEID = ""
+                COND_UNIQUEID = "4480117"
             });
 
             var sw = Stopwatch.StartNew();
@@ -407,26 +419,62 @@ namespace Paywire.NET.Tests
                  },
                  new Customer()
                  {
-                    BINNUMBER = ""
+                    BINNUMBER = "476173"
                  }
              );
+            
+            var sw = Stopwatch.StartNew();
             var response = await _client.SendRequest<BinValidationResponse>(request);
-
+            sw.Stop();
+            var elapsed = sw.ElapsedMilliseconds;
             Assert.True(response.Result == PaywireResult.Success);
         }
 
         [Test]
         public async Task CloseBatchTest()
         {
+            
             var request = PaywireRequestFactory.CloseBatch(
                  new TransactionHeader()
                  {
-                     PWINVOICENUMBER = ""
+                     PWINVOICENUMBER = "23285120757998873"
                  }
              );
+            
+            var sw = Stopwatch.StartNew();
             var response = await _client.SendRequest<CloseBatchResponse>(request);
-
+            sw.Stop();
+            var elapsed = sw.ElapsedMilliseconds;
             Assert.True(response.Result == PaywireResult.Success);
+        }
+
+        [Test]
+        public async Task RemoveTokenTest()
+        {
+            string token = ""; 
+            var request = PaywireRequestFactory.StoreCreditCardToken(10.00, 4012301230123010, "12", "25", 123);
+            var response = await _client.SendRequest<StoreTokenResponse>(request);
+            if(response.Result == PaywireResult.Approval)
+            {
+                token = response.PWTOKEN;
+            }
+            var requestToRemoveToken = PaywireRequestFactory.RemoveToken(
+                 new TransactionHeader()
+                 {
+                     
+                 },
+                 new Customer()
+                 {
+                     PWMEDIA = "CC",
+                     PWTOKEN = token
+                 }
+             ); 
+            
+            var sw = Stopwatch.StartNew();
+            var responseFromRemoveToken = await _client.SendRequest<RemoveTokenResponse>(requestToRemoveToken);
+            sw.Stop();
+            var elapsed = sw.ElapsedMilliseconds;
+            Assert.True(responseFromRemoveToken.Result == PaywireResult.Approval);
         }
     }
 }

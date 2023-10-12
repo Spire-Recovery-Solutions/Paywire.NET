@@ -9,6 +9,7 @@ using System.Xml.Serialization;
 
 namespace Paywire.NET.Models.SearchChargebacks
 {
+    [XmlRoot("PAYMENTRESPONSE")]
     public class SearchChargebackResponse : BasePaywireResponse
     {
         [XmlElement("SEARCHRESULT")]
