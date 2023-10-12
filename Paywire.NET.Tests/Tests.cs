@@ -378,7 +378,7 @@ namespace Paywire.NET.Tests
                  },
                  new Customer()
                  {
-                     EMAIL = "binny.samuel@spirerecoverysolutions.com"
+                     EMAIL = "CFFROST@EMAILADDRESS.COM"
                  }
              );
             var response = await _client.SendRequest<SendReceiptResponse>(request);
