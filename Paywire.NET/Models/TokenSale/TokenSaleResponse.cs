@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 using Paywire.NET.Models.Base;
 
 namespace Paywire.NET.Models.TokenSale
 {
+    [XmlRoot("PAYMENTRESPONSE")]
     public class TokenSaleResponse : BasePaywireResponse
     {
         /// <summary>
