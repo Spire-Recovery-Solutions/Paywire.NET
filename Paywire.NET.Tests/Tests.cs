@@ -114,6 +114,7 @@ namespace Paywire.NET.Tests
                 UniqueID = responseFromTokenSale.PWUNIQUEID;
                 InvoiceNumber = responseFromTokenSale.PWINVOICENUMBER;
                 BatchID = responseFromTokenSale.BATCHID;
+                SaleAmount = responseFromTokenSale.PWSALEAMOUNT;
             }
             Assert.True(responseFromTokenSale.Result == PaywireResult.Approval);
         }
@@ -123,15 +124,15 @@ namespace Paywire.NET.Tests
             var requestToRemoveToken = PaywireRequestFactory.RemoveToken(
                 new TransactionHeader()
                 {
-                     
+
                 },
                 new Customer()
                 {
                     PWMEDIA = "CC",
                     PWTOKEN = Token
                 }
-            ); 
-            
+            );
+
             var sw = Stopwatch.StartNew();
             var responseFromRemoveToken = await Client.SendRequest<RemoveTokenResponse>(requestToRemoveToken);
             sw.Stop();
@@ -173,7 +174,7 @@ namespace Paywire.NET.Tests
         [Test, Order(2), Category("Customer Verification")]
         public async Task VerificationTestNew()
         {
-            var request = PaywireRequestFactory.Verification(10.00, 4761739001010267, "12", "23", 999);
+            var request = PaywireRequestFactory.Verification(Convert.ToDouble(SaleAmount), 4761739001010267, "12", "23", 999);
             var response = await Client.SendRequest<VerificationResponse>(request);
             if (response.Result == PaywireResult.Approval)
             {
@@ -181,8 +182,185 @@ namespace Paywire.NET.Tests
             }
             Assert.True(response.Result == PaywireResult.Approval);
         }
-        
-        [Test, Order(4), Category("Credit Card")]
+        [Test, Order(3), Category("Credit Card")]
+        public async Task ConsumerFeeTest()
+        {
+            var cardRequestFee = PaywireRequestFactory.GetConsumerFee(new TransactionHeader()
+                {
+                    PWSALEAMOUNT = 10.00,
+                    DISABLECF = "FALSE",
+                    PWINVOICENUMBER = InvoiceNumber
+                },
+                new Customer()
+                {
+                    //4111 1111 1111 1111, cvv 123, exp 12/25
+                    REQUESTTOKEN = "TRUE",
+                    PWMEDIA = "CC",
+                    CARDNUMBER = 4012301230123010,
+                    CVV2 = 123,
+                    EXP_YY = "25",
+                    EXP_MM = "12",
+                    ADJTAXRATE = Convert.ToDouble("7"),
+                    FIRSTNAME = "CHRIS",
+                    LASTNAME = "FROST",
+                    PRIMARYPHONE = "7035551212",
+                    EMAIL = "CFFROST@EMAILADDRESS.COM",
+                    ADDRESS1 = "123",
+                    CITY = "CAZENOVIA",
+                    STATE = "NY",
+                    ZIP = "13035",
+                });
+
+            var checkRequestFee = PaywireRequestFactory.GetConsumerFee(new TransactionHeader()
+                {
+                    PWSALEAMOUNT = 10.00,
+                    DISABLECF = "FALSE",
+                    PWINVOICENUMBER = InvoiceNumber
+                },
+                new Customer()
+                {
+                    //4111 1111 1111 1111, cvv 123, exp 12/25
+                    REQUESTTOKEN = "TRUE",
+                    PWMEDIA = "ECHECK",
+                    BANKACCTTYPE = "CHECKING",
+                    ROUTINGNUMBER = "222224444",
+                    ACCOUNTNUMBER = "222224444",
+                    ADJTAXRATE = Convert.ToDouble("7"),
+                    FIRSTNAME = "CHRIS",
+                    LASTNAME = "FROST",
+                    PRIMARYPHONE = "7035551212",
+                    EMAIL = "CFFROST@EMAILADDRESS.COM",
+                    ADDRESS1 = "123",
+                    CITY = "CAZENOVIA",
+                    STATE = "NY",
+                    ZIP = "13035",
+                });
+
+            
+            var cardRequestNoFee = PaywireRequestFactory.GetConsumerFee(new TransactionHeader()
+                {
+                    PWSALEAMOUNT = 10.00,
+                    DISABLECF = "FALSE",
+                    PWINVOICENUMBER = InvoiceNumber
+                },
+                new Customer()
+                {
+                    //4111 1111 1111 1111, cvv 123, exp 12/25
+                    REQUESTTOKEN = "TRUE",
+                    PWMEDIA = "CC",
+                    CARDNUMBER = 4012301230123010,
+                    CVV2 = 123,
+                    EXP_YY = "25",
+                    EXP_MM = "12",
+                    ADJTAXRATE = Convert.ToDouble("7"),
+                    FIRSTNAME = "CHRIS",
+                    LASTNAME = "FROST",
+                    PRIMARYPHONE = "7035551212",
+                    EMAIL = "CFFROST@EMAILADDRESS.COM",
+                    ADDRESS1 = "123",
+                    CITY = "Norwalk",
+                    STATE = "CT",
+                    ZIP = "06850",
+                }); 
+            //PaywireRequestFactory.GetConsumerFee(10.00, "CC", "CT");
+
+            var checkRequestNoFee = PaywireRequestFactory.GetConsumerFee(new TransactionHeader()
+                {
+                    PWSALEAMOUNT = 10.00,
+                    DISABLECF = "FALSE",
+                    PWINVOICENUMBER = InvoiceNumber
+                },
+                new Customer()
+                {
+                    //4111 1111 1111 1111, cvv 123, exp 12/25
+                    REQUESTTOKEN = "TRUE",
+                    PWMEDIA = "ECHECK",
+                    BANKACCTTYPE = "CHECKING",
+                    ROUTINGNUMBER = "222224444",
+                    ACCOUNTNUMBER = "222224444",
+                    ADJTAXRATE = Convert.ToDouble("7"),
+                    FIRSTNAME = "CHRIS",
+                    LASTNAME = "FROST",
+                    PRIMARYPHONE = "7035551212",
+                    EMAIL = "CFFROST@EMAILADDRESS.COM",
+                    ADDRESS1 = "123",
+                    CITY = "Norwalk",
+                    STATE = "CT",
+                    ZIP = "06850",
+                });
+
+            var cardFeeResponse = await Client.SendRequest<GetConsumerFeeResponse>(cardRequestFee);
+            var checkFeeResponse = await Client.SendRequest<GetConsumerFeeResponse>(checkRequestFee);
+            var cardNoFeeResponse = await Client.SendRequest<GetConsumerFeeResponse>(cardRequestNoFee);
+            var checkNoFeeResponse = await Client.SendRequest<GetConsumerFeeResponse>(checkRequestNoFee);
+            
+            Assert.True(cardFeeResponse.Result == PaywireResult.Approval && cardFeeResponse.PWADJAMOUNT != cardFeeResponse.AMOUNT);
+            Assert.True(cardNoFeeResponse.Result == PaywireResult.Approval && cardNoFeeResponse.PWADJAMOUNT == 0);
+            Assert.True(checkFeeResponse.Result == PaywireResult.Approval && checkFeeResponse.PWADJAMOUNT != checkFeeResponse.AMOUNT);
+            Assert.True(checkNoFeeResponse.Result == PaywireResult.Approval && checkNoFeeResponse.PWADJAMOUNT == 0);
+        }
+         [Test, Order(4), Category("Credit Card")]
+        public async Task ConsumerFeeDisableCF_Test()
+        {
+            var cardRequestFee = PaywireRequestFactory.GetConsumerFee(new TransactionHeader()
+                {
+                    PWSALEAMOUNT = 10.00,
+                    DISABLECF = "TRUE",
+                    PWINVOICENUMBER = InvoiceNumber
+                },
+                new Customer()
+                {
+                    //4111 1111 1111 1111, cvv 123, exp 12/25
+                    REQUESTTOKEN = "TRUE",
+                    PWMEDIA = "CC",
+                    CARDNUMBER = 4012301230123010,
+                    CVV2 = 123,
+                    EXP_YY = "25",
+                    EXP_MM = "12",
+                    ADJTAXRATE = Convert.ToDouble("7"),
+                    FIRSTNAME = "CHRIS",
+                    LASTNAME = "FROST",
+                    PRIMARYPHONE = "7035551212",
+                    EMAIL = "CFFROST@EMAILADDRESS.COM",
+                    ADDRESS1 = "123",
+                    CITY = "CAZENOVIA",
+                    STATE = "NY",
+                    ZIP = "13035",
+                });
+
+            var checkRequestFee = PaywireRequestFactory.GetConsumerFee(new TransactionHeader()
+                {
+                    PWSALEAMOUNT = 10.00,
+                    DISABLECF = "TRUE",
+                    PWINVOICENUMBER = InvoiceNumber
+                },
+                new Customer()
+                {
+                    //4111 1111 1111 1111, cvv 123, exp 12/25
+                    REQUESTTOKEN = "TRUE",
+                    PWMEDIA = "ECHECK",
+                    BANKACCTTYPE = "CHECKING",
+                    ROUTINGNUMBER = "222224444",
+                    ACCOUNTNUMBER = "222224444",
+                    ADJTAXRATE = Convert.ToDouble("7"),
+                    FIRSTNAME = "CHRIS",
+                    LASTNAME = "FROST",
+                    PRIMARYPHONE = "7035551212",
+                    EMAIL = "CFFROST@EMAILADDRESS.COM",
+                    ADDRESS1 = "123",
+                    CITY = "CAZENOVIA",
+                    STATE = "NY",
+                    ZIP = "13035",
+                });
+
+
+            var cardFeeResponse = await Client.SendRequest<GetConsumerFeeResponse>(cardRequestFee);
+            var checkFeeResponse = await Client.SendRequest<GetConsumerFeeResponse>(checkRequestFee);
+            
+            Assert.True(cardFeeResponse.Result == PaywireResult.Approval && cardFeeResponse.PWADJAMOUNT == 0);
+            Assert.True(checkFeeResponse.Result == PaywireResult.Approval && checkFeeResponse.PWADJAMOUNT == 0);
+        }
+        [Test, Order(5), Category("Credit Card")]
         public async Task OneTimeSaleTest()
         {
             var feeRequest = PaywireRequestFactory.CardSale(new TransactionHeader()
@@ -251,7 +429,7 @@ namespace Paywire.NET.Tests
             Assert.True(feeResult.Result == PaywireResult.Approval);
             Assert.True(freeResult.Result == PaywireResult.Declined);
         }
-        [Test, Order(5), Category("Credit Card")]
+        [Test, Order(6), Category("Credit Card")]
         public async Task VoidTest()
         {
             // TODO: Find what data can make this a valid unit test
@@ -260,100 +438,14 @@ namespace Paywire.NET.Tests
 
             Assert.True(response.Result == PaywireResult.Approval);
         }
-        [Test, Order(6), Category("Credit Card")]
+        [Test, Order(7), Category("Credit Card")]
         public async Task CreditTest()
         {
             // TODO: Find what data can make this a valid unit test
-            var request = PaywireRequestFactory.Credit(Convert.ToDouble(SaleAmount), InvoiceNumber, UniqueID);
+            var request = PaywireRequestFactory.Credit(Convert.ToDouble("01.00"), "23289092537421643", "5001754");
             var response = await Client.SendRequest<CreditResponse>(request);
 
-            Assert.True(response.Result == PaywireResult.Success);
-        }
-        [Test, Order(7), Category("Credit Card")]
-        public async Task ConsumerFeeTest()
-        {
-            var cardRequestFee = PaywireRequestFactory.GetConsumerFee(new TransactionHeader()
-                {
-                    PWSALEAMOUNT = 10.00,
-                    DISABLECF = "FALSE"
-                },
-                new Customer()
-                {
-                    //4111 1111 1111 1111, cvv 123, exp 12/25
-                    REQUESTTOKEN = "TRUE",
-                    PWMEDIA = "CC",
-                    CARDNUMBER = 4012301230123010,
-                    CVV2 = 123,
-                    EXP_YY = "25",
-                    EXP_MM = "12",
-                    FIRSTNAME = "CHRIS",
-                    LASTNAME = "FROST",
-                    PRIMARYPHONE = "7035551212",
-                    EMAIL = "CFFROST@EMAILADDRESS.COM",
-                    ADDRESS1 = "123",
-                    CITY = "CAZENOVIA",
-                    STATE = "NY",
-                    ZIP = "13035",
-                });
-
-            var checkRequestFee = PaywireRequestFactory.GetConsumerFee(new TransactionHeader()
-                {
-                    PWSALEAMOUNT = 10.00,
-                    DISABLECF = "FALSE"
-                },
-                new Customer()
-                {
-                    //4111 1111 1111 1111, cvv 123, exp 12/25
-                    REQUESTTOKEN = "TRUE",
-                    PWMEDIA = "ECHECK",
-                    BANKACCTTYPE = "CHECKING",
-                    ROUTINGNUMBER = "222224444",
-                    ACCOUNTNUMBER = "222224444",
-                    FIRSTNAME = "CHRIS",
-                    LASTNAME = "FROST",
-                    PRIMARYPHONE = "7035551212",
-                    EMAIL = "CFFROST@EMAILADDRESS.COM",
-                    ADDRESS1 = "123",
-                    CITY = "CAZENOVIA",
-                    STATE = "NY",
-                    ZIP = "13035",
-                });
-
-            
-            var cardRequestNoFee = PaywireRequestFactory.GetConsumerFee(10.00, "CC", "CT");
-
-            var checkRequestNoFee = PaywireRequestFactory.GetConsumerFee(new TransactionHeader()
-                {
-                    PWSALEAMOUNT = 10.00,
-                    DISABLECF = "FALSE"
-                },
-                new Customer()
-                {
-                    //4111 1111 1111 1111, cvv 123, exp 12/25
-                    REQUESTTOKEN = "TRUE",
-                    PWMEDIA = "ECHECK",
-                    BANKACCTTYPE = "CHECKING",
-                    ROUTINGNUMBER = "222224444",
-                    ACCOUNTNUMBER = "222224444",
-                    FIRSTNAME = "CHRIS",
-                    LASTNAME = "FROST",
-                    PRIMARYPHONE = "7035551212",
-                    EMAIL = "CFFROST@EMAILADDRESS.COM",
-                    ADDRESS1 = "123",
-                    CITY = "Norwalk",
-                    STATE = "CT",
-                    ZIP = "06850",
-                });
-
-            var cardFeeResponse = await Client.SendRequest<GetConsumerFeeResponse>(cardRequestFee);
-            var checkFeeResponse = await Client.SendRequest<GetConsumerFeeResponse>(checkRequestFee);
-            var cardNoFeeResponse = await Client.SendRequest<GetConsumerFeeResponse>(cardRequestNoFee);
-            var checkNoFeeResponse = await Client.SendRequest<GetConsumerFeeResponse>(checkRequestNoFee);
-            
-            Assert.True(cardFeeResponse.Result == PaywireResult.Approval && cardFeeResponse.PWADJAMOUNT != cardFeeResponse.AMOUNT);
-            Assert.True(cardNoFeeResponse.Result == PaywireResult.Approval && cardNoFeeResponse.PWADJAMOUNT == cardNoFeeResponse.AMOUNT);
-            Assert.True(checkFeeResponse.Result == PaywireResult.Approval && checkFeeResponse.PWADJAMOUNT != checkFeeResponse.AMOUNT);
-            Assert.True(checkNoFeeResponse.Result == PaywireResult.Approval && checkNoFeeResponse.PWADJAMOUNT == checkNoFeeResponse.AMOUNT);
+            Assert.True(response.Result == PaywireResult.Approval);
         }
         
         //[Test, Order(8)]
