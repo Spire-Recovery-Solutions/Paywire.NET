@@ -38,6 +38,18 @@ namespace Paywire.NET
             _restClient = new RestClient(restClientOptions);
         }
 
+        public PaywireClient(PaywireClientOptions options, bool throwOnAnyError = true, bool throwOnDeserializationError = true, int timeout = 30000)
+        {
+            _paywireClientOptions = options;
+            var endpointUrl = GetEndpointUrl(options.Endpoint);
+            var restClientOptions = new RestClientOptions(endpointUrl)
+            {
+                ThrowOnAnyError = throwOnAnyError,
+                ThrowOnDeserializationError = throwOnDeserializationError,
+                Timeout = timeout,
+            };
+            _restClient = new RestClient(restClientOptions);
+        }
         public async Task<T?> SendRequest<T>(BasePaywireRequest request) where T : BasePaywireResponse
         {
             request.TransactionHeader ??= new TransactionHeader();

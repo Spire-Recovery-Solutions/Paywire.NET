@@ -56,6 +56,18 @@ namespace Paywire.NET.Tests
                 Endpoint = PaywireEndpoint.Staging
             });
 
+            //Client = new PaywireClient(new PaywireClientOptions()
+            //{
+            //    AuthenticationClientId = config["PWCLIENTID"],
+            //    AuthenticationUsername = config["PWUSER"],
+            //    AuthenticationKey = config["PWKEY"],
+            //    AuthenticationPassword = config["PWPASS"],
+            //    Endpoint = PaywireEndpoint.Staging
+            //},
+            //    true,
+            //    true,
+            //    30000
+            //);
 
         }
 
