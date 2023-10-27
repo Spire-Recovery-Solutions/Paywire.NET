@@ -1,4 +1,7 @@
-﻿using System.Security.Cryptography.X509Certificates;
+﻿using System.Collections.Immutable;
+using System.Security.Cryptography.X509Certificates;
+using System.Xml;
+using System.Xml.Serialization;
 using Paywire.NET.Models.Base;
 using Paywire.NET.Models.BatchInquiry;
 using Paywire.NET.Models.BinValidation;
@@ -82,12 +85,18 @@ namespace Paywire.NET
             };
 
             var restRequest = new RestRequest("/API/pwapi", Method.Post);
-
             restRequest.AddXmlBody(request);
-
-            var response = await _restClient.PostAsync<T>(restRequest);
-
-            return response;
+            var response = await _restClient.ExecuteAsync(restRequest);
+            DateTimeOffset transDateTime = DateTimeOffset.Parse(response.Headers.FirstOrDefault(t => t.Name == "Date").Value.ToString());
+            
+            var xmlSerializer = new XmlSerializer(typeof(T));
+            TextReader textReader = new StringReader(response.Content);
+            var returnResponse = (T)xmlSerializer.Deserialize(textReader);
+            returnResponse.TransactionTimestamp = transDateTime;
+            
+            //var res = await _restClient.PostAsync<T>(restRequest);
+            
+            return returnResponse;
         }
 
         /// <summary>

@@ -11,6 +11,11 @@ public class BasePaywireResponse
     public PaywireResult Result { get; set; }
 
     /// <summary>
+    /// Transaction DateTime from the response headers
+    /// </summary>
+    public DateTimeOffset TransactionTimestamp { get; set; }
+
+    /// <summary>
     /// Paywire-generated unique merchant identifier.	
     /// </summary>
     public string PWCLIENTID { get; set; }

@@ -401,6 +401,32 @@ namespace Paywire.NET.Tests
                     COUNTRY = "US",
                     ZIP = "14094",
                 });
+
+            var feeRequestCheck = PaywireRequestFactory.CardSale(new TransactionHeader()
+                {
+                    PWSALEAMOUNT = 0.15,
+                    DISABLECF = "FALSE",
+                    //PWINVOICENUMBER = "TEST001"
+                },
+                new Customer
+                {
+                    REQUESTTOKEN = "FALSE",
+                    DESCRIPTION = "Description",
+                    PWMEDIA = "ECHECK",
+                    BANKACCTTYPE = "CHECKING",
+                    ROUTINGNUMBER = "222224444",
+                    ACCOUNTNUMBER = "222224444",
+                    FIRSTNAME = "CHRIS",
+                    LASTNAME = "FROSTY",
+                    PRIMARYPHONE = "7035551212",
+                    EMAIL = "CFFROST@EMAILADDRESS.COM",
+                    ADDRESS1 = "123",
+                    ADDRESS2 = "",
+                    CITY = "LOCKPORT",
+                    STATE = "NY",
+                    COUNTRY = "US",
+                    ZIP = "14094",
+                });
             var freeRequest = PaywireRequestFactory.CardSale(
                 new TransactionHeader()
                 {
@@ -426,6 +452,7 @@ namespace Paywire.NET.Tests
                 }
             );
             var sw = Stopwatch.StartNew();
+            var res = await Client.SendRequest<SaleResponse>(feeRequestCheck);
             var feeResult = await Client.SendRequest<SaleResponse>(feeRequest);
             if (feeResult.Result == PaywireResult.Approval)
             {
@@ -510,7 +537,7 @@ namespace Paywire.NET.Tests
                 COND_TRANSAMT = "",                    //COND_TRANSAMT			int/decimal	Search by transaction amount.	
                 COND_TRANSTYPE = "ALL",                //COND_TRANSTYPE         string	    Search by transaction type.	Fixed options: ALL, SALE, CREDIT, VOID
                 COND_RESULT = "",                      //COND_RESULT			string	    Search by transaction result returned by the gateway.	See Transaction Result values.
-                COND_CARDTYPE = "",                    //COND_CARDTYPE			string	    Search by the card type used for the transaction.	Fixed options: ALL, VISA, MC, DISC, AMEX, ACH, REMOTE
+                COND_CARDTYPE = "ACH",                    //COND_CARDTYPE			string	    Search by the card type used for the transaction.	Fixed options: ALL, VISA, MC, DISC, AMEX, ACH, REMOTE
                 COND_LASTFOUR = "",                    //COND_LASTFOUR			int	        Search by the last four digits of the account or card used in the transaction searched.	4/4
                 COND_CUSTOMERID = "",                  //COND_CUSTOMERID		string	    Search by the Paywire customer identifier returned when creating a token.	
                 COND_RECURRINGID = "",                 //COND_RECURRINGID		int	        Search by the periodic identifier returned when creating a periodic plan.	
