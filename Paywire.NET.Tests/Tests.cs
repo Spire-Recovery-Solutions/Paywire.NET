@@ -481,7 +481,7 @@ namespace Paywire.NET.Tests
         public async Task CreditTest()
         {
             // TODO: Find what data can make this a valid unit test
-            var request = PaywireRequestFactory.Credit(Convert.ToDouble("01.00"), "23289092537421643", "5001754");
+            var request = PaywireRequestFactory.Credit(Convert.ToDouble("00.1"), "23289092537421643", "5001754");
             var response = await Client.SendRequest<CreditResponse>(request);
 
             Assert.True(response.Result == PaywireResult.Approval);
