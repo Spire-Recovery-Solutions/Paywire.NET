@@ -13,7 +13,7 @@ public class BasePaywireResponse
     /// <summary>
     /// Transaction DateTime from the response headers
     /// </summary>
-    public DateTimeOffset TransactionTimestamp { get; set; }
+    public DateTimeOffset Timestamp { get; set; }
 
     /// <summary>
     /// Paywire-generated unique merchant identifier.	
