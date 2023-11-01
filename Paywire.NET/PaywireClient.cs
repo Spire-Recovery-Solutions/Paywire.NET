@@ -92,7 +92,7 @@ namespace Paywire.NET
             var xmlSerializer = new XmlSerializer(typeof(T));
             TextReader textReader = new StringReader(response.Content);
             var returnResponse = (T)xmlSerializer.Deserialize(textReader);
-            returnResponse.TransactionTimestamp = transDateTime;
+            returnResponse.Timestamp = transDateTime;
             
             //var res = await _restClient.PostAsync<T>(restRequest);
             
