@@ -6,6 +6,11 @@ public class Customer
     /// Customer's company name.
     /// </summary>
     public string COMPANYNAME { get; set; }
+
+    /// <summary>
+    /// Account Holder's Full Name
+    /// </summary>
+    public string CUSTOMERNAME { get; set; }
     /// <summary>
     /// Account Holder's first name (required for RCC).	
     /// </summary>
