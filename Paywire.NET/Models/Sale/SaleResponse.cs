@@ -56,10 +56,7 @@ public class SaleResponse : BasePaywireResponse
     /// Original Sale Amount, before any markups or discounts. Max 7 digits, excluding decimals.
     /// </summary>
     public string PWSALEAMOUNT { get; set; }
-    /// <summary>
-    /// The masked account number under which the transaction was processed.
-    /// </summary>
-    public string MASKEDACCOUNTNUMBER { get; set; }
+    
     /// <summary>
     /// The account holder's first name that was supplied.
     /// </summary>
