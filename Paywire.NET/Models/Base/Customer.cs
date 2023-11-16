@@ -63,31 +63,31 @@ public class Customer
     /// <summary>
     /// Card number to process payment with. Required only when CC is submitted in PWMEDIA.	
     /// </summary>
-    public long CARDNUMBER { get; set; }
+    public long? CARDNUMBER { get; set; }
     /// <summary>
     /// Card expiry month. Required only when CC is submitted in PWMEDIA.	
     /// </summary>
-    public string EXP_MM { get; set; }
+    public string? EXP_MM { get; set; }
     /// <summary>
     /// Card expiry year. Required only when CC is submitted in PWMEDIA.	
     /// </summary>
-    public string EXP_YY { get; set; }
+    public string? EXP_YY { get; set; }
     /// <summary>
     /// Card Verification Value. Required only when CC is submitted in PWMEDIA.	
     /// </summary>
-    public int CVV2 { get; set; }
+    public int? CVV2 { get; set; }
     /// <summary>
     /// Type of Bank Account to process payment with. Required only when ECHECK is submitted in PWMEDIA.	CHECKING, SAVINGS
     /// </summary>
-    public string BANKACCTTYPE { get; set; }
+    public string? BANKACCTTYPE { get; set; }
     /// <summary>
     /// Routing number of Bank Account to process payment with. Required only when ECHECK is submitted in PWMEDIA.	
     /// </summary>
-    public string ROUTINGNUMBER { get; set; }
+    public string? ROUTINGNUMBER { get; set; }
     /// <summary>
     /// Account number of Bank Account to process payment with. Required only when ECHECK is submitted in PWMEDIA.	
     /// </summary>
-    public string ACCOUNTNUMBER { get; set; }
+    public string? ACCOUNTNUMBER { get; set; }
     /// <summary>
     /// Creates a token and returns a PWTOKEN in the response when set to TRUE. By default, when not submitted, a PWTOKEN is returned when CC is submitted in PWMEDIA but not for ECHECK.	
     /// </summary>
@@ -115,7 +115,7 @@ public class Customer
     /// <summary>
     /// Unique token representing a customer's card or account details stored on the Paywire Gateway.	
     /// </summary>
-    public string PWTOKEN { get; set; }
+    public string? PWTOKEN { get; set; }
     /// <summary>
     /// The unique ID assigned by Paywire associated with this transaction.
     /// </summary>
