@@ -526,8 +526,8 @@ namespace Paywire.NET.Tests
             },
             new SearchCondition()
             {
-                DateFrom = DateTime.Now.AddDays(-30),   //COND_DATEFROM			DateTime	Search date range from.	Date Format yyyy-mm-dd HH:MM.
-                DateTo = DateTime.Now.AddDays(1),      //COND_DATETO			DateTime	Search date range to.	Date Format yyyy-mm-dd HH:MM.
+                DateFrom = DateTimeOffset.Now.AddDays(-30),   //COND_DATEFROM			DateTime	Search date range from.	Date Format yyyy-mm-dd HH:MM.
+                DateTo = DateTimeOffset.Now.AddDays(1),      //COND_DATETO			DateTime	Search date range to.	Date Format yyyy-mm-dd HH:MM.
                 COND_PWCID = "",                       //COND_PWCID			    string	    Paywire Customer Identifier. When submitted, the created token will be associated with this customer.
                 COND_USERNAME = "",                    //COND_USERNAME			String	    Search by the USERNAME initiating the transaction.	
                 COND_UNIQUEID = "",                    //COND_UNIQUEID			int	        Search by transaction Unique ID returned by the gateway.	
@@ -569,8 +569,8 @@ namespace Paywire.NET.Tests
                 },
                 new SearchCondition()
                 {
-                    DateFrom = DateTime.Now.AddDays(-1),   //COND_DATEFROM			DateTime	Search date range from.	Date Format yyyy-mm-dd HH:MM.
-                    DateTo = DateTime.Now.AddDays(1),      //COND_DATETO			DateTime	Search date range to.	Date Format yyyy-mm-dd HH:MM.
+                    DateFrom = DateTimeOffset.Now.AddDays(-1),   //COND_DATEFROM			DateTime	Search date range from.	Date Format yyyy-mm-dd HH:MM.
+                    DateTo = DateTimeOffset.Now.AddDays(1),      //COND_DATETO			DateTime	Search date range to.	Date Format yyyy-mm-dd HH:MM.
                     COND_CBTYPE = "ALL",
                     COND_INSTITUTION = "ALL",
                     COND_UNIQUEID = UniqueID
