@@ -6,11 +6,23 @@ namespace Paywire.NET.Models.Base;
 
 public class BasePaywireResponse
 {
+    private PaywireResult _result;
     /// <summary>
     /// Status for the request.	APPROVAL, DECLINED, ERROR, SUCCESS, CAPTURED, CHARGEBACK
     /// </summary>
-    [XmlElement("RESULT", typeof(ResultCodeConverter))]
-    public PaywireResult Result { get; set; }
+    [XmlElement("RESULT")]
+    public string ResultAsString
+    {
+        get => ResultCodeConverter.ConvertPaywireResultToString(_result);
+        set => _result = ResultCodeConverter.ConvertStringToPaywireResult(value);
+    }
+
+    [XmlIgnore]
+    public PaywireResult Result
+    {
+        get => _result;
+        set => _result = value;
+    }
 
     /// <summary>
     /// Transaction DateTime from the response headers
