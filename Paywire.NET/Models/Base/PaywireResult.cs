@@ -23,5 +23,7 @@ public enum PaywireResult
     [XmlEnum("REJECTED")]
     Rejected,
     [XmlEnum("PENDING")]
-    Pending
+    Pending,
+    [XmlEnum("SUCCESS")]
+    Success
 }

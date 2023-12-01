@@ -12,9 +12,9 @@ public class SearchTransactionsRequest : BasePaywireRequest
 public class SearchCondition
 {
     [XmlIgnore]
-    public DateTime DateFrom { get; set; }
+    public DateTimeOffset DateFrom { get; set; }
     [XmlIgnore]
-    public DateTime DateTo { get; set; }
+    public DateTimeOffset DateTo { get; set; }
 
     public string COND_DATEFROM => DateFrom.ToString("yyyy-mm-dd HH:MM");
     public string COND_DATETO => DateTo.ToString("yyyy-mm-dd HH:MM");
