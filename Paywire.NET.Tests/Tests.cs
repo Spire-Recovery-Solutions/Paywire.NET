@@ -545,8 +545,8 @@ namespace Paywire.NET.Tests
 
             var sw = Stopwatch.StartNew();
             var response = await Client.SendRequest<SearchTransactionsResponse>(request);
-            Shared.CreditUniqueId = response.SearchResults.PaymentDetails.Select(s => s.PWUID).FirstOrDefault();
-            Shared.CreditInvoiceNumber = response.SearchResults.PaymentDetails.Select(s => s.PWINVOICENUMBER).FirstOrDefault();
+            Shared.CreditUniqueId = response.SearchResults.PaymentDetails.Select(s => s.PWUID).LastOrDefault();
+            Shared.CreditInvoiceNumber = response.SearchResults.PaymentDetails.Select(s => s.PWINVOICENUMBER).LastOrDefault();
             sw.Stop();
             var elapsed = sw.ElapsedMilliseconds;
 
@@ -555,7 +555,7 @@ namespace Paywire.NET.Tests
         [Test, Order(2), Category("Credit Card")]
         public async Task CreditTest()
         {
-            var request = PaywireRequestFactory.Credit(Convert.ToDouble("00.1"), CreditInvoiceNumber, CreditUniqueId);
+            var request = PaywireRequestFactory.Credit(Convert.ToDouble("00.01"), CreditInvoiceNumber, CreditUniqueId);
             var response = await Client.SendRequest<CreditResponse>(request);
 
             Assert.True(response.Result == PaywireResult.Approval);
