@@ -32,7 +32,7 @@ public class PaywirePaymentDetail
     public string TAXAMOUNT        { get; set; } //         0.00</TAXAMOUNT                 
     public string CREDITAMOUNT     { get; set; } //            0.00</CREDITAMOUNT                 
     public string AUTHCODE         { get; set; } //        281195</AUTHCODE                 
-    public string RESULT           { get; set; } //      CAPTURED</RESULT                 
+    public PaywireResult RESULT           { get; set; } //      CAPTURED</RESULT                 
     public string NAME             { get; set; } //    Test Customer</NAME                 
     public string RECURRINGID      { get; set; } //           0</RECURRINGID                 
     public string TRANSTIME        { get; set; } //         11/09/2020 05:54 PM</TRANSTIME                 
