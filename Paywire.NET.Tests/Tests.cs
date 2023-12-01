@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestPlatform.CoreUtilities.Helpers;
@@ -33,7 +35,11 @@ namespace Paywire.NET.Tests
         public static string UniqueID { get; set; }
         public static string InvoiceNumber { get; set; }
         public static string BatchID { get; set; }
-        public static string SaleAmount { get; set;}
+        public static string SaleAmount { get; set; }
+
+        public static string CreditUniqueId { get; set; }
+        public static string CreditInvoiceNumber { get; set; }
+        
     }
 
     [Order(1)]
@@ -477,15 +483,7 @@ namespace Paywire.NET.Tests
 
             Assert.True(response.Result == PaywireResult.Approval);
         }
-        [Test, Order(7), Category("Credit Card")]
-        public async Task CreditTest()
-        {
-            // TODO: Find what data can make this a valid unit test
-            var request = PaywireRequestFactory.Credit(Convert.ToDouble("00.1"), "23289092537421643", "5001754");
-            var response = await Client.SendRequest<CreditResponse>(request);
-
-            Assert.True(response.Result == PaywireResult.Approval);
-        }
+        
         
         //[Test, Order(8)]
         //public async Task BinValidationTest()
@@ -528,7 +526,7 @@ namespace Paywire.NET.Tests
             },
             new SearchCondition()
             {
-                DateFrom = DateTime.Now.AddDays(-1),   //COND_DATEFROM			DateTime	Search date range from.	Date Format yyyy-mm-dd HH:MM.
+                DateFrom = DateTime.Now.AddDays(-30),   //COND_DATEFROM			DateTime	Search date range from.	Date Format yyyy-mm-dd HH:MM.
                 DateTo = DateTime.Now.AddDays(1),      //COND_DATETO			DateTime	Search date range to.	Date Format yyyy-mm-dd HH:MM.
                 COND_PWCID = "",                       //COND_PWCID			    string	    Paywire Customer Identifier. When submitted, the created token will be associated with this customer.
                 COND_USERNAME = "",                    //COND_USERNAME			String	    Search by the USERNAME initiating the transaction.	
@@ -536,8 +534,8 @@ namespace Paywire.NET.Tests
                 COND_BATCHID = "",                     //COND_BATCHID			string	    Search by Batch ID returned by the gateway.	
                 COND_TRANSAMT = "",                    //COND_TRANSAMT			int/decimal	Search by transaction amount.	
                 COND_TRANSTYPE = "ALL",                //COND_TRANSTYPE         string	    Search by transaction type.	Fixed options: ALL, SALE, CREDIT, VOID
-                COND_RESULT = "",                      //COND_RESULT			string	    Search by transaction result returned by the gateway.	See Transaction Result values.
-                COND_CARDTYPE = "ACH",                    //COND_CARDTYPE			string	    Search by the card type used for the transaction.	Fixed options: ALL, VISA, MC, DISC, AMEX, ACH, REMOTE
+                COND_RESULT = "SETTLED",                      //COND_RESULT			string	    Search by transaction result returned by the gateway.	See Transaction Result values.
+                COND_CARDTYPE = "ALL",                    //COND_CARDTYPE			string	    Search by the card type used for the transaction.	Fixed options: ALL, VISA, MC, DISC, AMEX, ACH, REMOTE
                 COND_LASTFOUR = "",                    //COND_LASTFOUR			int	        Search by the last four digits of the account or card used in the transaction searched.	4/4
                 COND_CUSTOMERID = "",                  //COND_CUSTOMERID		string	    Search by the Paywire customer identifier returned when creating a token.	
                 COND_RECURRINGID = "",                 //COND_RECURRINGID		int	        Search by the periodic identifier returned when creating a periodic plan.	
@@ -547,12 +545,22 @@ namespace Paywire.NET.Tests
 
             var sw = Stopwatch.StartNew();
             var response = await Client.SendRequest<SearchTransactionsResponse>(request);
+            Shared.CreditUniqueId = response.SearchResults.PaymentDetails.Select(s => s.PWUID).FirstOrDefault();
+            Shared.CreditInvoiceNumber = response.SearchResults.PaymentDetails.Select(s => s.PWINVOICENUMBER).FirstOrDefault();
             sw.Stop();
             var elapsed = sw.ElapsedMilliseconds;
 
             Assert.True(response.Result == PaywireResult.Success);
         }
-        [Test, Order(2), Category("Search")]
+        [Test, Order(2), Category("Credit Card")]
+        public async Task CreditTest()
+        {
+            var request = PaywireRequestFactory.Credit(Convert.ToDouble("00.1"), CreditInvoiceNumber, CreditUniqueId);
+            var response = await Client.SendRequest<CreditResponse>(request);
+
+            Assert.True(response.Result == PaywireResult.Approval);
+        }
+        [Test, Order(3), Category("Search")]
         public async Task SearchChargebackTest()
         {
             var request = PaywireRequestFactory.SearchChargeback(new TransactionHeader()
@@ -575,7 +583,7 @@ namespace Paywire.NET.Tests
 
             Assert.True(response.Result == PaywireResult.Success);
         }
-        [Test, Order(3), Category("Receipt")]
+        [Test, Order(4), Category("Receipt")]
         public async Task SendReceiptTest()
         {
             var request = PaywireRequestFactory.SendReceipt(
@@ -625,5 +633,6 @@ namespace Paywire.NET.Tests
             var elapsed = sw.ElapsedMilliseconds;
             Assert.True(response.Result == PaywireResult.Success);
         }
+       
     }
 }
