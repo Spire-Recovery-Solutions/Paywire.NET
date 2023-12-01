@@ -8,8 +8,6 @@ public enum PaywireResult
     Unknown,
     [XmlEnum("ERROR")]
     Error,
-    [XmlEnum("SUCCESS")]
-    Success,
     [XmlEnum("APPROVAL")]
     Approval,
     [XmlEnum("DECLINED")]
