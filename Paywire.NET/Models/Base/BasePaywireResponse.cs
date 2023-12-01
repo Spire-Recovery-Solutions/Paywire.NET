@@ -1,4 +1,6 @@
-﻿using System.Xml.Serialization;
+﻿using Paywire.NET.Converters;
+using System.Text.Json.Serialization;
+using System.Xml.Serialization;
 
 namespace Paywire.NET.Models.Base;
 
@@ -7,7 +9,7 @@ public class BasePaywireResponse
     /// <summary>
     /// Status for the request.	APPROVAL, DECLINED, ERROR, SUCCESS, CAPTURED, CHARGEBACK
     /// </summary>
-    [XmlElement("RESULT")]
+    [XmlElement("RESULT", typeof(ResultCodeConverter))]
     public PaywireResult Result { get; set; }
 
     /// <summary>

@@ -17,5 +17,15 @@ public enum PaywireResult
     [XmlEnum("CAPTURED")]
     Captured,
     [XmlEnum("CHARGEBACK")]
-    Chargeback
+    Chargeback,
+    [XmlEnum("UNSUCCESS")]
+    UnSuccess,
+    [XmlEnum("SETTLED")]
+    Settled,
+    [XmlEnum("VOIDED")]
+    Voided,
+    [XmlEnum("REJECTED")]
+    Rejected,
+    [XmlEnum("PENDING")]
+    Pending
 }
