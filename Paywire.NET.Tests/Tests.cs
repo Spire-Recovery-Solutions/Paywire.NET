@@ -381,9 +381,10 @@ namespace Paywire.NET.Tests
         [Test, Order(5), Category("Credit Card")]
         public async Task OneTimeSaleTest()
         {
+            
             var feeRequest = PaywireRequestFactory.CardSale(new TransactionHeader()
                 {
-                    PWSALEAMOUNT = 0.15,
+                    PWSALEAMOUNT = 20.00,
                     DISABLECF = "FALSE",
                     //PWINVOICENUMBER = "TEST001"
                 },
@@ -467,6 +468,21 @@ namespace Paywire.NET.Tests
                 BatchID = feeResult.BATCHID;
                 SaleAmount = feeResult.PWSALEAMOUNT;
             }
+            var request = PaywireRequestFactory.PreAuth(new TransactionHeader()
+                {
+                    PWSALEAMOUNT = 10.0,
+                    //DISABLECF = "FALSE",
+                    PWINVOICENUMBER = InvoiceNumber
+                },
+                new Customer
+                {
+                    PWMEDIA = "CC",
+                    CARDNUMBER = 4012301230123010,
+                    EXP_YY = "25",
+                    EXP_MM = "12"
+                });
+
+            var response = await Client.SendRequest<PreAuthResponse>(request);
             var freeResult = await Client.SendRequest<SaleResponse>(freeRequest);
             sw.Stop();
             var elapsed = sw.ElapsedMilliseconds;
@@ -483,8 +499,41 @@ namespace Paywire.NET.Tests
 
             Assert.True(response.Result == PaywireResult.Approval);
         }
-        
-        
+
+        [Test, Order(7)]
+        public async Task PreAuthTest()
+        {
+            var request = PaywireRequestFactory.PreAuth(new TransactionHeader()
+                {
+                    PWSALEAMOUNT = 1.0,
+                    DISABLECF = "FALSE",
+                    PWINVOICENUMBER = InvoiceNumber
+                },
+                new Customer
+                {
+                    REQUESTTOKEN = "FALSE",
+                    DESCRIPTION = "Description",
+                    PWMEDIA = "CC",
+                    CARDNUMBER = 4012301230123010,
+                    CVV2 = 123,
+                    EXP_YY = "25",
+                    EXP_MM = "12",
+                    FIRSTNAME = "CHRIS",
+                    LASTNAME = "FROSTY",
+                    PRIMARYPHONE = "7035551212",
+                    EMAIL = "CFFROST@EMAILADDRESS.COM",
+                    ADDRESS1 = "123",
+                    ADDRESS2 = "",
+                    CITY = "LOCKPORT",
+                    STATE = "NY",
+                    COUNTRY = "US",
+                    ZIP = "14094",
+                });
+            var response = await Client.SendRequest<PreAuthResponse>(request);
+
+            Assert.True(response.Result == PaywireResult.Approval);
+        }
+
         //[Test, Order(8)]
         //public async Task BinValidationTest()
         //{
@@ -497,7 +546,7 @@ namespace Paywire.NET.Tests
         //            BINNUMBER = "401230"
         //        }
         //    );
-            
+
         //    var sw = Stopwatch.StartNew();
         //    var response = await Client.SendRequest<BinValidationResponse>(request);
         //    sw.Stop();
