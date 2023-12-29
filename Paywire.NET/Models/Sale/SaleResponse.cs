@@ -82,7 +82,10 @@ public class SaleResponse : BasePaywireResponse
     /// The periodic amount if the value under PWCTRANSTYPE is selected.
     /// </summary>
     public string RECURRING { get; set; }
-
+    /// <summary>
+    /// Indicate if the card is a debit or credit card.
+    /// </summary>
+    public bool ISDEBIT { get; set; }
 
     [XmlElement("CDSUMMARY")] public ConsumerFeeSummary CDSUMMARY { get; set; }
 }           
