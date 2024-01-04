@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -192,7 +193,7 @@ namespace Paywire.NET.Tests
         [Test, Order(2), Category("Customer Verification")]
         public async Task VerificationTestNew()
         {
-            var request = PaywireRequestFactory.Verification(Convert.ToDouble(SaleAmount), 4761739001010267, "12", "23", 999);
+            var request = PaywireRequestFactory.Verification(Convert.ToDouble(SaleAmount), 4012301230123010, "07", "25", 123);
             var response = await Client.SendRequest<VerificationResponse>(request);
             if (response.Result == PaywireResult.Approval)
             {
@@ -491,6 +492,36 @@ namespace Paywire.NET.Tests
             Assert.True(freeResult.Result == PaywireResult.Declined);
         }
         [Test, Order(6), Category("Credit Card")]
+        public async Task CheckSaleTest()
+        {
+
+            var request = PaywireRequestFactory.OneTimeCheckPayment(
+                saleAmount: 10.00,
+                routingNumber: "222224444",
+                accountNumber: "222224444",
+                bankAccountType: "CHECKING",
+                companyName: "",
+                firstName: "CHRIS",
+                lastName: "FROST",
+                email: "CFFROST@EMAILADDRESS.COM",
+                address: "123",
+                address2: "",
+                city: "CAZENOVIA",
+                state: "NY",
+                country: "",
+                zip: "13035",
+                primaryPhone: "7035551212",
+                workPhone: ""
+            );    
+                    
+            var sw = Stopwatch.StartNew();
+            var res = await Client.SendRequest<SaleResponse>(request);
+            sw.Stop();
+            var elapsed = sw.ElapsedMilliseconds;
+
+            Assert.True(res.Result == PaywireResult.Approval);
+        }
+        [Test, Order(7), Category("Credit Card")]
         public async Task VoidTest()
         {
             // TODO: Find what data can make this a valid unit test
@@ -500,7 +531,7 @@ namespace Paywire.NET.Tests
             Assert.True(response.Result == PaywireResult.Approval);
         }
 
-        [Test, Order(7)]
+        [Test, Order(8)]
         public async Task PreAuthTest()
         {
             var request = PaywireRequestFactory.PreAuth(new TransactionHeader()
