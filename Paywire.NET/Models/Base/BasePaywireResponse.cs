@@ -34,4 +34,9 @@ public class BasePaywireResponse
     public string PWCID { get; set; }
 
     public string PWTOKEN { get; set; }
+
+    /// <summary>
+    /// Custom third-party id to be associated with this transaction.
+    /// </summary>
+    public string PWCUSTOMID1 {get; set; }
 }

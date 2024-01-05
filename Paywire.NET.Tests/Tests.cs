@@ -123,8 +123,8 @@ namespace Paywire.NET.Tests
                     CITY = "LOCKPORT",
                     STATE = "NY",
                     COUNTRY = "US",
-                    ZIP = "14094"
-                    
+                    ZIP = "14094",
+                    PWCUSTOMID1 = "Test123"
                 });
             var responseFromTokenSale = await Client.SendRequest<TokenSaleResponse>(requestForTokenSale);
 
@@ -408,6 +408,7 @@ namespace Paywire.NET.Tests
                     STATE = "NY",
                     COUNTRY = "US",
                     ZIP = "14094",
+                    PWCUSTOMID1 = "123Test"
                 });
 
             var feeRequestCheck = PaywireRequestFactory.CardSale(new TransactionHeader()

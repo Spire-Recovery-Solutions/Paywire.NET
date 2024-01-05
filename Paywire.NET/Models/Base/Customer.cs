@@ -150,4 +150,6 @@ public class Customer
     /// </summary>
     public string PWCTRANSTYPE { get; set; }
 
+    public string PWCUSTOMID1 { get; set; }
+
 }
