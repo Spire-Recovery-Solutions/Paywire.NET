@@ -16,8 +16,8 @@ public class SearchCondition
     [XmlIgnore]
     public DateTimeOffset DateTo { get; set; }
 
-    public string COND_DATEFROM => DateFrom.ToString("yyyy-mm-dd HH:MM");
-    public string COND_DATETO => DateTo.ToString("yyyy-mm-dd HH:MM");
+    public string COND_DATEFROM => DateFrom.ToString("yyyy-MM-dd HH:mm");
+    public string COND_DATETO => DateTo.ToString("yyyy-MM-dd HH:mm");
     public string COND_TRANSTYPE { get; set; }
     public string COND_PWCID { get; set; }
     public string COND_PWCUSTOMID2 { get; set; }
