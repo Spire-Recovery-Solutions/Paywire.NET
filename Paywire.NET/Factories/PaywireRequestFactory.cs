@@ -290,6 +290,7 @@ namespace Paywire.NET.Factories
         /// </summary>
         public static TokenSaleRequest TokenSale(TransactionHeader header, Customer customer)
         {
+            customer.REQUESTTOKEN = "FALSE";
             return new TokenSaleRequest { TransactionHeader = header, Customer = customer };
         }
 
