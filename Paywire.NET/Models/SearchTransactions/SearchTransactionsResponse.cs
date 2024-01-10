@@ -36,8 +36,9 @@ public class PaywirePaymentDetail
     public string NAME             { get; set; } //    Test Customer</NAME                 
     public string RECURRINGID      { get; set; } //           0</RECURRINGID                 
     public string TRANSTIME        { get; set; } //         11/09/2020 05:54 PM</TRANSTIME                 
-    public string PWINVOICENUMBER  { get; set; } //               test12345</PWINVOICENUMBER                 
-    public string PWCUSTOMID2      { get; set; } //           c211021fdc26324095c1111111111a0a</PWCUSTOMID2                 
+    public string PWINVOICENUMBER  { get; set; } //               test12345</PWINVOICENUMBER
+    public string PWCUSTOMID1      { get; set; } //            sPWCUSTOMID1
+    public string PWCUSTOMID2      { get; set; } //           c211021fdc26324095c1111111111a0a</c                 
     public string SETTLEMENTDATE   { get; set; } //              2021-01-12</SETTLEMENTDATE
     public string RESPONSETEXT { get; set; } //         CVV2 Mismatch</RESPONSETEXT>
 
