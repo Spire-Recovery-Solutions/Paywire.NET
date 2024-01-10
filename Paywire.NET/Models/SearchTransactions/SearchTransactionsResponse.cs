@@ -41,5 +41,6 @@ public class PaywirePaymentDetail
     public string PWCUSTOMID2      { get; set; } //           c211021fdc26324095c1111111111a0a</c                 
     public string SETTLEMENTDATE   { get; set; } //              2021-01-12</SETTLEMENTDATE
     public string RESPONSETEXT { get; set; } //         CVV2 Mismatch</RESPONSETEXT>
+    public string DESCRIPTION { get; set; } //            Transaction custom description message.
 
 }
