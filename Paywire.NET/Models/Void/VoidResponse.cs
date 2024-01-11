@@ -11,6 +11,10 @@ namespace Paywire.NET.Models.Void
         /// </summary>
         public string BATCHID { get; set; }
         /// <summary>
+        /// The account holder's name that was supplied.
+        /// </summary>
+        public string AHNAME { get; set; }
+        /// <summary>
         /// Method of payment with which the transaction was processed: E for web ACH, C for Card.
         /// </summary>
         public string PAYMETH { get; set; }
