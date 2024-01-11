@@ -64,6 +64,11 @@ namespace Paywire.NET.Models.TokenSale
         /// </summary>
         /// <see cref="https://project.paywire.com/dbtranz/docs/OSBP/files/Development.html?csharp#avs-codes"/>
         public string AVSCODE { get; set; }
+        /// <summary>
+        /// Transaction CVV result: 1 for a match, 0 for a failure.
+        /// </summary>
+        public string CVVCODE { get; set; }
+
         public string PWCUSTOMID2 { get; set; }
     }
 }
