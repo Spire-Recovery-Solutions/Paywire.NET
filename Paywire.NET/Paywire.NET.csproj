@@ -15,5 +15,9 @@
   <ItemGroup>
     <DotNetCliToolReference  Include="Microsoft.XmlSerializer.Generator" Version="6.0.0" />
   </ItemGroup>
-
+	 
+  <ItemGroup> 
+    <None Include="bin/Release/net6.0/Paywire.NET.XmlSerializers.dll" Pack="true" PackagePath="lib/$(TargetFramework)" /> 
+  </ItemGroup> 
+ 
 </Project>
