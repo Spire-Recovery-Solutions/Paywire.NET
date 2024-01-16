@@ -2,6 +2,7 @@
 
 namespace Paywire.NET.Models.Base;
 
+[XmlRoot("PAYMENTREQUEST")]
 public class BasePaywireRequest
 {
 

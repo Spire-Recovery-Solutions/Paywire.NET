@@ -4,7 +4,6 @@ using Paywire.NET.Models.GetConsumerFee;
 
 namespace Paywire.NET.Models.Sale;
 
-[XmlRoot("PAYMENTRESPONSE")]
 
 public class SaleResponse : BasePaywireResponse
 {

@@ -8,7 +8,6 @@ using System.Xml.Serialization;
 
 namespace Paywire.NET.Models.Receipt
 {
-    [XmlRoot("PAYMENTRESPONSE")]
     public class SendReceiptResponse : BasePaywireResponse
     {
     }

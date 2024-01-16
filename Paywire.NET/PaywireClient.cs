@@ -89,9 +89,14 @@ namespace Paywire.NET
             var response = await _restClient.ExecuteAsync(restRequest);
             DateTimeOffset transDateTime = DateTimeOffset.Parse(response.Headers.FirstOrDefault(t => t.Name == "Date").Value.ToString());
             
-            var xmlSerializer = new XmlSerializer(typeof(T));
+            var emptyNameSpace = new XmlSerializerNamespaces();
+            emptyNameSpace.Add("", "");
+
+            var xmlSerializer = new XmlSerializer(typeof(T), new XmlRootAttribute("PAYMENTRESPONSE") { Namespace = "" });
+
             TextReader textReader = new StringReader(response.Content);
             var returnResponse = (T)xmlSerializer.Deserialize(textReader);
+
             returnResponse.Timestamp = transDateTime;
             
             //var res = await _restClient.PostAsync<T>(restRequest);

@@ -8,7 +8,7 @@ using System.Xml.Serialization;
 
 namespace Paywire.NET.Models.CloseBatch
 {
-    [XmlRoot("PAYMENTRESPONSE")]
+    
     public class CloseBatchResponse : BasePaywireResponse
     {
         public string BATCHID { get; set; }

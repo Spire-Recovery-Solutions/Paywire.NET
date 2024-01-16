@@ -3,7 +3,7 @@ using Paywire.NET.Models.Base;
 
 namespace Paywire.NET.Models.Sale;
 
-[XmlRoot("PAYMENTREQUEST")]
+
 public class SaleRequest : BasePaywireRequest
 {
     [XmlElement("CUSTOMER")]

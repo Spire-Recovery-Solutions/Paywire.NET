@@ -8,7 +8,7 @@ using System.Xml.Serialization;
 
 namespace Paywire.NET.Models.BinValidation
 {
-    [XmlRoot("PAYMENTRESPONSE")]
+
     public class BinValidationResponse : BasePaywireResponse
     {
         [XmlElement("BINVALDETAIL")]

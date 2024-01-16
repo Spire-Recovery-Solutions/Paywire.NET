@@ -3,7 +3,6 @@ using Paywire.NET.Models.Base;
 
 namespace Paywire.NET.Models.Credit
 {
-    [XmlRoot("PAYMENTRESPONSE")]
     public class CreditResponse : BasePaywireResponse
     {
         /// <summary>
