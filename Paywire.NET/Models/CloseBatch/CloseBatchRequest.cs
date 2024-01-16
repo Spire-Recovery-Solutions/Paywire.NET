@@ -8,7 +8,7 @@ using System.Xml.Serialization;
 
 namespace Paywire.NET.Models.CloseBatch
 {
-    [XmlRoot("PAYMENTREQUEST")]
+   
     public class CloseBatchRequest : BasePaywireRequest
     {
     }

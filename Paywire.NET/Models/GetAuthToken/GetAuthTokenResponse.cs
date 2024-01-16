@@ -6,7 +6,7 @@ namespace Paywire.NET.Models.GetAuthToken;
 /// <summary>
 /// Exchange your credentials for an AUTHTOKEN to use when calling the OSBP.
 /// </summary>
-[XmlRoot("PAYMENTRESPONSE")]
+
 public class GetAuthTokenResponse : BasePaywireResponse
 {
     /// <summary>

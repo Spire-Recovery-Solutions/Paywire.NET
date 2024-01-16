@@ -9,13 +9,14 @@ using System.Xml.Serialization;
 
 namespace Paywire.NET.Models.SearchChargebacks
 {
-    [XmlRoot("PAYMENTRESPONSE")]
+
     public class SearchChargebackResponse : BasePaywireResponse
     {
         [XmlElement("SEARCHRESULT")]
         public SearchResult SearchResults { get; set; }
     }
 
+    [XmlType("SearchChargebackResult")]
     public class SearchResult
     {
         [XmlElement("PWCBDETAIL")]

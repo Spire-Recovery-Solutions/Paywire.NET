@@ -3,7 +3,7 @@ using Paywire.NET.Models.Base;
 
 namespace Paywire.NET.Models.PreAuth
 {
-    [XmlRoot("PAYMENTRESPONSE")]
+ 
     public class PreAuthResponse : BasePaywireResponse
     {
         /// <summary>

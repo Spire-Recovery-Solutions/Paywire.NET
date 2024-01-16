@@ -3,7 +3,6 @@ using Paywire.NET.Models.Base;
 
 namespace Paywire.NET.Models.Verification
 {
-    [XmlRoot("PAYMENTREQUEST")]
     public class VerificationRequest : BasePaywireRequest
     {
         [XmlElement("CUSTOMER")]

@@ -3,7 +3,7 @@ using System.Xml.Serialization;
 
 namespace Paywire.NET.Models.RemoveToken
 {
-    [XmlRoot("PAYMENTREQUEST")]
+
     public class RemoveTokenRequest : BasePaywireRequest
     {
         [XmlElement("CUSTOMER")]

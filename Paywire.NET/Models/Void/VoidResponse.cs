@@ -3,7 +3,7 @@ using Paywire.NET.Models.Base;
 
 namespace Paywire.NET.Models.Void
 {
-    [XmlRoot("PAYMENTRESPONSE")]
+ 
     public class VoidResponse : BasePaywireResponse
     {
         /// <summary>

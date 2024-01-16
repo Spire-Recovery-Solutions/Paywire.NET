@@ -2,32 +2,31 @@
 
 namespace Paywire.NET.Models.Base;
 
+[XmlRoot("PAYMENTRESPONSE")]
 public class BasePaywireResponse
 {
-    [XmlElement("RESULT")]
-    public string RAW_RESULT
-    {
-        set
-        {
-            var canParse = Enum.TryParse(typeof(PaywireResult), value, true, out var parsed);
-            if (canParse)
-            {
-                Result = (PaywireResult)(parsed ?? PaywireResult.Unknown);
-            }
-            else
-            {
-                if (value.ToUpper() == "APPROVED")
-                {
-                    Result = PaywireResult.Approval;
-                }
-            }
-        }
 
-    }
+    [XmlElement("RESULT")]
+    public string RAW_RESULT { get; set; }
+
     /// <summary>
     /// Status for the request.	APPROVAL, DECLINED, ERROR, SUCCESS, CAPTURED, CHARGEBACK
     /// </summary>
-    public PaywireResult Result { get; set; }
+    [XmlIgnore]
+    public PaywireResult Result
+    {
+        get
+        {
+            var canParse = Enum.TryParse(typeof(PaywireResult), RAW_RESULT, true, out var parsed);
+            if (canParse)
+            {
+                return (PaywireResult)(parsed ?? PaywireResult.Unknown);
+            }
+
+            return RAW_RESULT.ToUpper() == "APPROVED" ? PaywireResult.Approval : PaywireResult.Unknown;
+        }
+        set => throw new NotImplementedException();
+    }
 
     /// <summary>
     /// Transaction DateTime from the response headers

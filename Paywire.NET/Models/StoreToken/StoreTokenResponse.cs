@@ -3,7 +3,7 @@ using Paywire.NET.Models.Base;
 
 namespace Paywire.NET.Models.StoreToken
 {
-    [XmlRoot("PAYMENTRESPONSE")]
+ 
     public class StoreTokenResponse : BasePaywireResponse
     {
         /// <summary>

@@ -8,7 +8,6 @@ using Paywire.NET.Models.Base;
 
 namespace Paywire.NET.Models.TokenSale
 {
-    [XmlRoot("PAYMENTRESPONSE")]
     public class TokenSaleResponse : BasePaywireResponse
     {
         /// <summary>

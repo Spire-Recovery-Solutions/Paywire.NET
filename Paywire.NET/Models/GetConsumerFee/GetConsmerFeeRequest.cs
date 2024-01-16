@@ -11,7 +11,7 @@ namespace Paywire.NET.Models.GetConsumerFee
     /// <summary>
     /// For merchants configured with Cash Discount or Convenience Fees, submit GETCONSUMERFEE in the <PWTRANSACTIONTYPE /> parameter to retrieve the adjustment amount.
     /// </summary>
-    [XmlRoot("PAYMENTREQUEST")]
+
     public class GetConsumerFeeRequest : BasePaywireRequest
     {
         public string PWINVOICENUMBER { get; set; }

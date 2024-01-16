@@ -8,7 +8,7 @@ using Paywire.NET.Models.Base;
 
 namespace Paywire.NET.Models.Verification
 {
-    [XmlRoot("PAYMENTRESPONSE")]
+
     public class VerificationResponse : BasePaywireResponse
     {
         /// <summary>

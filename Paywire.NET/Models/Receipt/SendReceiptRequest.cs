@@ -3,7 +3,7 @@ using System.Xml.Serialization;
 
 namespace Paywire.NET.Models.Receipt
 {
-    [XmlRoot("PAYMENTREQUEST")]
+  
     public class SendReceiptRequest : BasePaywireRequest
     {
         [XmlElement("CUSTOMER")]
