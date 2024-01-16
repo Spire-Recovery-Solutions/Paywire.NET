@@ -4,10 +4,29 @@ namespace Paywire.NET.Models.Base;
 
 public class BasePaywireResponse
 {
+    [XmlElement("RESULT")]
+    public string RAW_RESULT
+    {
+        set
+        {
+            var canParse = Enum.TryParse(typeof(PaywireResult), value, true, out var parsed);
+            if (canParse)
+            {
+                Result = (PaywireResult)(parsed ?? PaywireResult.Unknown);
+            }
+            else
+            {
+                if (value.ToUpper() == "APPROVED")
+                {
+                    Result = PaywireResult.Approval;
+                }
+            }
+        }
+
+    }
     /// <summary>
     /// Status for the request.	APPROVAL, DECLINED, ERROR, SUCCESS, CAPTURED, CHARGEBACK
     /// </summary>
-    [XmlElement("RESULT")]
     public PaywireResult Result { get; set; }
 
     /// <summary>
