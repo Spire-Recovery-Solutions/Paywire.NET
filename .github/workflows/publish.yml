@@ -19,7 +19,8 @@ jobs:
     - name: Build
       run: |
         cd Paywire.NET
-        dotnet build --configuration Release
+        dotnet restore
+        dotnet build --configuration Release --no-restore
 
     - name: Test
       run: | 
