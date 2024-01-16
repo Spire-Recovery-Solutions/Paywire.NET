@@ -31,8 +31,32 @@ public class PaywirePaymentDetail
     public string TIPAMOUNT        { get; set; } //         0.00</TIPAMOUNT                 
     public string TAXAMOUNT        { get; set; } //         0.00</TAXAMOUNT                 
     public string CREDITAMOUNT     { get; set; } //            0.00</CREDITAMOUNT                 
-    public string AUTHCODE         { get; set; } //        281195</AUTHCODE                 
-    public PaywireResult RESULT           { get; set; } //      CAPTURED</RESULT                 
+    public string AUTHCODE         { get; set; } //        281195</AUTHCODE
+                                                 //        
+    [XmlElement("RESULT")]
+    public string RAW_RESULT
+    {
+        set
+        {
+            var canParse = Enum.TryParse(typeof(PaywireResult), value, true, out var parsed);
+            if (canParse)
+            {
+                Result = (PaywireResult)(parsed ?? PaywireResult.Unknown);
+            }
+            else
+            {
+                if (value.ToUpper() == "APPROVED")
+                {
+                    Result = PaywireResult.Approval;
+                }
+            }
+        }
+
+    }
+    /// <summary>
+    /// Status for the request.	APPROVAL, DECLINED, ERROR, SUCCESS, CAPTURED, CHARGEBACK
+    /// </summary>
+    public PaywireResult Result { get; set; } //      CAPTURED</RESULT   
     public string NAME             { get; set; } //    Test Customer</NAME                 
     public string RECURRINGID      { get; set; } //           0</RECURRINGID                 
     public string TRANSTIME        { get; set; } //         11/09/2020 05:54 PM</TRANSTIME                 
