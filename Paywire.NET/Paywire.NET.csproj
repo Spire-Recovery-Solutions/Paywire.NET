@@ -12,4 +12,8 @@
     <PackageReference Include="RestSharp" Version="107.3.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <DotNetCliToolReference  Include="Microsoft.XmlSerializer.Generator" Version="6.0.0" />
+  </ItemGroup>
+
 </Project>
