@@ -82,4 +82,8 @@ public static class PaywireTransactionType
     /// Bin Validation
     /// </summary>
     public static readonly string BinValidation = "BINVALIDATION";
+    /// <summary>
+    /// Capture
+    /// </summary>
+    public static readonly string Capture = "CAPTURE";
 }
