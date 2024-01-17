@@ -5,6 +5,7 @@ using System.Xml.Serialization;
 using Paywire.NET.Models.Base;
 using Paywire.NET.Models.BatchInquiry;
 using Paywire.NET.Models.BinValidation;
+using Paywire.NET.Models.Capture;
 using Paywire.NET.Models.CloseBatch;
 using Paywire.NET.Models.Credit;
 using Paywire.NET.Models.GetAuthToken;
@@ -81,6 +82,7 @@ namespace Paywire.NET
                 BinValidationRequest => PaywireTransactionType.BinValidation,
                 CloseBatchRequest => PaywireTransactionType.CloseBatch,
                 RemoveTokenRequest => PaywireTransactionType.RemoveToken,
+                CaptureRequest => PaywireTransactionType.Capture,
                 _ => request.TransactionHeader.PWTRANSACTIONTYPE
             };
 

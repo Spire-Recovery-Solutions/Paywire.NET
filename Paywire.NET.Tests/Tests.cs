@@ -12,6 +12,7 @@ using Paywire.NET.Factories;
 using Paywire.NET.Models.Base;
 using Paywire.NET.Models.BatchInquiry;
 using Paywire.NET.Models.BinValidation;
+using Paywire.NET.Models.Capture;
 using Paywire.NET.Models.CloseBatch;
 using Paywire.NET.Models.Credit;
 using Paywire.NET.Models.GetAuthToken;
@@ -40,7 +41,10 @@ namespace Paywire.NET.Tests
 
         public static string CreditUniqueId { get; set; }
         public static string CreditInvoiceNumber { get; set; }
-        
+
+        public static string PreAuthUniqueId { get; set; }
+        public static string PreAuthInvoiceNumber { get; set; }
+
     }
 
     [Order(1)]
@@ -528,7 +532,7 @@ namespace Paywire.NET.Tests
             // TODO: Find what data can make this a valid unit test
             var request = PaywireRequestFactory.Void(Convert.ToDouble(SaleAmount), InvoiceNumber, UniqueID);
             var response = await Client.SendRequest<VoidResponse>(request);
-
+           
             Assert.True(response.Result == PaywireResult.Approval);
         }
 
@@ -537,7 +541,7 @@ namespace Paywire.NET.Tests
         {
             var request = PaywireRequestFactory.PreAuth(new TransactionHeader()
                 {
-                    PWSALEAMOUNT = 1.0,
+                    PWSALEAMOUNT = 5.0,
                     DISABLECF = "FALSE",
                     PWINVOICENUMBER = InvoiceNumber
                 },
@@ -562,10 +566,22 @@ namespace Paywire.NET.Tests
                     ZIP = "14094",
                 });
             var response = await Client.SendRequest<PreAuthResponse>(request);
-
+            if (response.Result == PaywireResult.Approval)
+            {
+                PreAuthUniqueId = response.PWUNIQUEID;
+                PreAuthInvoiceNumber = response.PWINVOICENUMBER;
+            }
             Assert.True(response.Result == PaywireResult.Approval);
         }
 
+        [Test, Order(9), Category("Credit Card")]
+        public async Task CaptureTest()
+        {
+            var request = PaywireRequestFactory.Capture(Convert.ToDouble(0), PreAuthInvoiceNumber, PreAuthUniqueId);
+            var response = await Client.SendRequest<CaptureResponse>(request);
+
+            Assert.True(response.Result == PaywireResult.Approval);
+        }
         //[Test, Order(8)]
         //public async Task BinValidationTest()
         //{
