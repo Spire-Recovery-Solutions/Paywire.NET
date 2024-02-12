@@ -71,35 +71,15 @@ namespace Paywire.NET.Factories
             };
         }
 
-        public static CreditRequest Credit(string token, double saleAmount, string invoiceNumber, string media)
+        public static CreditRequest Credit(TransactionHeader transactionHeader, Customer customer)
         {
             return new CreditRequest
             {
-                TransactionHeader = new TransactionHeader
-                {
-                    PWSALEAMOUNT = saleAmount, PWINVOICENUMBER = invoiceNumber, PWTOKEN = token
-                },
-                Customer = new Customer
-                {
-                   PWMEDIA = media
-                }
+                TransactionHeader = transactionHeader,
+                Customer = customer
             };
         }
 
-        public static CreditRequest Credit(double saleAmount, string invoiceNumber, string cardNumber, string expMonth, string expYear, string media)
-        {
-            return new CreditRequest
-            {
-                TransactionHeader = new TransactionHeader
-                {
-                    PWSALEAMOUNT = saleAmount, PWINVOICENUMBER = invoiceNumber, CARDNUMBER = cardNumber, EXP_MM = expMonth, EXP_YY = expYear
-                },
-                Customer = new Customer
-                {
-                    PWMEDIA = media
-                }
-            };
-        }
         /// <summary>
         /// Pre-authorize a card.
         /// </summary>

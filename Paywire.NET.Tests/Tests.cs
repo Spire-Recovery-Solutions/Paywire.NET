@@ -144,8 +144,17 @@ namespace Paywire.NET.Tests
         [Test, Order(4), Category("Token")]
         public async Task TokenCreditTest()
         {
-           
-            var request = PaywireRequestFactory.Credit( Token, 00.1, InvoiceNumber, "CC");
+            
+            var request = PaywireRequestFactory.Credit(new TransactionHeader
+            {
+                PWSALEAMOUNT = 0.1,
+                PWINVOICENUMBER = InvoiceNumber,
+                PWTOKEN = Token
+            },
+            new Customer
+            {
+                PWMEDIA = "CC"
+            });
             var response = await Client.SendRequest<CreditResponse>(request);
 
             Assert.True(response.Result == PaywireResult.Approval);
@@ -540,7 +549,18 @@ namespace Paywire.NET.Tests
         [Test, Order(7), Category("Credit Card")]
         public async Task CardnumberCreditTest()
         {
-            var request = PaywireRequestFactory.Credit(00.01, InvoiceNumber, "4012301230123010", "12", "25", "CC");
+            var request = PaywireRequestFactory.Credit(new TransactionHeader
+            {
+                PWSALEAMOUNT = 0.1,
+                PWINVOICENUMBER = InvoiceNumber,
+                CARDNUMBER = "4012301230123010",
+                EXP_MM = "12",
+                EXP_YY = "25"
+            },
+            new Customer
+            {
+                PWMEDIA = "CC"
+            });
             var response = await Client.SendRequest<CreditResponse>(request);
 
             Assert.True(response.Result == PaywireResult.Approval);
