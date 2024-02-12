@@ -6,5 +6,7 @@ namespace Paywire.NET.Models.Credit
 
     public class CreditRequest : BasePaywireRequest
     {
+        [XmlElement("CUSTOMER")]
+        public Customer Customer { get; set; }
     }
 }

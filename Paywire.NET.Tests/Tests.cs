@@ -142,6 +142,24 @@ namespace Paywire.NET.Tests
             Assert.True(responseFromTokenSale.Result == PaywireResult.Approval);
         }
         [Test, Order(4), Category("Token")]
+        public async Task TokenCreditTest()
+        {
+            
+            var request = PaywireRequestFactory.Credit(new TransactionHeader
+            {
+                PWSALEAMOUNT = 0.1,
+                PWINVOICENUMBER = InvoiceNumber,
+                PWTOKEN = Token
+            },
+            new Customer
+            {
+                PWMEDIA = "CC"
+            });
+            var response = await Client.SendRequest<CreditResponse>(request);
+
+            Assert.True(response.Result == PaywireResult.Approval);
+        }
+        [Test, Order(5), Category("Token")]
         public async Task RemoveTokenTest()
         {
             var requestToRemoveToken = PaywireRequestFactory.RemoveToken(
@@ -417,7 +435,7 @@ namespace Paywire.NET.Tests
 
             var feeRequestCheck = PaywireRequestFactory.CardSale(new TransactionHeader()
                 {
-                    PWSALEAMOUNT = 0.15,
+                    PWSALEAMOUNT = 15,
                     DISABLECF = "FALSE",
                     //PWINVOICENUMBER = "TEST001"
                 },
@@ -448,7 +466,7 @@ namespace Paywire.NET.Tests
                 },
                 new Customer()
                 {
-                    REQUESTTOKEN = "TRUE",
+                    REQUESTTOKEN = "FALSE",
                     PWMEDIA = "CC",
                     CARDNUMBER = 4012301230123010,
                     CVV2 = 123,
@@ -473,6 +491,7 @@ namespace Paywire.NET.Tests
                 InvoiceNumber = feeResult.PWINVOICENUMBER;
                 BatchID = feeResult.BATCHID;
                 SaleAmount = feeResult.PWSALEAMOUNT;
+                Token = feeResult.PWTOKEN;
             }
             var request = PaywireRequestFactory.PreAuth(new TransactionHeader()
                 {
@@ -526,7 +545,28 @@ namespace Paywire.NET.Tests
 
             Assert.True(res.Result == PaywireResult.Approval);
         }
+
         [Test, Order(7), Category("Credit Card")]
+        public async Task CardnumberCreditTest()
+        {
+            var request = PaywireRequestFactory.Credit(new TransactionHeader
+            {
+                PWSALEAMOUNT = 0.1,
+                PWINVOICENUMBER = InvoiceNumber,
+                CARDNUMBER = "4012301230123010",
+                EXP_MM = "12",
+                EXP_YY = "25"
+            },
+            new Customer
+            {
+                PWMEDIA = "CC"
+            });
+            var response = await Client.SendRequest<CreditResponse>(request);
+
+            Assert.True(response.Result == PaywireResult.Approval);
+        }
+
+        [Test, Order(8), Category("Credit Card")]
         public async Task VoidTest()
         {
             // TODO: Find what data can make this a valid unit test
@@ -536,7 +576,7 @@ namespace Paywire.NET.Tests
             Assert.True(response.Result == PaywireResult.Approval);
         }
 
-        [Test, Order(8)]
+        [Test, Order(9)]
         public async Task PreAuthTest()
         {
             var request = PaywireRequestFactory.PreAuth(new TransactionHeader()

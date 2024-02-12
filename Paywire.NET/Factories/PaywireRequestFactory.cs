@@ -71,6 +71,15 @@ namespace Paywire.NET.Factories
             };
         }
 
+        public static CreditRequest Credit(TransactionHeader transactionHeader, Customer customer)
+        {
+            return new CreditRequest
+            {
+                TransactionHeader = transactionHeader,
+                Customer = customer
+            };
+        }
+
         /// <summary>
         /// Pre-authorize a card.
         /// </summary>
