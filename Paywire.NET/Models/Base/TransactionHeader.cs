@@ -110,5 +110,20 @@ public class TransactionHeader
     /// Overrides applying a Convenience Fee or Cash Discount when set to TRUE, if configured. Note that Sales Tax will also be disabled.
     /// </summary>
     public string DISABLECF { get; set; }
-
+    /// <summary>
+    /// Token returned by the Paywire Gateway. When used in credit request, the refund happens to Token directly 
+    /// </summary>
+    public string PWTOKEN { get; set; }
+    /// <summary>
+    /// Card number to process payment with. When used in Credit Request, the refund happens to Card.	
+    /// </summary>
+    public string? CARDNUMBER { get; set; }
+    /// <summary>
+    /// Card expiry month. Required only when CC is submitted in PWMEDIA.	
+    /// </summary>
+    public string? EXP_MM { get; set; }
+    /// <summary>
+    /// Card expiry year. Required only when CC is submitted in PWMEDIA.	
+    /// </summary>
+    public string? EXP_YY { get; set; }
 }
