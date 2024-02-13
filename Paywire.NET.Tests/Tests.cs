@@ -565,8 +565,26 @@ namespace Paywire.NET.Tests
 
             Assert.True(response.Result == PaywireResult.Approval);
         }
-
         [Test, Order(8), Category("Credit Card")]
+        public async Task AccountNumberCreditTest()
+        {
+            var request = PaywireRequestFactory.Credit(new TransactionHeader
+                {
+                    PWSALEAMOUNT = 0.1,
+                    PWINVOICENUMBER = InvoiceNumber,
+                    BANKACCTTYPE = "CHECKING",
+                    ROUTINGNUMBER = "222224444",
+                    ACCOUNTNUMBER = "222224444",
+                },
+                new Customer
+                {
+                    PWMEDIA = "ECHECK"
+                });
+            var response = await Client.SendRequest<CreditResponse>(request);
+
+            Assert.True(response.Result == PaywireResult.Approval);
+        }
+        [Test, Order(9), Category("Credit Card")]
         public async Task VoidTest()
         {
             // TODO: Find what data can make this a valid unit test
@@ -576,7 +594,7 @@ namespace Paywire.NET.Tests
             Assert.True(response.Result == PaywireResult.Approval);
         }
 
-        [Test, Order(9)]
+        [Test, Order(10)]
         public async Task PreAuthTest()
         {
             var request = PaywireRequestFactory.PreAuth(new TransactionHeader()
@@ -614,7 +632,7 @@ namespace Paywire.NET.Tests
             Assert.True(response.Result == PaywireResult.Approval);
         }
 
-        [Test, Order(9), Category("Credit Card")]
+        [Test, Order(11), Category("Credit Card")]
         public async Task CaptureTest()
         {
             var request = PaywireRequestFactory.Capture(Convert.ToDouble(0), PreAuthInvoiceNumber, PreAuthUniqueId);
