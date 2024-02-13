@@ -126,4 +126,16 @@ public class TransactionHeader
     /// Card expiry year. Required only when CC is submitted in PWMEDIA.	
     /// </summary>
     public string? EXP_YY { get; set; }
+    /// <summary>
+    /// Type of Bank Account to process payment with. Required only when ECHECK is submitted in PWMEDIA.	CHECKING, SAVINGS
+    /// </summary>
+    public string? BANKACCTTYPE { get; set; }
+    /// <summary>
+    /// Routing number of Bank Account to process payment with. Required only when ECHECK is submitted in PWMEDIA.	
+    /// </summary>
+    public string? ROUTINGNUMBER { get; set; }
+    /// <summary>
+    /// Account number of Bank Account to process payment with. Required only when ECHECK is submitted in PWMEDIA.	
+    /// </summary>
+    public string? ACCOUNTNUMBER { get; set; }
 }
