@@ -75,7 +75,7 @@ public class Customer
     /// <summary>
     /// Card Verification Value. Required only when CC is submitted in PWMEDIA.	
     /// </summary>
-    public int? CVV2 { get; set; }
+    public string? CVV2 { get; set; }
     /// <summary>
     /// Type of Bank Account to process payment with. Required only when ECHECK is submitted in PWMEDIA.	CHECKING, SAVINGS
     /// </summary>
