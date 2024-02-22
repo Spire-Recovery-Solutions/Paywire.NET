@@ -109,7 +109,7 @@ namespace Paywire.NET.Factories
         /// <param name="expMM"/>
         /// <param name="expYY"/>
         /// <param name="cvv2"/>
-        public static PreAuthRequest PreAuth(double saleAmount, string payorState, long cardNumber, string expMM, string expYY, int cvv2) // string payorFirstName, string payorLastName, string payorAddress1, string payorAddress2, string payorCity, string payorZip,
+        public static PreAuthRequest PreAuth(double saleAmount, string payorState, long cardNumber, string expMM, string expYY, string cvv2) // string payorFirstName, string payorLastName, string payorAddress1, string payorAddress2, string payorCity, string payorZip,
         {
             return new PreAuthRequest
             {
@@ -208,7 +208,7 @@ namespace Paywire.NET.Factories
         /// <param name="workPhone"/>
         /// <param name="pwCid"/>
         /// <param name="addCustomer"/>
-        public static StoreTokenRequest StoreCreditCardToken(double saleAmount, long cardNumber, string expMM, string expYY, int cvv2, string companyName = "", string firstName = "", string lastName = "", string email = "", string address = "",  string address2 = "", string city = "", string state = "", string country = "", string zip = "", string primaryPhone = "", string workPhone = "", string pwCid = "", string addCustomer = "FALSE")
+        public static StoreTokenRequest StoreCreditCardToken(double saleAmount, long cardNumber, string expMM, string expYY, string cvv2, string companyName = "", string firstName = "", string lastName = "", string email = "", string address = "",  string address2 = "", string city = "", string state = "", string country = "", string zip = "", string primaryPhone = "", string workPhone = "", string pwCid = "", string addCustomer = "FALSE")
         {
             return new StoreTokenRequest
             {
@@ -357,7 +357,7 @@ namespace Paywire.NET.Factories
         /// <param name="email"></param>
         /// <param name="primaryPhone"></param>
         /// <returns></returns>
-        public static VerificationRequest Verification(double saleAmount, long cardNumber, string expMM, string expYY, int cvv2, string firstName = "", string lastName = "", string address = "", string address2 = "", string zip = "", string email = "", string primaryPhone = "")
+        public static VerificationRequest Verification(double saleAmount, long cardNumber, string expMM, string expYY, string cvv2, string firstName = "", string lastName = "", string address = "", string address2 = "", string zip = "", string email = "", string primaryPhone = "")
         {
             return new VerificationRequest
             {
@@ -436,7 +436,7 @@ namespace Paywire.NET.Factories
         /// Charge a card.
         /// </summary>
         /// <returns></returns>
-        public static SaleRequest OneTimeCardPayment(double saleAmount, long cardNumber, string expMM, string expYY, int cvv2, string companyName = "", string firstName = "", string lastName = "", string email = "", string address = "",  string address2 = "", string city = "", string state = "", string country = "", string zip = "", string primaryPhone = "", string workPhone = "")
+        public static SaleRequest OneTimeCardPayment(double saleAmount, long cardNumber, string expMM, string expYY, string cvv2, string companyName = "", string firstName = "", string lastName = "", string email = "", string address = "",  string address2 = "", string city = "", string state = "", string country = "", string zip = "", string primaryPhone = "", string workPhone = "")
         {
             // TODO: Check what field addCustomer goes into
             return new SaleRequest

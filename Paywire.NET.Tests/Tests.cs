@@ -94,7 +94,7 @@ namespace Paywire.NET.Tests
         [Test, Order(2), Category("Token")]
         public async Task StoreTokenTest()
         {
-            var request = PaywireRequestFactory.StoreCreditCardToken(10.00, 4012301230123010, "12", "25", 123);
+            var request = PaywireRequestFactory.StoreCreditCardToken(10.00, 4012301230123010, "12", "25", "123");
             var response = await Client.SendRequest<StoreTokenResponse>(request);
             if (response.Result == PaywireResult.Approval)
             {
@@ -115,7 +115,7 @@ namespace Paywire.NET.Tests
                     PWTOKEN = Token,
                     PWMEDIA = "CC",
                     CARDNUMBER = 4012301230123010,
-                    CVV2 = 123,
+                    CVV2 = "123",
                     EXP_YY = "25",
                     EXP_MM = "12",
                     FIRSTNAME = "CHRIS",
@@ -193,7 +193,7 @@ namespace Paywire.NET.Tests
                 REQUESTTOKEN = "TRUE",
                 PWMEDIA = "CC",
                 CARDNUMBER = 4012301230123010,
-                CVV2 = 123,
+                CVV2 = "123",
                 EXP_YY = "25",
                 EXP_MM = "07",
                 FIRSTNAME = "John",
@@ -215,7 +215,7 @@ namespace Paywire.NET.Tests
         [Test, Order(2), Category("Customer Verification")]
         public async Task VerificationTestNew()
         {
-            var request = PaywireRequestFactory.Verification(Convert.ToDouble(SaleAmount), 4012301230123010, "07", "25", 123);
+            var request = PaywireRequestFactory.Verification(Convert.ToDouble(SaleAmount), 4012301230123010, "07", "25", "123");
             var response = await Client.SendRequest<VerificationResponse>(request);
             if (response.Result == PaywireResult.Approval)
             {
@@ -238,7 +238,7 @@ namespace Paywire.NET.Tests
                     REQUESTTOKEN = "TRUE",
                     PWMEDIA = "CC",
                     CARDNUMBER = 4012301230123010,
-                    CVV2 = 123,
+                    CVV2 = "123",
                     EXP_YY = "25",
                     EXP_MM = "12",
                     ADJTAXRATE = Convert.ToDouble("7"),
@@ -290,7 +290,7 @@ namespace Paywire.NET.Tests
                     REQUESTTOKEN = "TRUE",
                     PWMEDIA = "CC",
                     CARDNUMBER = 4012301230123010,
-                    CVV2 = 123,
+                    CVV2 = "123",
                     EXP_YY = "25",
                     EXP_MM = "12",
                     ADJTAXRATE = Convert.ToDouble("7"),
@@ -355,7 +355,7 @@ namespace Paywire.NET.Tests
                     REQUESTTOKEN = "TRUE",
                     PWMEDIA = "CC",
                     CARDNUMBER = 4012301230123010,
-                    CVV2 = 123,
+                    CVV2 = "123",
                     EXP_YY = "25",
                     EXP_MM = "12",
                     ADJTAXRATE = Convert.ToDouble("7"),
@@ -417,7 +417,7 @@ namespace Paywire.NET.Tests
                     DESCRIPTION = "Description",
                     PWMEDIA = "CC",
                     CARDNUMBER = 4012301230123010,
-                    CVV2 = 123,
+                    CVV2 = "123",
                     EXP_YY = "25",
                     EXP_MM = "12",
                     FIRSTNAME = "CHRIS",
@@ -469,7 +469,7 @@ namespace Paywire.NET.Tests
                     REQUESTTOKEN = "FALSE",
                     PWMEDIA = "CC",
                     CARDNUMBER = 4012301230123010,
-                    CVV2 = 123,
+                    CVV2 = "123",
                     EXP_YY = "25",
                     EXP_MM = "12",
                     FIRSTNAME = "CHRIS",
@@ -609,7 +609,7 @@ namespace Paywire.NET.Tests
                     DESCRIPTION = "Description",
                     PWMEDIA = "CC",
                     CARDNUMBER = 4012301230123010,
-                    CVV2 = 123,
+                    CVV2 = "123",
                     EXP_YY = "25",
                     EXP_MM = "12",
                     FIRSTNAME = "CHRIS",
