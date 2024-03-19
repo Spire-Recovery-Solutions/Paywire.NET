@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.PortableExecutable;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
-using Paywire.NET.Models.Base;
+﻿using Paywire.NET.Models.Base;
 using Paywire.NET.Models.BatchInquiry;
 using Paywire.NET.Models.BinValidation;
 using Paywire.NET.Models.Capture;
@@ -66,7 +59,9 @@ namespace Paywire.NET.Factories
             {
                 TransactionHeader = new TransactionHeader
                 {
-                    PWSALEAMOUNT = saleAmount, PWINVOICENUMBER = invoiceNumber, PWUNIQUEID = uniqueId
+                    PWSALEAMOUNT = saleAmount,
+                    PWINVOICENUMBER = invoiceNumber,
+                    PWUNIQUEID = uniqueId
                 }
             };
         }
@@ -113,7 +108,7 @@ namespace Paywire.NET.Factories
         {
             return new PreAuthRequest
             {
-                TransactionHeader = new TransactionHeader { PWSALEAMOUNT = saleAmount }, 
+                TransactionHeader = new TransactionHeader { PWSALEAMOUNT = saleAmount },
                 Customer = new Customer
                 {
                     STATE = payorState,
@@ -171,8 +166,8 @@ namespace Paywire.NET.Factories
         {
             return new GetConsumerFeeRequest
             {
-                TransactionHeader = new TransactionHeader{ PWSALEAMOUNT = saleAmount, DISABLECF = disableCF},
-                Customer = new Customer {PWMEDIA = media, STATE = state, PWTOKEN = token}
+                TransactionHeader = new TransactionHeader { PWSALEAMOUNT = saleAmount, DISABLECF = disableCF },
+                Customer = new Customer { PWMEDIA = media, STATE = state, PWTOKEN = token }
             };
         }
 
@@ -183,7 +178,7 @@ namespace Paywire.NET.Factories
         /// <param name="customer"/>
         public static StoreTokenRequest StoreToken(TransactionHeader header, Customer customer)
         {
-            return new StoreTokenRequest{TransactionHeader = header, Customer = customer};
+            return new StoreTokenRequest { TransactionHeader = header, Customer = customer };
         }
 
         /// <summary>
@@ -208,7 +203,7 @@ namespace Paywire.NET.Factories
         /// <param name="workPhone"/>
         /// <param name="pwCid"/>
         /// <param name="addCustomer"/>
-        public static StoreTokenRequest StoreCreditCardToken(double saleAmount, long cardNumber, string expMM, string expYY, string cvv2, string companyName = "", string firstName = "", string lastName = "", string email = "", string address = "",  string address2 = "", string city = "", string state = "", string country = "", string zip = "", string primaryPhone = "", string workPhone = "", string pwCid = "", string addCustomer = "FALSE")
+        public static StoreTokenRequest StoreCreditCardToken(double saleAmount, long cardNumber, string expMM, string expYY, string cvv2, string companyName = "", string firstName = "", string lastName = "", string email = "", string address = "", string address2 = "", string city = "", string state = "", string country = "", string zip = "", string primaryPhone = "", string workPhone = "", string pwCid = "", string addCustomer = "FALSE")
         {
             return new StoreTokenRequest
             {
@@ -403,7 +398,7 @@ namespace Paywire.NET.Factories
         {
             return new SearchTransactionsRequest()
             {
-                TransactionHeader = new TransactionHeader{ XOPTION = "TRUE" },
+                TransactionHeader = new TransactionHeader { XOPTION = "TRUE" },
                 SearchCondition = search
             };
         }
@@ -418,15 +413,80 @@ namespace Paywire.NET.Factories
 
 
         /// <summary>
-        /// Charge a card or bank account (if applicable).
+        /// Charge a card account (if applicable).
         /// </summary>
         /// <returns></returns>
         public static SaleRequest CardSale(TransactionHeader header, Customer customer)
         {
             var request = new SaleRequest
             {
-                TransactionHeader = header,
-                Customer = customer
+                TransactionHeader = new TransactionHeader
+                {
+                    PWSALEAMOUNT = header.PWSALEAMOUNT,
+                    DISABLECF = header.DISABLECF,
+                    PWINVOICENUMBER = header.PWINVOICENUMBER
+                },
+                Customer = new Customer
+                {
+                    REQUESTTOKEN = customer.REQUESTTOKEN,
+                    DESCRIPTION = customer.DESCRIPTION,
+                    PWMEDIA = "CC",
+                    CARDNUMBER = customer.CARDNUMBER,
+                    CVV2 = customer.CVV2,
+                    EXP_YY = customer.EXP_YY,
+                    EXP_MM = customer.EXP_MM,
+                    FIRSTNAME = customer.FIRSTNAME,
+                    LASTNAME = customer.LASTNAME,
+                    PRIMARYPHONE = customer.PRIMARYPHONE,
+                    EMAIL = customer.EMAIL,
+                    ADDRESS1 = customer.ADDRESS1,
+                    ADDRESS2 = customer.ADDRESS2,
+                    CITY = customer.CITY,
+                    STATE = customer.STATE,
+                    COUNTRY = customer.COUNTRY,
+                    ZIP = customer.ZIP,
+                    PWCUSTOMID1 = customer.PWCUSTOMID1
+                }
+            };
+
+            return request;
+        }
+
+
+
+        /// <summary>
+        /// Charge a bank account (if applicable).
+        /// </summary>
+        /// <returns></returns>
+        public static SaleRequest CheckSale(TransactionHeader header, Customer customer)
+        {
+            var request = new SaleRequest
+            {
+                TransactionHeader = new TransactionHeader
+                {
+                    PWSALEAMOUNT = header.PWSALEAMOUNT,
+                    DISABLECF = header.DISABLECF,
+                    PWINVOICENUMBER = header.PWINVOICENUMBER
+                },
+                Customer = new Customer
+                {
+                    REQUESTTOKEN = customer.REQUESTTOKEN,
+                    DESCRIPTION = customer.DESCRIPTION,
+                    PWMEDIA = "ECHECK",
+                    BANKACCTTYPE = customer.BANKACCTTYPE,
+                    ROUTINGNUMBER = customer.ROUTINGNUMBER,
+                    ACCOUNTNUMBER = customer.ACCOUNTNUMBER,
+                    FIRSTNAME = customer.FIRSTNAME,
+                    LASTNAME = customer.LASTNAME,
+                    PRIMARYPHONE = customer.PRIMARYPHONE,
+                    EMAIL = customer.EMAIL,
+                    ADDRESS1 = customer.ADDRESS1,
+                    ADDRESS2 = customer.ADDRESS2,
+                    CITY = customer.CITY,
+                    STATE = customer.STATE,
+                    COUNTRY = customer.COUNTRY,
+                    ZIP = customer.ZIP
+                }
             };
 
             return request;
@@ -436,7 +496,7 @@ namespace Paywire.NET.Factories
         /// Charge a card.
         /// </summary>
         /// <returns></returns>
-        public static SaleRequest OneTimeCardPayment(double saleAmount, long cardNumber, string expMM, string expYY, string cvv2, string companyName = "", string firstName = "", string lastName = "", string email = "", string address = "",  string address2 = "", string city = "", string state = "", string country = "", string zip = "", string primaryPhone = "", string workPhone = "")
+        public static SaleRequest OneTimeCardPayment(double saleAmount, long cardNumber, string expMM, string expYY, string cvv2, string companyName = "", string firstName = "", string lastName = "", string email = "", string address = "", string address2 = "", string city = "", string state = "", string country = "", string zip = "", string primaryPhone = "", string workPhone = "")
         {
             // TODO: Check what field addCustomer goes into
             return new SaleRequest

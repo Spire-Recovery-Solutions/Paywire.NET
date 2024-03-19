@@ -1,17 +1,8 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
-using Microsoft.VisualStudio.TestPlatform.CoreUtilities.Helpers;
-using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using Paywire.NET.Factories;
 using Paywire.NET.Models.Base;
 using Paywire.NET.Models.BatchInquiry;
-using Paywire.NET.Models.BinValidation;
 using Paywire.NET.Models.Capture;
 using Paywire.NET.Models.CloseBatch;
 using Paywire.NET.Models.Credit;
@@ -27,13 +18,17 @@ using Paywire.NET.Models.StoreToken;
 using Paywire.NET.Models.TokenSale;
 using Paywire.NET.Models.Verification;
 using Paywire.NET.Models.Void;
+using System;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Paywire.NET.Tests
 {
     public class Shared
     {
         public static PaywireClient? Client { get; set; }
-        public static string Token {get; set; }
+        public static string Token { get; set; }
         public static string UniqueID { get; set; }
         public static string InvoiceNumber { get; set; }
         public static string BatchID { get; set; }
@@ -111,7 +106,7 @@ namespace Paywire.NET.Tests
                 PWSALEAMOUNT = 10.00
             },
                 new Customer
-                { 
+                {
                     PWTOKEN = Token,
                     PWMEDIA = "CC",
                     CARDNUMBER = 4012301230123010,
@@ -144,7 +139,7 @@ namespace Paywire.NET.Tests
         [Test, Order(4), Category("Token")]
         public async Task TokenCreditTest()
         {
-            
+
             var request = PaywireRequestFactory.Credit(new TransactionHeader
             {
                 PWSALEAMOUNT = 0.1,
@@ -227,11 +222,11 @@ namespace Paywire.NET.Tests
         public async Task ConsumerFeeTest()
         {
             var cardRequestFee = PaywireRequestFactory.GetConsumerFee(new TransactionHeader()
-                {
-                    PWSALEAMOUNT = 10.00,
-                    DISABLECF = "FALSE",
-                    PWINVOICENUMBER = InvoiceNumber
-                },
+            {
+                PWSALEAMOUNT = 10.00,
+                DISABLECF = "FALSE",
+                PWINVOICENUMBER = InvoiceNumber
+            },
                 new Customer()
                 {
                     //4111 1111 1111 1111, cvv 123, exp 12/25
@@ -253,11 +248,11 @@ namespace Paywire.NET.Tests
                 });
 
             var checkRequestFee = PaywireRequestFactory.GetConsumerFee(new TransactionHeader()
-                {
-                    PWSALEAMOUNT = 10.00,
-                    DISABLECF = "FALSE",
-                    PWINVOICENUMBER = InvoiceNumber
-                },
+            {
+                PWSALEAMOUNT = 10.00,
+                DISABLECF = "FALSE",
+                PWINVOICENUMBER = InvoiceNumber
+            },
                 new Customer()
                 {
                     //4111 1111 1111 1111, cvv 123, exp 12/25
@@ -277,13 +272,13 @@ namespace Paywire.NET.Tests
                     ZIP = "13035",
                 });
 
-            
+
             var cardRequestNoFee = PaywireRequestFactory.GetConsumerFee(new TransactionHeader()
-                {
-                    PWSALEAMOUNT = 10.00,
-                    DISABLECF = "FALSE",
-                    PWINVOICENUMBER = InvoiceNumber
-                },
+            {
+                PWSALEAMOUNT = 10.00,
+                DISABLECF = "FALSE",
+                PWINVOICENUMBER = InvoiceNumber
+            },
                 new Customer()
                 {
                     //4111 1111 1111 1111, cvv 123, exp 12/25
@@ -302,15 +297,15 @@ namespace Paywire.NET.Tests
                     CITY = "Norwalk",
                     STATE = "CT",
                     ZIP = "06850",
-                }); 
+                });
             //PaywireRequestFactory.GetConsumerFee(10.00, "CC", "CT");
 
             var checkRequestNoFee = PaywireRequestFactory.GetConsumerFee(new TransactionHeader()
-                {
-                    PWSALEAMOUNT = 10.00,
-                    DISABLECF = "FALSE",
-                    PWINVOICENUMBER = InvoiceNumber
-                },
+            {
+                PWSALEAMOUNT = 10.00,
+                DISABLECF = "FALSE",
+                PWINVOICENUMBER = InvoiceNumber
+            },
                 new Customer()
                 {
                     //4111 1111 1111 1111, cvv 123, exp 12/25
@@ -334,21 +329,21 @@ namespace Paywire.NET.Tests
             var checkFeeResponse = await Client.SendRequest<GetConsumerFeeResponse>(checkRequestFee);
             var cardNoFeeResponse = await Client.SendRequest<GetConsumerFeeResponse>(cardRequestNoFee);
             var checkNoFeeResponse = await Client.SendRequest<GetConsumerFeeResponse>(checkRequestNoFee);
-            
+
             Assert.True(cardFeeResponse.Result == PaywireResult.Approval && cardFeeResponse.PWADJAMOUNT != cardFeeResponse.AMOUNT);
             Assert.True(cardNoFeeResponse.Result == PaywireResult.Approval && cardNoFeeResponse.PWADJAMOUNT == 0);
             Assert.True(checkFeeResponse.Result == PaywireResult.Approval && checkFeeResponse.PWADJAMOUNT != checkFeeResponse.AMOUNT);
             Assert.True(checkNoFeeResponse.Result == PaywireResult.Approval && checkNoFeeResponse.PWADJAMOUNT == 0);
         }
-         [Test, Order(4), Category("Credit Card")]
+        [Test, Order(4), Category("Credit Card")]
         public async Task ConsumerFeeDisableCF_Test()
         {
             var cardRequestFee = PaywireRequestFactory.GetConsumerFee(new TransactionHeader()
-                {
-                    PWSALEAMOUNT = 10.00,
-                    DISABLECF = "TRUE",
-                    PWINVOICENUMBER = InvoiceNumber
-                },
+            {
+                PWSALEAMOUNT = 10.00,
+                DISABLECF = "TRUE",
+                PWINVOICENUMBER = InvoiceNumber
+            },
                 new Customer()
                 {
                     //4111 1111 1111 1111, cvv 123, exp 12/25
@@ -370,11 +365,11 @@ namespace Paywire.NET.Tests
                 });
 
             var checkRequestFee = PaywireRequestFactory.GetConsumerFee(new TransactionHeader()
-                {
-                    PWSALEAMOUNT = 10.00,
-                    DISABLECF = "TRUE",
-                    PWINVOICENUMBER = InvoiceNumber
-                },
+            {
+                PWSALEAMOUNT = 10.00,
+                DISABLECF = "TRUE",
+                PWINVOICENUMBER = InvoiceNumber
+            },
                 new Customer()
                 {
                     //4111 1111 1111 1111, cvv 123, exp 12/25
@@ -397,20 +392,20 @@ namespace Paywire.NET.Tests
 
             var cardFeeResponse = await Client.SendRequest<GetConsumerFeeResponse>(cardRequestFee);
             var checkFeeResponse = await Client.SendRequest<GetConsumerFeeResponse>(checkRequestFee);
-            
+
             Assert.True(cardFeeResponse.Result == PaywireResult.Approval && cardFeeResponse.PWADJAMOUNT == 0);
             Assert.True(checkFeeResponse.Result == PaywireResult.Approval && checkFeeResponse.PWADJAMOUNT == 0);
         }
         [Test, Order(5), Category("Credit Card")]
         public async Task OneTimeSaleTest()
         {
-            
+
             var feeRequest = PaywireRequestFactory.CardSale(new TransactionHeader()
-                {
-                    PWSALEAMOUNT = 20.00,
-                    DISABLECF = "FALSE",
-                    //PWINVOICENUMBER = "TEST001"
-                },
+            {
+                PWSALEAMOUNT = 20.00,
+                DISABLECF = "FALSE",
+                //PWINVOICENUMBER = "TEST001"
+            },
                 new Customer
                 {
                     REQUESTTOKEN = "FALSE",
@@ -433,12 +428,12 @@ namespace Paywire.NET.Tests
                     PWCUSTOMID1 = "123Test"
                 });
 
-            var feeRequestCheck = PaywireRequestFactory.CardSale(new TransactionHeader()
-                {
-                    PWSALEAMOUNT = 15,
-                    DISABLECF = "FALSE",
-                    //PWINVOICENUMBER = "TEST001"
-                },
+            var feeRequestCheck = PaywireRequestFactory.CheckSale(new TransactionHeader()
+            {
+                PWSALEAMOUNT = 15,
+                DISABLECF = "FALSE",
+                //PWINVOICENUMBER = "TEST001"
+            },
                 new Customer
                 {
                     REQUESTTOKEN = "FALSE",
@@ -494,11 +489,11 @@ namespace Paywire.NET.Tests
                 Token = feeResult.PWTOKEN;
             }
             var request = PaywireRequestFactory.PreAuth(new TransactionHeader()
-                {
-                    PWSALEAMOUNT = 10.0,
-                    //DISABLECF = "FALSE",
-                    PWINVOICENUMBER = InvoiceNumber
-                },
+            {
+                PWSALEAMOUNT = 10.0,
+                //DISABLECF = "FALSE",
+                PWINVOICENUMBER = InvoiceNumber
+            },
                 new Customer
                 {
                     PWMEDIA = "CC",
@@ -536,8 +531,8 @@ namespace Paywire.NET.Tests
                 zip: "13035",
                 primaryPhone: "7035551212",
                 workPhone: ""
-            );    
-                    
+            );
+
             var sw = Stopwatch.StartNew();
             var res = await Client.SendRequest<SaleResponse>(request);
             sw.Stop();
@@ -569,13 +564,13 @@ namespace Paywire.NET.Tests
         public async Task AccountNumberCreditTest()
         {
             var request = PaywireRequestFactory.Credit(new TransactionHeader
-                {
-                    PWSALEAMOUNT = 0.1,
-                    PWINVOICENUMBER = InvoiceNumber,
-                    BANKACCTTYPE = "CHECKING",
-                    ROUTINGNUMBER = "222224444",
-                    ACCOUNTNUMBER = "222224444",
-                },
+            {
+                PWSALEAMOUNT = 0.1,
+                PWINVOICENUMBER = InvoiceNumber,
+                BANKACCTTYPE = "CHECKING",
+                ROUTINGNUMBER = "222224444",
+                ACCOUNTNUMBER = "222224444",
+            },
                 new Customer
                 {
                     PWMEDIA = "ECHECK"
@@ -590,7 +585,7 @@ namespace Paywire.NET.Tests
             // TODO: Find what data can make this a valid unit test
             var request = PaywireRequestFactory.Void(Convert.ToDouble(SaleAmount), InvoiceNumber, UniqueID);
             var response = await Client.SendRequest<VoidResponse>(request);
-           
+
             Assert.True(response.Result == PaywireResult.Approval);
         }
 
@@ -598,11 +593,11 @@ namespace Paywire.NET.Tests
         public async Task PreAuthTest()
         {
             var request = PaywireRequestFactory.PreAuth(new TransactionHeader()
-                {
-                    PWSALEAMOUNT = 5.0,
-                    DISABLECF = "FALSE",
-                    PWINVOICENUMBER = InvoiceNumber
-                },
+            {
+                PWSALEAMOUNT = 5.0,
+                DISABLECF = "FALSE",
+                PWINVOICENUMBER = InvoiceNumber
+            },
                 new Customer
                 {
                     REQUESTTOKEN = "FALSE",
@@ -719,9 +714,9 @@ namespace Paywire.NET.Tests
         public async Task SearchChargebackTest()
         {
             var request = PaywireRequestFactory.SearchChargeback(new TransactionHeader()
-                {
-                    XOPTION = "TRUE"
-                },
+            {
+                XOPTION = "TRUE"
+            },
                 new SearchCondition()
                 {
                     DateFrom = DateTimeOffset.Now.AddDays(-1),   //COND_DATEFROM			DateTime	Search date range from.	Date Format yyyy-mm-dd HH:MM.
@@ -744,7 +739,7 @@ namespace Paywire.NET.Tests
             var request = PaywireRequestFactory.SendReceipt(
                 new TransactionHeader()
                 {
-                    PWUNIQUEID= UniqueID
+                    PWUNIQUEID = UniqueID
                 },
                 new Customer()
                 {
@@ -781,13 +776,13 @@ namespace Paywire.NET.Tests
                     PWINVOICENUMBER = InvoiceNumber
                 }
             );
-            
+
             var sw = Stopwatch.StartNew();
             var response = await Client.SendRequest<CloseBatchResponse>(request);
             sw.Stop();
             var elapsed = sw.ElapsedMilliseconds;
             Assert.True(response.Result == PaywireResult.Success);
         }
-       
+
     }
 }
