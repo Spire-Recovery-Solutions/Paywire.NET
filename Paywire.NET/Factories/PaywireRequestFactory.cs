@@ -411,82 +411,16 @@ namespace Paywire.NET.Factories
             return new BatchInquiryRequest();
         }
 
-
         /// <summary>
-        /// Charge a card account (if applicable).
+        /// Charge a card or bank account (if applicable).
         /// </summary>
         /// <returns></returns>
-        public static SaleRequest CardSale(TransactionHeader header, Customer customer)
+        public static SaleRequest Sale(TransactionHeader header, Customer customer)
         {
             var request = new SaleRequest
             {
-                TransactionHeader = new TransactionHeader
-                {
-                    PWSALEAMOUNT = header.PWSALEAMOUNT,
-                    DISABLECF = header.DISABLECF,
-                    PWINVOICENUMBER = header.PWINVOICENUMBER
-                },
-                Customer = new Customer
-                {
-                    REQUESTTOKEN = customer.REQUESTTOKEN,
-                    DESCRIPTION = customer.DESCRIPTION,
-                    PWMEDIA = "CC",
-                    CARDNUMBER = customer.CARDNUMBER,
-                    CVV2 = customer.CVV2,
-                    EXP_YY = customer.EXP_YY,
-                    EXP_MM = customer.EXP_MM,
-                    FIRSTNAME = customer.FIRSTNAME,
-                    LASTNAME = customer.LASTNAME,
-                    PRIMARYPHONE = customer.PRIMARYPHONE,
-                    EMAIL = customer.EMAIL,
-                    ADDRESS1 = customer.ADDRESS1,
-                    ADDRESS2 = customer.ADDRESS2,
-                    CITY = customer.CITY,
-                    STATE = customer.STATE,
-                    COUNTRY = customer.COUNTRY,
-                    ZIP = customer.ZIP,
-                    PWCUSTOMID1 = customer.PWCUSTOMID1
-                }
-            };
-
-            return request;
-        }
-
-
-
-        /// <summary>
-        /// Charge a bank account (if applicable).
-        /// </summary>
-        /// <returns></returns>
-        public static SaleRequest CheckSale(TransactionHeader header, Customer customer)
-        {
-            var request = new SaleRequest
-            {
-                TransactionHeader = new TransactionHeader
-                {
-                    PWSALEAMOUNT = header.PWSALEAMOUNT,
-                    DISABLECF = header.DISABLECF,
-                    PWINVOICENUMBER = header.PWINVOICENUMBER
-                },
-                Customer = new Customer
-                {
-                    REQUESTTOKEN = customer.REQUESTTOKEN,
-                    DESCRIPTION = customer.DESCRIPTION,
-                    PWMEDIA = "ECHECK",
-                    BANKACCTTYPE = customer.BANKACCTTYPE,
-                    ROUTINGNUMBER = customer.ROUTINGNUMBER,
-                    ACCOUNTNUMBER = customer.ACCOUNTNUMBER,
-                    FIRSTNAME = customer.FIRSTNAME,
-                    LASTNAME = customer.LASTNAME,
-                    PRIMARYPHONE = customer.PRIMARYPHONE,
-                    EMAIL = customer.EMAIL,
-                    ADDRESS1 = customer.ADDRESS1,
-                    ADDRESS2 = customer.ADDRESS2,
-                    CITY = customer.CITY,
-                    STATE = customer.STATE,
-                    COUNTRY = customer.COUNTRY,
-                    ZIP = customer.ZIP
-                }
+                TransactionHeader = header,
+                Customer = customer
             };
 
             return request;

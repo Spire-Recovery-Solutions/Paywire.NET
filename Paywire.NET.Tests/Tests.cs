@@ -400,7 +400,7 @@ namespace Paywire.NET.Tests
         public async Task OneTimeSaleTest()
         {
 
-            var feeRequest = PaywireRequestFactory.CardSale(new TransactionHeader()
+            var feeRequest = PaywireRequestFactory.Sale(new TransactionHeader()
             {
                 PWSALEAMOUNT = 20.00,
                 DISABLECF = "FALSE",
@@ -428,7 +428,7 @@ namespace Paywire.NET.Tests
                     PWCUSTOMID1 = "123Test"
                 });
 
-            var feeRequestCheck = PaywireRequestFactory.CheckSale(new TransactionHeader()
+            var feeRequestCheck = PaywireRequestFactory.Sale(new TransactionHeader()
             {
                 PWSALEAMOUNT = 15,
                 DISABLECF = "FALSE",
@@ -453,7 +453,7 @@ namespace Paywire.NET.Tests
                     COUNTRY = "US",
                     ZIP = "14094",
                 });
-            var freeRequest = PaywireRequestFactory.CardSale(
+            var freeRequest = PaywireRequestFactory.Sale(
                 new TransactionHeader()
                 {
                     PWSALEAMOUNT = 0.05,
