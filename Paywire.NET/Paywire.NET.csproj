@@ -1,19 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <UserSecretsId>b49a26a5-325e-414e-bb59-ac53f617fbd2</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.XmlSerializer.Generator" Version="6.0.0" />
-    <PackageReference Include="RestSharp" Version="107.3.0" />
+    <PackageReference Include="Microsoft.XmlSerializer.Generator" Version="8.0.0" />
+    <PackageReference Include="RestSharp" Version="110.2.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <DotNetCliToolReference  Include="Microsoft.XmlSerializer.Generator" Version="6.0.0" />
+    <DotNetCliToolReference Include="Microsoft.XmlSerializer.Generator" Version="6.0.0" />
   </ItemGroup>
 	 
   <ItemGroup> 

@@ -1,8 +1,4 @@
-﻿using System.Collections.Immutable;
-using System.Security.Cryptography.X509Certificates;
-using System.Xml;
-using System.Xml.Serialization;
-using Paywire.NET.Models.Base;
+﻿using Paywire.NET.Models.Base;
 using Paywire.NET.Models.BatchInquiry;
 using Paywire.NET.Models.BinValidation;
 using Paywire.NET.Models.Capture;
@@ -21,6 +17,7 @@ using Paywire.NET.Models.TokenSale;
 using Paywire.NET.Models.Verification;
 using Paywire.NET.Models.Void;
 using RestSharp;
+using System.Xml.Serialization;
 
 namespace Paywire.NET
 {
@@ -37,7 +34,7 @@ namespace Paywire.NET
             {
                 ThrowOnAnyError = true,
                 ThrowOnDeserializationError = true,
-                Timeout = 20000,
+                MaxTimeout = 30000,
             };
             _restClient = new RestClient(restClientOptions);
         }
@@ -50,7 +47,7 @@ namespace Paywire.NET
             {
                 ThrowOnAnyError = throwOnAnyError,
                 ThrowOnDeserializationError = throwOnDeserializationError,
-                Timeout = timeout,
+                MaxTimeout = timeout,
             };
             _restClient = new RestClient(restClientOptions);
         }
@@ -90,7 +87,7 @@ namespace Paywire.NET
             restRequest.AddXmlBody(request);
             var response = await _restClient.ExecuteAsync(restRequest);
             DateTimeOffset transDateTime = DateTimeOffset.Parse(response.Headers.FirstOrDefault(t => t.Name == "Date").Value.ToString());
-            
+
             var emptyNameSpace = new XmlSerializerNamespaces();
             emptyNameSpace.Add("", "");
 
@@ -100,9 +97,9 @@ namespace Paywire.NET
             var returnResponse = (T)xmlSerializer.Deserialize(textReader);
 
             returnResponse.Timestamp = transDateTime;
-            
+
             //var res = await _restClient.PostAsync<T>(restRequest);
-            
+
             return returnResponse;
         }
 
