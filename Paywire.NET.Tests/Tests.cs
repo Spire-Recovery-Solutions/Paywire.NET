@@ -83,8 +83,8 @@ namespace Paywire.NET.Tests
             var response = await Client.SendRequest<GetAuthTokenResponse>(
                 new GetAuthTokenRequest());
 
-            Assert.True(response.Result == PaywireResult.Success);
-            Assert.True(response.AUTHTOKEN != null);
+            Assert.That(response.Result, Is.EqualTo(PaywireResult.Success));
+            Assert.That(response.AUTHTOKEN, Is.Not.Null);
         }
         [Test, Order(2), Category("Token")]
         public async Task StoreTokenTest()
@@ -95,7 +95,7 @@ namespace Paywire.NET.Tests
             {
                 Token = response.PWTOKEN;
             }
-            Assert.True(response.Result == PaywireResult.Approval);
+            Assert.That(response.Result, Is.EqualTo(PaywireResult.Approval));
         }
         [Test, Order(3), Category("Token")]
         public async Task TokenSaleTest()
@@ -134,7 +134,7 @@ namespace Paywire.NET.Tests
                 BatchID = responseFromTokenSale.BATCHID;
                 SaleAmount = responseFromTokenSale.PWSALEAMOUNT;
             }
-            Assert.True(responseFromTokenSale.Result == PaywireResult.Approval);
+            Assert.That(responseFromTokenSale.Result, Is.EqualTo(PaywireResult.Approval));
         }
         [Test, Order(4), Category("Token")]
         public async Task TokenCreditTest()
@@ -152,7 +152,7 @@ namespace Paywire.NET.Tests
             });
             var response = await Client.SendRequest<CreditResponse>(request);
 
-            Assert.True(response.Result == PaywireResult.Approval);
+            Assert.That(response.Result, Is.EqualTo(PaywireResult.Approval));
         }
         [Test, Order(5), Category("Token")]
         public async Task RemoveTokenTest()
@@ -173,7 +173,7 @@ namespace Paywire.NET.Tests
             var responseFromRemoveToken = await Client.SendRequest<RemoveTokenResponse>(requestToRemoveToken);
             sw.Stop();
             var elapsed = sw.ElapsedMilliseconds;
-            Assert.True(responseFromRemoveToken.Result == PaywireResult.Approval);
+            Assert.That(responseFromRemoveToken.Result, Is.EqualTo(PaywireResult.Approval));
         }
     }
 
@@ -204,8 +204,7 @@ namespace Paywire.NET.Tests
             {
                 InvoiceNumber = response.PWINVOICENUMBER;
             }
-            Assert.True(response.Result == PaywireResult.Approval);
-
+            Assert.That(response.Result, Is.EqualTo(PaywireResult.Approval));
         }
         [Test, Order(2), Category("Customer Verification")]
         public async Task VerificationTestNew()
@@ -216,7 +215,7 @@ namespace Paywire.NET.Tests
             {
                 InvoiceNumber = response.PWINVOICENUMBER;
             }
-            Assert.True(response.Result == PaywireResult.Approval);
+            Assert.That(response.Result, Is.EqualTo(PaywireResult.Approval));
         }
         [Test, Order(3), Category("Credit Card")]
         public async Task ConsumerFeeTest()
@@ -330,10 +329,20 @@ namespace Paywire.NET.Tests
             var cardNoFeeResponse = await Client.SendRequest<GetConsumerFeeResponse>(cardRequestNoFee);
             var checkNoFeeResponse = await Client.SendRequest<GetConsumerFeeResponse>(checkRequestNoFee);
 
-            Assert.True(cardFeeResponse.Result == PaywireResult.Approval && cardFeeResponse.PWADJAMOUNT != cardFeeResponse.AMOUNT);
-            Assert.True(cardNoFeeResponse.Result == PaywireResult.Approval && cardNoFeeResponse.PWADJAMOUNT == 0);
-            Assert.True(checkFeeResponse.Result == PaywireResult.Approval && checkFeeResponse.PWADJAMOUNT != checkFeeResponse.AMOUNT);
-            Assert.True(checkNoFeeResponse.Result == PaywireResult.Approval && checkNoFeeResponse.PWADJAMOUNT == 0);
+            Assert.Multiple(() =>
+            {
+                Assert.That(cardFeeResponse.Result, Is.EqualTo(PaywireResult.Approval));
+                Assert.That(cardFeeResponse.PWADJAMOUNT, Is.Not.EqualTo(cardFeeResponse.AMOUNT));
+
+                Assert.That(cardNoFeeResponse.Result, Is.EqualTo(PaywireResult.Approval));
+                Assert.That(cardNoFeeResponse.PWADJAMOUNT, Is.EqualTo(0));
+
+                Assert.That(checkFeeResponse.Result, Is.EqualTo(PaywireResult.Approval));
+                Assert.That(checkFeeResponse.PWADJAMOUNT, Is.Not.EqualTo(checkFeeResponse.AMOUNT));
+
+                Assert.That(checkNoFeeResponse.Result, Is.EqualTo(PaywireResult.Approval));
+                Assert.That(checkNoFeeResponse.PWADJAMOUNT, Is.EqualTo(0));
+            });
         }
         [Test, Order(4), Category("Credit Card")]
         public async Task ConsumerFeeDisableCF_Test()
@@ -393,8 +402,11 @@ namespace Paywire.NET.Tests
             var cardFeeResponse = await Client.SendRequest<GetConsumerFeeResponse>(cardRequestFee);
             var checkFeeResponse = await Client.SendRequest<GetConsumerFeeResponse>(checkRequestFee);
 
-            Assert.True(cardFeeResponse.Result == PaywireResult.Approval && cardFeeResponse.PWADJAMOUNT == 0);
-            Assert.True(checkFeeResponse.Result == PaywireResult.Approval && checkFeeResponse.PWADJAMOUNT == 0);
+            Assert.That(cardFeeResponse.Result, Is.EqualTo(PaywireResult.Approval));
+            Assert.That(cardFeeResponse.PWADJAMOUNT, Is.EqualTo(0));
+
+            Assert.That(checkFeeResponse.Result, Is.EqualTo(PaywireResult.Approval));
+            Assert.That(checkFeeResponse.PWADJAMOUNT, Is.EqualTo(0));
         }
         [Test, Order(5), Category("Credit Card")]
         public async Task OneTimeSaleTest()
@@ -507,8 +519,8 @@ namespace Paywire.NET.Tests
             sw.Stop();
             var elapsed = sw.ElapsedMilliseconds;
 
-            Assert.True(feeResult.Result == PaywireResult.Approval);
-            Assert.True(freeResult.Result == PaywireResult.Declined);
+            Assert.That(feeResult.Result, Is.EqualTo(PaywireResult.Approval));
+            Assert.That(freeResult.Result, Is.EqualTo(PaywireResult.Declined));
         }
         [Test, Order(6), Category("Credit Card")]
         public async Task CheckSaleTest()
@@ -538,7 +550,7 @@ namespace Paywire.NET.Tests
             sw.Stop();
             var elapsed = sw.ElapsedMilliseconds;
 
-            Assert.True(res.Result == PaywireResult.Approval);
+            Assert.That(res.Result, Is.EqualTo(PaywireResult.Approval));
         }
 
         [Test, Order(7), Category("Credit Card")]
@@ -557,8 +569,7 @@ namespace Paywire.NET.Tests
                 PWMEDIA = "CC"
             });
             var response = await Client.SendRequest<CreditResponse>(request);
-
-            Assert.True(response.Result == PaywireResult.Approval);
+            Assert.That(response.Result, Is.EqualTo(PaywireResult.Approval));
         }
         [Test, Order(8), Category("Credit Card")]
         public async Task AccountNumberCreditTest()
@@ -576,8 +587,7 @@ namespace Paywire.NET.Tests
                     PWMEDIA = "ECHECK"
                 });
             var response = await Client.SendRequest<CreditResponse>(request);
-
-            Assert.True(response.Result == PaywireResult.Approval);
+            Assert.That(response.Result, Is.EqualTo(PaywireResult.Approval));
         }
         [Test, Order(9), Category("Credit Card")]
         public async Task VoidTest()
@@ -586,7 +596,7 @@ namespace Paywire.NET.Tests
             var request = PaywireRequestFactory.Void(Convert.ToDouble(SaleAmount), InvoiceNumber, UniqueID);
             var response = await Client.SendRequest<VoidResponse>(request);
 
-            Assert.True(response.Result == PaywireResult.Approval);
+            Assert.That(response.Result, Is.EqualTo(PaywireResult.Approval));
         }
 
         [Test, Order(10)]
@@ -624,7 +634,7 @@ namespace Paywire.NET.Tests
                 PreAuthUniqueId = response.PWUNIQUEID;
                 PreAuthInvoiceNumber = response.PWINVOICENUMBER;
             }
-            Assert.True(response.Result == PaywireResult.Approval);
+            Assert.That(response.Result, Is.EqualTo(PaywireResult.Approval));
         }
 
         [Test, Order(11), Category("Credit Card")]
@@ -633,7 +643,7 @@ namespace Paywire.NET.Tests
             var request = PaywireRequestFactory.Capture(Convert.ToDouble(0), PreAuthInvoiceNumber, PreAuthUniqueId);
             var response = await Client.SendRequest<CaptureResponse>(request);
 
-            Assert.True(response.Result == PaywireResult.Approval);
+            Assert.That(response.Result, Is.EqualTo(PaywireResult.Approval));
         }
         //[Test, Order(8)]
         //public async Task BinValidationTest()
@@ -699,16 +709,14 @@ namespace Paywire.NET.Tests
             Shared.CreditInvoiceNumber = response.SearchResults.PaymentDetails.Select(s => s.PWINVOICENUMBER).LastOrDefault();
             sw.Stop();
             var elapsed = sw.ElapsedMilliseconds;
-
-            Assert.True(response.Result == PaywireResult.Success);
+            Assert.That(response.Result, Is.EqualTo(PaywireResult.Success));
         }
         [Test, Order(2), Category("Credit Card")]
         public async Task CreditTest()
         {
             var request = PaywireRequestFactory.Credit(Convert.ToDouble("00.01"), CreditInvoiceNumber, CreditUniqueId);
             var response = await Client.SendRequest<CreditResponse>(request);
-
-            Assert.True(response.Result == PaywireResult.Approval);
+            Assert.That(response.Result, Is.EqualTo(PaywireResult.Approval));
         }
         [Test, Order(3), Category("Search")]
         public async Task SearchChargebackTest()
@@ -730,8 +738,7 @@ namespace Paywire.NET.Tests
             var response = await Client.SendRequest<SearchChargebackResponse>(request);
             sw.Stop();
             var elapsed = sw.ElapsedMilliseconds;
-
-            Assert.True(response.Result == PaywireResult.Success);
+            Assert.That(response.Result, Is.EqualTo(PaywireResult.Success));
         }
         [Test, Order(4), Category("Receipt")]
         public async Task SendReceiptTest()
@@ -747,8 +754,7 @@ namespace Paywire.NET.Tests
                 }
             );
             var response = await Client.SendRequest<SendReceiptResponse>(request);
-
-            Assert.True(response.Result == PaywireResult.Success);
+            Assert.That(response.Result, Is.EqualTo(PaywireResult.Success));
         }
     }
 
@@ -764,8 +770,7 @@ namespace Paywire.NET.Tests
             var response = await Client.SendRequest<BatchInquiryResponse>(request);
             sw.Stop();
             var elapsed = sw.ElapsedMilliseconds;
-
-            Assert.True(response.Result == PaywireResult.Success);
+            Assert.That(response.Result, Is.EqualTo(PaywireResult.Success));
         }
         [Test, Order(2), Category("Close")]
         public async Task CloseBatchTest()
@@ -781,7 +786,7 @@ namespace Paywire.NET.Tests
             var response = await Client.SendRequest<CloseBatchResponse>(request);
             sw.Stop();
             var elapsed = sw.ElapsedMilliseconds;
-            Assert.True(response.Result == PaywireResult.Success);
+            Assert.That(response.Result, Is.EqualTo(PaywireResult.Success));
         }
 
     }
