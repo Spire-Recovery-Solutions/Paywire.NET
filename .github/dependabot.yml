@@ -10,11 +10,6 @@
 #     schedule:
 #       interval: "weekly"
 version: 2
-registries:
-  nuget-github:
-    type: nuget-feed
-    url: https://nuget.pkg.github.com/Spire-Recovery-Solutions/index.json
-    token: ${{secrets.ACTIONS_TOKEN}}
     
 updates:
   # GitHub Actions
