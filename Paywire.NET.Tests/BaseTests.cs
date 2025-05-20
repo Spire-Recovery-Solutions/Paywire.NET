@@ -41,7 +41,6 @@ public abstract class BaseTests
             AUTHENTICATION_USERNAME = config["PWUSER"] ?? throw new InvalidOperationException("PWUSER not found in configuration"),
             AUTHENTICATION_KEY = config["PWKEY"] ?? throw new InvalidOperationException("PWKEY not found in configuration"),
             AUTHENTICATION_PASSWORD = config["PWPASS"] ?? throw new InvalidOperationException("PWPASS not found in configuration"),
-            
             ENDPOINT = PaywireEndpoint.Staging
         });
 
