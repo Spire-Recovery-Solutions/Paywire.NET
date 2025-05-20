@@ -2,11 +2,11 @@
 
 public class PaywireClientOptions
 {
-    public PaywireEndpoint Endpoint { get; set; }
-    public string AuthenticationClientId { get; set; }
-    public string AuthenticationKey { get; set; }
-    public string AuthenticationUsername { get; set; }
-    public string AuthenticationPassword { get; set; }
+    public PaywireEndpoint ENDPOINT { get; set; }
+    public string AUTHENTICATION_CLIENT_ID { get; set; }
+    public string AUTHENTICATION_KEY { get; set; }
+    public string AUTHENTICATION_USERNAME { get; set; }
+    public string AUTHENTICATION_PASSWORD { get; set; }
 }
 
 public enum PaywireEndpoint

@@ -12,7 +12,7 @@ namespace Paywire.NET.Models.BinValidation
     public class BinValidationResponse : BasePaywireResponse
     {
         [XmlElement("BINVALDETAIL")]
-        public Bin BinDetail { get; set; }
+        public Bin BIN_DETAIL { get; set; }
     }
 
     public class Bin

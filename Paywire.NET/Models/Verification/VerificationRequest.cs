@@ -6,7 +6,7 @@ namespace Paywire.NET.Models.Verification
     public class VerificationRequest : BasePaywireRequest
     {
         [XmlElement("CUSTOMER")]
-        public Customer Customer { get; set; }
+        public Customer CUSTOMER { get; set; }
         /*
         
          * PWSALEAMOUNT	int/decimal	Amount of the transaction. [In TransactionHeader]

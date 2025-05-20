@@ -17,7 +17,7 @@ namespace Paywire.NET.Models.GetConsumerFee
         public string PWINVOICENUMBER { get; set; }
 
         //Customer Object
-        [XmlElement("CUSTOMER")] public Customer Customer { get; set; } // Put the shit below into this... 
+        [XmlElement("CUSTOMER")] public Customer CUSTOMER { get; set; } // Put the shit below into this... 
 
 
         /*

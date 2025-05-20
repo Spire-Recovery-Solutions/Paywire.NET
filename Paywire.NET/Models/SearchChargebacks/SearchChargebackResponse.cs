@@ -13,14 +13,14 @@ namespace Paywire.NET.Models.SearchChargebacks
     public class SearchChargebackResponse : BasePaywireResponse
     {
         [XmlElement("SEARCHRESULT")]
-        public SearchResult SearchResults { get; set; }
+        public SearchResult SEARCH_RESULTS { get; set; }
     }
 
     [XmlType("SearchChargebackResult")]
     public class SearchResult
     {
         [XmlElement("PWCBDETAIL")]
-        public PaywirePaymentChargebackDetail[] PaymentChargebackDetails { get; set; }
+        public PaywirePaymentChargebackDetail[] PAYMENT_CHARGEBACK_DETAILS { get; set; }
     }
 
     public class PaywirePaymentChargebackDetail

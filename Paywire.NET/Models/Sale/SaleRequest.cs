@@ -7,5 +7,5 @@ namespace Paywire.NET.Models.Sale;
 public class SaleRequest : BasePaywireRequest
 {
     [XmlElement("CUSTOMER")]
-    public Customer Customer { get; set; }
+    public Customer CUSTOMER { get; set; }
 }

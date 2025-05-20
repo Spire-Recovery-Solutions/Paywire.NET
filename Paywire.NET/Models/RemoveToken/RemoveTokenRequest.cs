@@ -7,7 +7,7 @@ namespace Paywire.NET.Models.RemoveToken
     public class RemoveTokenRequest : BasePaywireRequest
     {
         [XmlElement("CUSTOMER")]
-        public Customer Customer { get; set; }
+        public Customer CUSTOMER { get; set; }
              
     }
 }

@@ -13,7 +13,7 @@ public class BasePaywireResponse
     /// Status for the request.	APPROVAL, DECLINED, ERROR, SUCCESS, CAPTURED, CHARGEBACK
     /// </summary>
     [XmlIgnore]
-    public PaywireResult Result
+    public PaywireResult RESULT
     {
         get
         {
@@ -31,7 +31,7 @@ public class BasePaywireResponse
     /// <summary>
     /// Transaction DateTime from the response headers
     /// </summary>
-    public DateTimeOffset Timestamp { get; set; }
+    public DateTimeOffset TIMESTAMP { get; set; }
 
     /// <summary>
     /// Paywire-generated unique merchant identifier.	

@@ -7,6 +7,6 @@ namespace Paywire.NET.Models.PreAuth
     public class PreAuthRequest : BasePaywireRequest
     {
         [XmlElement("CUSTOMER")]
-        public Customer Customer { get; set; }
+        public Customer CUSTOMER { get; set; }
     }
 }

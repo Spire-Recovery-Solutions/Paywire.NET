@@ -6,7 +6,7 @@ namespace Paywire.NET.Models.SearchTransactions;
 public class SearchTransactionsResponse : BasePaywireResponse
 {
     [XmlElement("SEARCHRESULT")]
-    public SearchResult SearchResults { get; set; }
+    public SearchResult SEARCH_RESULTS { get; set; }
 
 }
 
@@ -14,7 +14,7 @@ public class SearchTransactionsResponse : BasePaywireResponse
 public class SearchResult
 {
     [XmlElement("PWPAYDETAIL")]
-    public PaywirePaymentDetail[] PaymentDetails { get; set; }
+    public PaywirePaymentDetail[] PAYMENT_DETAILS { get; set; }
 
 }
 
@@ -40,7 +40,7 @@ public class PaywirePaymentDetail
     /// Status for the request.	APPROVAL, DECLINED, ERROR, SUCCESS, CAPTURED, CHARGEBACK
     /// </summary>
     [XmlIgnore]
-    public PaywireResult Result
+    public PaywireResult RESULT
     {
         get
         {

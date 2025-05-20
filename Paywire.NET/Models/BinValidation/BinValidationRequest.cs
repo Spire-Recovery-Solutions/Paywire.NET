@@ -11,6 +11,6 @@ namespace Paywire.NET.Models.BinValidation
     public class BinValidationRequest : BasePaywireRequest
     {
         [XmlElement("CUSTOMER")]
-        public Customer Customer { get; set; }
+        public Customer CUSTOMER { get; set; }
     }
 }
