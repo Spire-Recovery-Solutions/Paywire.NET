@@ -6,18 +6,18 @@ namespace Paywire.NET.Models.SearchTransactions;
 public class SearchTransactionsRequest : BasePaywireRequest
 {
     [XmlElement("SEARCHCONDITION")]
-    public SearchCondition SearchCondition { get; set; }
+    public SearchCondition SEARCH_CONDITION { get; set; }
 }
 
 public class SearchCondition
 {
     [XmlIgnore]
-    public DateTimeOffset? DateFrom { get; set; }
+    public DateTimeOffset? DATE_FROM { get; set; }
     [XmlIgnore]
-    public DateTimeOffset? DateTo { get; set; }
+    public DateTimeOffset? DATE_TO { get; set; }
 
-    public string? COND_DATEFROM => DateFrom?.ToString("yyyy-MM-dd HH:mm");
-    public string? COND_DATETO => DateTo?.ToString("yyyy-MM-dd HH:mm");
+    public string? COND_DATEFROM => DATE_FROM?.ToString("yyyy-MM-dd HH:mm");
+    public string? COND_DATETO => DATE_TO?.ToString("yyyy-MM-dd HH:mm");
     public string? COND_TRANSTYPE { get; set; }
     public string? COND_PWCID { get; set; }
     public string? COND_PWCUSTOMID2 { get; set; }

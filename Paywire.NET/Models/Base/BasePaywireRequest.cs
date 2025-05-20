@@ -7,5 +7,5 @@ public class BasePaywireRequest
 {
 
     [XmlElement("TRANSACTIONHEADER")]
-    public TransactionHeader TransactionHeader { get; set; }
+    public required TransactionHeader TRANSACTION_HEADER { get; set; }
 }

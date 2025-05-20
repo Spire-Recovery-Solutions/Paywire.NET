@@ -13,6 +13,6 @@ namespace Paywire.NET.Models.SearchChargebacks
     public class SearchChargebackRequest : BasePaywireRequest
     {
         [XmlElement("SEARCHCONDITION")]
-        public SearchCondition SearchCondition { get; set; }
+        public SearchCondition SEARCH_CONDITION { get; set; }
     }
 }

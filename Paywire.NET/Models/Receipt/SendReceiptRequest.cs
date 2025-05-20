@@ -7,6 +7,6 @@ namespace Paywire.NET.Models.Receipt
     public class SendReceiptRequest : BasePaywireRequest
     {
         [XmlElement("CUSTOMER")]
-        public Customer Customer { get; set; }
+        public Customer CUSTOMER { get; set; }
     }
 }

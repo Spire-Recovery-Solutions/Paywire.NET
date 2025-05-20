@@ -29,39 +29,39 @@ namespace Paywire.NET
         public PaywireClient(PaywireClientOptions options)
         {
             _paywireClientOptions = options;
-            var endpointUrl = GetEndpointUrl(options.Endpoint);
+            var endpointUrl = GetEndpointUrl(options.ENDPOINT);
             var restClientOptions = new RestClientOptions(endpointUrl)
             {
                 ThrowOnAnyError = true,
                 ThrowOnDeserializationError = true,
-                MaxTimeout = 30000,
+                Timeout = TimeSpan.FromSeconds(30),
             };
             _restClient = new RestClient(restClientOptions);
         }
 
-        public PaywireClient(PaywireClientOptions options, bool throwOnAnyError = true, bool throwOnDeserializationError = true, int timeout = 30000)
+        public PaywireClient(PaywireClientOptions options, bool throwOnAnyError = true, bool throwOnDeserializationError = true, TimeSpan? timeout = null)
         {
             _paywireClientOptions = options;
-            var endpointUrl = GetEndpointUrl(options.Endpoint);
+            var endpointUrl = GetEndpointUrl(options.ENDPOINT);
             var restClientOptions = new RestClientOptions(endpointUrl)
             {
                 ThrowOnAnyError = throwOnAnyError,
-                ThrowOnDeserializationError = throwOnDeserializationError,
-                MaxTimeout = timeout,
+                ThrowOnDeserializationError = throwOnDeserializationError, 
+                Timeout = timeout,
             };
             _restClient = new RestClient(restClientOptions);
         }
+        
         public async Task<T?> SendRequest<T>(BasePaywireRequest request) where T : BasePaywireResponse
         {
-            request.TransactionHeader ??= new TransactionHeader();
+            request.TRANSACTION_HEADER ??= new TransactionHeader();
+            request.TRANSACTION_HEADER.PWCLIENTID = _paywireClientOptions.AUTHENTICATION_CLIENT_ID;
+            request.TRANSACTION_HEADER.PWKEY = _paywireClientOptions.AUTHENTICATION_KEY;
+            request.TRANSACTION_HEADER.PWUSER = _paywireClientOptions.AUTHENTICATION_USERNAME;
+            request.TRANSACTION_HEADER.PWPASS = _paywireClientOptions.AUTHENTICATION_PASSWORD;
+            request.TRANSACTION_HEADER.PWVERSION = 3;
 
-            request.TransactionHeader.PWCLIENTID = _paywireClientOptions.AuthenticationClientId;
-            request.TransactionHeader.PWKEY = _paywireClientOptions.AuthenticationKey;
-            request.TransactionHeader.PWUSER = _paywireClientOptions.AuthenticationUsername;
-            request.TransactionHeader.PWPASS = _paywireClientOptions.AuthenticationPassword;
-            request.TransactionHeader.PWVERSION = 3;
-
-            request.TransactionHeader.PWTRANSACTIONTYPE = request switch
+            request.TRANSACTION_HEADER.PWTRANSACTIONTYPE = request switch
             {
                 GetAuthTokenRequest => PaywireTransactionType.GetAuthToken,
                 VerificationRequest => PaywireTransactionType.Verification,
@@ -80,13 +80,14 @@ namespace Paywire.NET
                 CloseBatchRequest => PaywireTransactionType.CloseBatch,
                 RemoveTokenRequest => PaywireTransactionType.RemoveToken,
                 CaptureRequest => PaywireTransactionType.Capture,
-                _ => request.TransactionHeader.PWTRANSACTIONTYPE
+                _ => request.TRANSACTION_HEADER.PWTRANSACTIONTYPE
             };
 
             var restRequest = new RestRequest("/API/pwapi", Method.Post);
             restRequest.AddXmlBody(request);
             var response = await _restClient.ExecuteAsync(restRequest);
-            DateTimeOffset transDateTime = DateTimeOffset.Parse(response.Headers.FirstOrDefault(t => t.Name == "Date").Value.ToString());
+            
+            var transDateTime = DateTimeOffset.Parse(response.Headers.FirstOrDefault(t => t.Name == "Date").Value.ToString());
 
             var emptyNameSpace = new XmlSerializerNamespaces();
             emptyNameSpace.Add("", "");
@@ -96,7 +97,7 @@ namespace Paywire.NET
             TextReader textReader = new StringReader(response.Content);
             var returnResponse = (T)xmlSerializer.Deserialize(textReader);
 
-            returnResponse.Timestamp = transDateTime;
+            returnResponse.TIMESTAMP = transDateTime;
 
             //var res = await _restClient.PostAsync<T>(restRequest);
 
