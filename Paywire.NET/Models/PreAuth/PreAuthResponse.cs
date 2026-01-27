@@ -51,5 +51,29 @@ namespace Paywire.NET.Models.PreAuth
         /// Transaction CVV result: 1 for a match, 0 for a failure.
         /// </summary>
         public string CVVCODE { get; set; }
+        /// <summary>
+        /// Processor decline code.
+        /// </summary>
+        public string RESPONSECODE { get; set; }
+        /// <summary>
+        /// The account holder's first name that was supplied.
+        /// </summary>
+        public string AHFIRSTNAME { get; set; }
+        /// <summary>
+        /// The account holder's last name that was supplied.
+        /// </summary>
+        public string AHLASTNAME { get; set; }
+        /// <summary>
+        /// Adjustment amount.
+        /// </summary>
+        public string PWADJAMOUNT { get; set; }
+        /// <summary>
+        /// Indicate if the card is a debit or credit card.
+        /// </summary>
+        public bool ISDEBIT { get; set; }
+        /// <summary>
+        /// Periodic plan ID.
+        /// </summary>
+        public string RECURRINGID { get; set; }
     }
 }
