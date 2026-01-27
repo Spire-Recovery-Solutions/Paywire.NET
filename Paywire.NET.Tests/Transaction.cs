@@ -65,26 +65,28 @@ public class TransactionTests : BaseTests
     [Test, Order(2), Category("Credit Card")]
     public async Task CreditTest()
     {
-        Assert.That(string.IsNullOrEmpty(CREDIT_UNIQUE_ID), Is.False, "CREDIT_UNIQUE_ID is required for this test - no settled transactions found");
-
+        // Credit to card directly instead of relying on finding a creditable settled transaction
         var request = PaywireRequestFactory.Credit(
-            Convert.ToDouble("00.01"),
-            CREDIT_INVOICE_NUMBER,
-            CREDIT_UNIQUE_ID);
+            new TransactionHeader
+            {
+                PWSALEAMOUNT = 0.01
+            },
+            new Customer
+            {
+                PWMEDIA = "CC",
+                CARDNUMBER = 4012301230123010,
+                EXP_MM = "12",
+                EXP_YY = "27",
+                CVV2 = "123",
+                FIRSTNAME = "CHRIS",
+                LASTNAME = "FROSTY",
+                EMAIL = "cffrost@emailaddress.com"
+            });
 
         var response = await CLIENT.SendRequest<CreditResponse>(request);
 
-        // If the transaction is not eligible for credit, that's expected for integration tests
-        // The test verifies we can make the API call correctly
-        Assert.That(response.RESULT, Is.EqualTo(PaywireResult.Approval).Or.EqualTo(PaywireResult.Error),
-            $"Credit API call failed. RESTEXT: {response.RESTEXT}");
-
-        // Additional info if it failed
-        if (response.RESULT == PaywireResult.Error)
-        {
-            Assert.That(response.RESTEXT, Does.Contain("INVALID FOR CREDIT").Or.Contain("SETTLED"),
-                "Expected credit to fail with 'INVALID FOR CREDIT' or settlement-related message, but got: " + response.RESTEXT);
-        }
+        Assert.That(response.RESULT, Is.EqualTo(PaywireResult.Approval),
+            $"Credit failed. RESULT: {response.RESULT}, RESTEXT: {response.RESTEXT}");
     }
     
     [Test, Order(3), Category("Search")]
