@@ -28,7 +28,7 @@ public class CreditCardTests : BaseTests
             PWMEDIA = "CC",
             CARDNUMBER = 4012301230123010,
             CVV2 = "123",
-            EXP_YY = "25",
+            EXP_YY = "27",
             EXP_MM = "07",
             FIRSTNAME = "John",
             LASTNAME = "Doe",
@@ -51,8 +51,10 @@ public class CreditCardTests : BaseTests
     [Test, Order(2), Category("Customer Verification")]
     public async Task VerificationTestNew()
     {
+        Assert.That(string.IsNullOrEmpty(SALE_AMOUNT), Is.False, "SALE_AMOUNT is required for this test - previous test may have failed");
+
         var request = PaywireRequestFactory.Verification(
-            Convert.ToDouble(SALE_AMOUNT), 4012301230123010, "07", "25", "123");
+            Convert.ToDouble(SALE_AMOUNT), 4012301230123010, "07", "27", "123");
         var response = await CLIENT.SendRequest<VerificationResponse>(request);
         
         if (response.RESULT == PaywireResult.Approval)
@@ -80,7 +82,7 @@ public class CreditCardTests : BaseTests
                 PWMEDIA = "CC",
                 CARDNUMBER = 4012301230123010,
                 CVV2 = "123",
-                EXP_YY = "25",
+                EXP_YY = "27",
                 EXP_MM = "12",
                 ADJTAXRATE = Convert.ToDouble("7"),
                 FIRSTNAME = "CHRIS",
@@ -133,7 +135,7 @@ public class CreditCardTests : BaseTests
                 PWMEDIA = "CC",
                 CARDNUMBER = 4012301230123010,
                 CVV2 = "123",
-                EXP_YY = "25",
+                EXP_YY = "27",
                 EXP_MM = "12",
                 ADJTAXRATE = Convert.ToDouble("7"),
                 FIRSTNAME = "CHRIS",
@@ -212,7 +214,7 @@ public class CreditCardTests : BaseTests
                 PWMEDIA = "CC",
                 CARDNUMBER = 4012301230123010,
                 CVV2 = "123",
-                EXP_YY = "25",
+                EXP_YY = "27",
                 EXP_MM = "12",
                 ADJTAXRATE = Convert.ToDouble("7"),
                 FIRSTNAME = "CHRIS",
@@ -280,7 +282,7 @@ public class CreditCardTests : BaseTests
                 PWMEDIA = "CC",
                 CARDNUMBER = 4012301230123010,
                 CVV2 = "123",
-                EXP_YY = "25",
+                EXP_YY = "27",
                 EXP_MM = "12",
                 FIRSTNAME = "CHRIS",
                 LASTNAME = "FROSTY",
@@ -335,7 +337,7 @@ public class CreditCardTests : BaseTests
                 PWMEDIA = "CC",
                 CARDNUMBER = 4012301230123010,
                 CVV2 = "123",
-                EXP_YY = "25",
+                EXP_YY = "27",
                 EXP_MM = "12",
                 FIRSTNAME = "CHRIS",
                 LASTNAME = "FROSTY",
@@ -372,7 +374,7 @@ public class CreditCardTests : BaseTests
             {
                 PWMEDIA = "CC",
                 CARDNUMBER = 4012301230123010,
-                EXP_YY = "25",
+                EXP_YY = "27",
                 EXP_MM = "12"
             });
 
@@ -424,7 +426,7 @@ public class CreditCardTests : BaseTests
                 PWINVOICENUMBER = INVOICE_NUMBER,
                 CARDNUMBER = "4012301230123010",
                 EXP_MM = "12",
-                EXP_YY = "25"
+                EXP_YY = "27"
             },
             new Customer
             {
@@ -461,6 +463,9 @@ public class CreditCardTests : BaseTests
     [Test, Order(9), Category("Credit Card")]
     public async Task VoidTest()
     {
+        Assert.That(string.IsNullOrEmpty(SALE_AMOUNT), Is.False, "SALE_AMOUNT is required for this test - previous test may have failed");
+        Assert.That(string.IsNullOrEmpty(UNIQUE_ID), Is.False, "UNIQUE_ID is required for this test - previous test may have failed");
+
         var request = PaywireRequestFactory.Void(
             Convert.ToDouble(SALE_AMOUNT), INVOICE_NUMBER, UNIQUE_ID);
         var response = await CLIENT.SendRequest<VoidResponse>(request);
@@ -485,7 +490,7 @@ public class CreditCardTests : BaseTests
                 PWMEDIA = "CC",
                 CARDNUMBER = 4012301230123010,
                 CVV2 = "123",
-                EXP_YY = "25",
+                EXP_YY = "27",
                 EXP_MM = "12",
                 FIRSTNAME = "CHRIS",
                 LASTNAME = "FROSTY",
