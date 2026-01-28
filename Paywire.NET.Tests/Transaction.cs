@@ -60,15 +60,6 @@ public class TransactionTests : BaseTests
 
         // Log search results for visibility
         TestContext.WriteLine($"Found {response.SEARCH_RESULTS.PAYMENT_DETAILS.Length} settled transactions");
-
-        // Store last transaction details (no longer used by CreditTest but kept for potential future use)
-        CREDIT_UNIQUE_ID = response.SEARCH_RESULTS.PAYMENT_DETAILS
-            .Select(s => s.PWUID)
-            .LastOrDefault() ?? string.Empty;
-
-        CREDIT_INVOICE_NUMBER = response.SEARCH_RESULTS.PAYMENT_DETAILS
-            .Select(s => s.PWINVOICENUMBER)
-            .LastOrDefault() ?? string.Empty;
     }
 
     [Test, Order(2), Category("Search")]

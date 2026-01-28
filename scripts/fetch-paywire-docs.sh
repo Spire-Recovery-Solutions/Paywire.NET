@@ -29,8 +29,6 @@ echo "Fetching Paywire documentation from: $URL"
 curl -sS "https://r.jina.ai/$URL" \
   -H "Authorization: Bearer $JINA_API_KEY" \
   -o "$OUTPUT"
-
-echo ""
 echo "Saved to: $OUTPUT"
 echo "Size: $(wc -c < "$OUTPUT" | tr -d ' ') bytes"
 echo "Lines: $(wc -l < "$OUTPUT" | tr -d ' ')"

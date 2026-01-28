@@ -75,7 +75,7 @@ public class CreditCardTests : BaseTests
             new TransactionHeader(),
             new Customer
             {
-                BINNUMBER = "400057"  // BIN from Paywire docs example
+                BINNUMBER = "400057"
             });
 
         var response = await CLIENT.SendRequest<BinValidationResponse>(request);
