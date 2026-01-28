@@ -77,7 +77,7 @@ public class PaywirePaymentDetail
     /// </summary>
     public string PWCUSTOMID3 { get; set; }
     /// <summary>
-    /// Periodic payment indicator (C/I/R/T).
+    /// Periodic payment indicator: C = Customer-initiated, I = Initial, R = Recurring, T = Installment.
     /// </summary>
     public string POSINDICATOR { get; set; }
 

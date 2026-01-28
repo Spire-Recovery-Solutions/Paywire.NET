@@ -69,8 +69,7 @@ public class CreditCardTests : BaseTests
     [Test, Order(2), Category("BIN Validation")]
     public async Task BinValidationTest()
     {
-        // BIN validation uses BINNUMBER (first 6 digits of card), not CARDNUMBER
-        // Use BIN from Paywire docs example: 400057
+        // BIN validation uses BINNUMBER (Bank Identification Number), not CARDNUMBER
         var request = PaywireRequestFactory.BinValidation(
             new TransactionHeader(),
             new Customer
