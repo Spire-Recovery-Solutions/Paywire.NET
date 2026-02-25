@@ -590,5 +590,93 @@ namespace Paywire.NET.Factories
             return new CaptureRequest { TRANSACTION_HEADER = new TransactionHeader { PWSALEAMOUNT = saleAmount, PWINVOICENUMBER = invoiceNumber, PWUNIQUEID = uniqueId } };
         }
 
+        /// <summary>
+        /// Process an Apple Pay or Google Pay sale with an encrypted wallet payload.
+        /// </summary>
+        /// <param name="saleAmount">Transaction amount</param>
+        /// <param name="walletType">"A" for Apple Pay, "G" for Google Pay</param>
+        /// <param name="walletPayload">Base64-encoded encrypted payload from the digital wallet</param>
+        /// <param name="firstName">Account holder's first name</param>
+        /// <param name="lastName">Account holder's last name</param>
+        /// <param name="state">Account holder's state (required for convenience fees)</param>
+        /// <param name="email">Account holder's email address</param>
+        public static SaleRequest DigitalWalletSale(double saleAmount, string walletType, string walletPayload,
+            string firstName = "", string lastName = "", string state = "", string email = "")
+        {
+            return new SaleRequest
+            {
+                TRANSACTION_HEADER = new TransactionHeader { PWSALEAMOUNT = saleAmount },
+                CUSTOMER = new Customer
+                {
+                    PWMEDIA = "CC",
+                    FIRSTNAME = firstName,
+                    LASTNAME = lastName,
+                    STATE = state,
+                    EMAIL = email
+                },
+                DIGITAL_WALLET = new DigitalWallet
+                {
+                    DWTYPE = walletType,
+                    DWPAYLOAD = walletPayload
+                }
+            };
+        }
+
+        /// <summary>
+        /// Pre-authorize an Apple Pay or Google Pay transaction with an encrypted wallet payload.
+        /// </summary>
+        /// <param name="saleAmount">Transaction amount</param>
+        /// <param name="walletType">"A" for Apple Pay, "G" for Google Pay</param>
+        /// <param name="walletPayload">Base64-encoded encrypted payload from the digital wallet</param>
+        /// <param name="firstName">Account holder's first name</param>
+        /// <param name="lastName">Account holder's last name</param>
+        /// <param name="state">Account holder's state (required for convenience fees)</param>
+        public static PreAuthRequest DigitalWalletPreAuth(double saleAmount, string walletType, string walletPayload,
+            string firstName = "", string lastName = "", string state = "")
+        {
+            return new PreAuthRequest
+            {
+                TRANSACTION_HEADER = new TransactionHeader { PWSALEAMOUNT = saleAmount },
+                CUSTOMER = new Customer
+                {
+                    PWMEDIA = "CC",
+                    FIRSTNAME = firstName,
+                    LASTNAME = lastName,
+                    STATE = state
+                },
+                DIGITAL_WALLET = new DigitalWallet
+                {
+                    DWTYPE = walletType,
+                    DWPAYLOAD = walletPayload
+                }
+            };
+        }
+
+        /// <summary>
+        /// Charge a card or bank account with digital wallet data (full-control overload).
+        /// </summary>
+        public static SaleRequest Sale(TransactionHeader header, Customer customer, DigitalWallet digitalWallet)
+        {
+            return new SaleRequest
+            {
+                TRANSACTION_HEADER = header,
+                CUSTOMER = customer,
+                DIGITAL_WALLET = digitalWallet
+            };
+        }
+
+        /// <summary>
+        /// Pre-authorize a card with digital wallet data (full-control overload).
+        /// </summary>
+        public static PreAuthRequest PreAuth(TransactionHeader header, Customer customer, DigitalWallet digitalWallet)
+        {
+            return new PreAuthRequest
+            {
+                TRANSACTION_HEADER = header,
+                CUSTOMER = customer,
+                DIGITAL_WALLET = digitalWallet
+            };
+        }
+
     }
 }

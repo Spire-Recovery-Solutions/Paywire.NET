@@ -66,12 +66,13 @@ Paywire.NET/
 │   ├── PaywireClientOptions.cs      # Configuration + PaywireEndpoint enum
 │   ├── PaywireTransactionType.cs    # Transaction type constants (19 types)
 │   ├── Factories/
-│   │   └── PaywireRequestFactory.cs # Factory methods (593 lines, 25+ methods)
+│   │   └── PaywireRequestFactory.cs # Factory methods (593 lines, 29+ methods)
 │   └── Models/
 │       ├── Base/                    # Base classes and shared models
 │       │   ├── BasePaywireRequest.cs
 │       │   ├── BasePaywireResponse.cs
 │       │   ├── Customer.cs          # Customer/payment data model
+│       │   ├── DigitalWallet.cs     # Digital wallet (Apple/Google Pay) model
 │       │   ├── PaywireResult.cs     # Result enum
 │       │   └── TransactionHeader.cs # Auth and transaction metadata
 │       ├── BatchInquiry/
@@ -113,7 +114,7 @@ Paywire.NET/
 
 1. **PaywireClient** (`Paywire.NET/PaywireClient.cs`): Main client class implementing `IPaywireClient`. Uses RestSharp for HTTP operations with generic `SendRequest<T>(request, CancellationToken)` method for type-safe requests. Includes automatic transaction type inference, XXE-safe XML deserialization (`DtdProcessing.Prohibit`, `XmlResolver = null`), a static `ConcurrentDictionary<Type, XmlSerializer>` cache to prevent memory leaks, and implements `IDisposable` to dispose the `RestClient`.
 
-2. **PaywireRequestFactory** (`Paywire.NET/Factories/PaywireRequestFactory.cs`): Static factory class with 25+ methods providing fluent interfaces to create all request types.
+2. **PaywireRequestFactory** (`Paywire.NET/Factories/PaywireRequestFactory.cs`): Static factory class with 29+ methods providing fluent interfaces to create all request types.
 
 3. **Models** (`Paywire.NET/Models/`): Organized by operation type, each folder containing:
    - Request model (e.g., `SaleRequest`)
@@ -299,6 +300,7 @@ The SDK supports all major Paywire transaction types:
 | **CLOSEBATCH** | Close current batch | ✅ Implemented |
 | **BINVALIDATION** | Validate BIN information | ✅ Implemented |
 | **RECEIPT** | Get transaction receipt | ✅ Implemented |
+| **Digital Wallet** | Apple Pay / Google Pay via SALE or PREAUTH | ✅ Supported via SALE/PREAUTH |
 | **CREATECUSTOMER** | Create customer profile | ❌ Not implemented |
 | **GETCUSTOMERTOKENS** | Get customer's stored tokens | ❌ Not implemented |
 | **GETPERIODICPLAN** | Get recurring plan details | ❌ Not implemented |

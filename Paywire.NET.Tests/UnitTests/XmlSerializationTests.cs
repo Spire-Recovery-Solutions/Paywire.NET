@@ -3,6 +3,7 @@ using System.IO;
 using System.Xml.Serialization;
 using NUnit.Framework;
 using Paywire.NET.Models.Base;
+using Paywire.NET.Models.PreAuth;
 using Paywire.NET.Models.Sale;
 
 namespace Paywire.NET.Tests.UnitTests;
@@ -174,5 +175,60 @@ public class XmlSerializationTests
         Assert.That(deserialized.CUSTOMER.CARDNUMBER, Is.EqualTo(4111111111111111));
         Assert.That(deserialized.CUSTOMER.FIRSTNAME, Is.EqualTo("Jane"));
         Assert.That(deserialized.CUSTOMER.STATE, Is.EqualTo("TX"));
+    }
+
+    [Test]
+    public void SaleRequest_WithDigitalWallet_SerializesCorrectly()
+    {
+        var request = new SaleRequest
+        {
+            TRANSACTION_HEADER = new TransactionHeader { PWCLIENTID = "C1" },
+            CUSTOMER = new Customer { PWMEDIA = "CC" },
+            DIGITAL_WALLET = new DigitalWallet { DWTYPE = "A", DWPAYLOAD = "TEST_PAYLOAD" }
+        };
+
+        var xml = Serialize(request);
+
+        Assert.That(xml, Does.Contain("<DIGITALWALLET>"));
+        Assert.That(xml, Does.Contain("<DWTYPE>A</DWTYPE>"));
+        Assert.That(xml, Does.Contain("<DWPAYLOAD>TEST_PAYLOAD</DWPAYLOAD>"));
+        // DIGITALWALLET should be a sibling of TRANSACTIONHEADER and CUSTOMER
+        Assert.That(xml, Does.Contain("<TRANSACTIONHEADER>"));
+        Assert.That(xml, Does.Contain("<CUSTOMER>"));
+    }
+
+    [Test]
+    public void SaleRequest_WithoutDigitalWallet_OmitsElement()
+    {
+        var request = new SaleRequest
+        {
+            TRANSACTION_HEADER = new TransactionHeader { PWCLIENTID = "C1" },
+            CUSTOMER = new Customer { PWMEDIA = "CC" }
+        };
+
+        var xml = Serialize(request);
+
+        Assert.That(xml, Does.Not.Contain("<DIGITALWALLET>"));
+    }
+
+    [Test]
+    public void DigitalWallet_DecryptedPath_SerializesAllFields()
+    {
+        var wallet = new DigitalWallet
+        {
+            DWTYPE = "G",
+            ISTDES = "TRUE",
+            CAVV = "CAVV_DATA",
+            ECI = "05",
+            UCAF = "UCAF_IND"
+        };
+
+        var xml = Serialize(wallet);
+
+        Assert.That(xml, Does.Contain("<DWTYPE>G</DWTYPE>"));
+        Assert.That(xml, Does.Contain("<ISTDES>TRUE</ISTDES>"));
+        Assert.That(xml, Does.Contain("<CAVV>CAVV_DATA</CAVV>"));
+        Assert.That(xml, Does.Contain("<ECI>05</ECI>"));
+        Assert.That(xml, Does.Contain("<UCAF>UCAF_IND</UCAF>"));
     }
 }
