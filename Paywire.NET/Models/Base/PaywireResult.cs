@@ -25,5 +25,7 @@ public enum PaywireResult
     [XmlEnum("PENDING")]
     Pending,
     [XmlEnum("SUCCESS")]
-    Success
+    Success,
+    [XmlEnum("COMPLETED")]
+    Completed
 }

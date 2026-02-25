@@ -67,7 +67,5 @@ namespace Paywire.NET.Models.TokenSale
         /// Transaction CVV result: 1 for a match, 0 for a failure.
         /// </summary>
         public string CVVCODE { get; set; }
-
-        public string PWCUSTOMID2 { get; set; }
     }
 }

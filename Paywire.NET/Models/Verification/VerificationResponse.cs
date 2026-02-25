@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
+﻿using System.Xml.Serialization;
 using Paywire.NET.Models.Base;
 
 namespace Paywire.NET.Models.Verification
@@ -14,7 +9,7 @@ namespace Paywire.NET.Models.Verification
         /// <summary>
         /// Batch number
         /// </summary>
-        public int BATCHID { get; set; }
+        public string BATCHID { get; set; }
 
         /// <summary>
         /// Authorization code associated with the transaction
@@ -45,7 +40,7 @@ namespace Paywire.NET.Models.Verification
         /// <summary>
         /// Payment amount.
         /// </summary>
-        public double AMOUNT { get; set; }
+        public string AMOUNT { get; set; }
 
         /// <summary>
         /// Masked credit card number.
@@ -55,12 +50,7 @@ namespace Paywire.NET.Models.Verification
         /// <summary>
         /// Credit card type.
         /// </summary>
-        public string CCTYPE { get; set; } 
-
-        /// <summary>
-        /// Client custom ID.
-        /// </summary>
-        public string PWCUSTOMID2 { get; set; }
+        public string CCTYPE { get; set; }
 
         /*
          * RESULT	string	China UnionPay transaction result.	

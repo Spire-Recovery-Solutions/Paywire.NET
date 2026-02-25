@@ -99,7 +99,7 @@ public class Customer
     /// <summary>
     /// Overrides the configured Sales Tax rate.	
     /// </summary>
-    public double ADJTAXRATE { get; set; }
+    public double? ADJTAXRATE { get; set; }
     /// <summary>
     /// Transaction custom description message.	
     /// </summary>
