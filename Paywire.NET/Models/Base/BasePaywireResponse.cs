@@ -1,4 +1,4 @@
-﻿using System.Xml.Serialization;
+using System.Xml.Serialization;
 
 namespace Paywire.NET.Models.Base;
 
@@ -7,7 +7,7 @@ public class BasePaywireResponse
 {
 
     [XmlElement("RESULT")]
-    public string RAW_RESULT { get; set; }
+    public string RAW_RESULT { get; set; } = string.Empty;
 
     /// <summary>
     /// Status for the request.	APPROVAL, DECLINED, ERROR, SUCCESS, CAPTURED, CHARGEBACK
@@ -34,29 +34,29 @@ public class BasePaywireResponse
     public DateTimeOffset TIMESTAMP { get; set; }
 
     /// <summary>
-    /// Paywire-generated unique merchant identifier.	
+    /// Paywire-generated unique merchant identifier.
     /// </summary>
-    public string PWCLIENTID { get; set; }
+    public string PWCLIENTID { get; set; } = string.Empty;
     /// <summary>
-    /// Identifier for this request.	
+    /// Identifier for this request.
     /// </summary>
-    public string PWINVOICENUMBER { get; set; }
+    public string PWINVOICENUMBER { get; set; } = string.Empty;
 
     /// <summary>
     /// Contains the error message.
     /// </summary>
-    public string RESTEXT { get; set; }
+    public string RESTEXT { get; set; } = string.Empty;
 
-    public string PWCUSTOMERID { get; set; }
+    public string PWCUSTOMERID { get; set; } = string.Empty;
 
-    public string PWCID { get; set; }
+    public string PWCID { get; set; } = string.Empty;
 
-    public string PWTOKEN { get; set; }
+    public string PWTOKEN { get; set; } = string.Empty;
 
     /// <summary>
     /// Custom third-party id to be associated with this transaction.
     /// </summary>
-    public string PWCUSTOMID1 {get; set; }
+    public string PWCUSTOMID1 {get; set; } = string.Empty;
 
-    public string PWCUSTOMID2 { get; set; }
+    public string PWCUSTOMID2 { get; set; } = string.Empty;
 }

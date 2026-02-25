@@ -118,7 +118,7 @@ namespace Paywire.NET
                             XmlResolver = null
                         };
                         using var xmlReader = XmlReader.Create(textReader, xmlSettings);
-                        var deserializedResponse = (T)xmlSerializer.Deserialize(xmlReader);
+                        var deserializedResponse = xmlSerializer.Deserialize(xmlReader) as T;
                         
                         if (deserializedResponse != null)
                         {

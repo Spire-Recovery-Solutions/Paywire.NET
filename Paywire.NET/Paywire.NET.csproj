@@ -4,6 +4,7 @@
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <UserSecretsId>b49a26a5-325e-414e-bb59-ac53f617fbd2</UserSecretsId>
     <!-- Disable automatic serialization assembly generation to avoid build failures -->
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>

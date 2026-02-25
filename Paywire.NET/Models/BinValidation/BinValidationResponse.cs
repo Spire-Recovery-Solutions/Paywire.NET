@@ -1,4 +1,4 @@
-﻿using Paywire.NET.Models.Base;
+using Paywire.NET.Models.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,24 +12,24 @@ namespace Paywire.NET.Models.BinValidation
     public class BinValidationResponse : BasePaywireResponse
     {
         [XmlElement("BINVALDETAIL")]
-        public Bin BIN_DETAIL { get; set; }
+        public Bin BIN_DETAIL { get; set; } = new();
     }
 
     public class Bin
     {
-        public string BIN { get; set; }
-        public string BRAND { get; set; }
-        public string CARDTYPE { get; set; }
-        public string BANK { get; set; }
-        public string COUNTRY { get; set; }
-        public string ISFSA { get; set; }
+        public string BIN { get; set; } = string.Empty;
+        public string BRAND { get; set; } = string.Empty;
+        public string CARDTYPE { get; set; } = string.Empty;
+        public string BANK { get; set; } = string.Empty;
+        public string COUNTRY { get; set; } = string.Empty;
+        public string ISFSA { get; set; } = string.Empty;
         /// <summary>
         /// Card sub-type (0-50 chars).
         /// </summary>
-        public string SUBTYPE { get; set; }
+        public string SUBTYPE { get; set; } = string.Empty;
         /// <summary>
         /// TRUE/FALSE - prepaid card indicator.
         /// </summary>
-        public string ISPREPAID { get; set; }
+        public string ISPREPAID { get; set; } = string.Empty;
     }
 }

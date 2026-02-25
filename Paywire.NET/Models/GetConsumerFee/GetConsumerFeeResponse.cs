@@ -1,4 +1,4 @@
-﻿using System.Xml.Serialization;
+using System.Xml.Serialization;
 using Paywire.NET.Models.Base;
 
 namespace Paywire.NET.Models.GetConsumerFee
@@ -9,20 +9,20 @@ namespace Paywire.NET.Models.GetConsumerFee
         /// <summary>
         /// Describes the payment method.	C: Card, A: ACH
         /// </summary>
-        public string PAYMETH { get; set; }
+        public string PAYMETH { get; set; } = string.Empty;
 
         /// <summary>
-        /// The description for the adjustment as set in the merchant configuration.	
+        /// The description for the adjustment as set in the merchant configuration.
         /// </summary>
-        public string PWADJDESC { get; set; }
+        public string PWADJDESC { get; set; } = string.Empty;
 
         /// <summary>
-        /// The tax amount calculated by the gateway, based on the Sales Tax rate set in the merchant configuration.	
+        /// The tax amount calculated by the gateway, based on the Sales Tax rate set in the merchant configuration.
         /// </summary>
         public double PWSALETAX { get; set; }
 
         /// <summary>
-        /// 	The adjustment amount calculated by the gateway, based on the Adjustment rate or fixed amount set in the merchant configuration. This can be either the Cash Discount markdown or the Convenience Fee.	
+        /// 	The adjustment amount calculated by the gateway, based on the Adjustment rate or fixed amount set in the merchant configuration. This can be either the Cash Discount markdown or the Convenience Fee.
         /// </summary>
         public double PWADJAMOUNT { get; set; }
 
@@ -36,29 +36,29 @@ namespace Paywire.NET.Models.GetConsumerFee
         /// </summary>
         public double PWSALEAMOUNT { get; set; }
 
-        [XmlElement("CDSUMMARY")] public ConsumerFeeSummary CDSUMMARY { get; set; }
+        [XmlElement("CDSUMMARY")] public ConsumerFeeSummary CDSUMMARY { get; set; } = new();
 
     }
 
     public class ConsumerFeeSummary
     {
         /// <summary>
-        /// Name of the merchant as set in the merchant configuration.	
+        /// Name of the merchant as set in the merchant configuration.
         /// </summary>
-        public string MERCHANTNAME { get; set; }
+        public string MERCHANTNAME { get; set; } = string.Empty;
 
         /// <summary>
-        /// The processor's merchant identifier.	
+        /// The processor's merchant identifier.
         /// </summary>
-        public string MID { get; set; }
+        public string MID { get; set; } = string.Empty;
 
         /// <summary>
         /// The type of merchant as set in the merchant configuration. A: General + Single SAP, B: Medical, C: General + Split SAP, D: Remote Check + SAP Invoices, E: Cash Discount, F: Convenience Fees
         /// </summary>
-        public string MERCHANTTYPE { get; set; }
+        public string MERCHANTTYPE { get; set; } = string.Empty;
 
         /// <summary>
-        /// The Sales Tax rate as set in the merchant configuration or submitted in the request.	
+        /// The Sales Tax rate as set in the merchant configuration or submitted in the request.
         /// </summary>
         public double ADJTAXRATE { get; set; }
 
@@ -68,12 +68,12 @@ namespace Paywire.NET.Models.GetConsumerFee
         public double CARDSALESAMOUNT { get; set; }
 
         /// <summary>
-        /// The Adjustment amount for a Card transaction. Relevant for Cash Discount.	
+        /// The Adjustment amount for a Card transaction. Relevant for Cash Discount.
         /// </summary>
         public double CARDADJAMOUNT { get; set; }
 
         /// <summary>
-        /// The calculated Sales Tax amount for a Card transaction. Relevant for Cash Discount.	
+        /// The calculated Sales Tax amount for a Card transaction. Relevant for Cash Discount.
         /// </summary>
         public double CARDTAXAMOUNT { get; set; }
 
@@ -83,22 +83,22 @@ namespace Paywire.NET.Models.GetConsumerFee
         public double CARDTRANSACTIONAMOUNT { get; set; }
 
         /// <summary>
-        /// The adjusted amount for a Card transaction before adding tax. Relevant for Cash Discount.	
+        /// The adjusted amount for a Card transaction before adding tax. Relevant for Cash Discount.
         /// </summary>
         public double CARDAMOUNTBEFORETAX { get; set; }
 
         /// <summary>
-        /// The Cash Sale amount before tax and any adjustments. Relevant for Cash Discount.	
+        /// The Cash Sale amount before tax and any adjustments. Relevant for Cash Discount.
         /// </summary>
         public double CASHSALESAMOUNT { get; set; }
 
         /// <summary>
-        /// The calculated Sales Tax amount for a Cash transaction. Relevant for Cash Discount.	
+        /// The calculated Sales Tax amount for a Cash transaction. Relevant for Cash Discount.
         /// </summary>
         public double CASHTAXAMOUNT { get; set; }
 
         /// <summary>
-        /// The total amount for a Cash transaction after tax and any adjustments. Relevant for Cash Discount.	
+        /// The total amount for a Cash transaction after tax and any adjustments. Relevant for Cash Discount.
         /// </summary>
         public double CASHTRANSACTIONAMOUNT { get; set; }
 
@@ -117,54 +117,54 @@ namespace Paywire.NET.Models.GetConsumerFee
         /// </summary>
         [XmlIgnore]
         [Obsolete("The line breaks contained in the response break XML parsing.")]
-        public string CDDESCRIPTIONVPOS { get; set; }
+        public string CDDESCRIPTIONVPOS { get; set; } = string.Empty;
 
         /// <summary>
-        /// The descriptive text set in the merchant config. to be displayed on the OSBP payment page.	
+        /// The descriptive text set in the merchant config. to be displayed on the OSBP payment page.
         /// </summary>
         [XmlIgnore]
         [Obsolete("The line breaks contained in the response break XML parsing.")]
-        public string CDDESCRIPTIONOSBP { get; set; }
+        public string CDDESCRIPTIONOSBP { get; set; } = string.Empty;
 
         /// <summary>
-        /// ACH Account Holder full name. Returned only when ECHECK in PWMEDIA and a valid PWTOKEN are submitted in the request.	
+        /// ACH Account Holder full name. Returned only when ECHECK in PWMEDIA and a valid PWTOKEN are submitted in the request.
         /// </summary>
-        public string AHNAME { get; set; }
+        public string AHNAME { get; set; } = string.Empty;
 
         /// <summary>
-        /// Masked Card or Account number. Returned only when a valid PWTOKEN is submitted in the request.	
+        /// Masked Card or Account number. Returned only when a valid PWTOKEN is submitted in the request.
         /// </summary>
-        public string MACCOUNT { get; set; }
+        public string MACCOUNT { get; set; } = string.Empty;
 
         /// <summary>
-        /// U.S. Bank Account routing number. Returned only when ECHECK in PWMEDIA and a valid PWTOKEN are submitted in the request.	
+        /// U.S. Bank Account routing number. Returned only when ECHECK in PWMEDIA and a valid PWTOKEN are submitted in the request.
         /// </summary>
-        public string ROUTINGNUMBER { get; set; }
+        public string ROUTINGNUMBER { get; set; } = string.Empty;
 
         /// <summary>
         /// Type of Bank Account. Returned only when ECHECK in PWMEDIA and a valid PWTOKEN are submitted in the request.
         /// </summary>
-        public string BANKACCTTYPE { get; set; }
+        public string BANKACCTTYPE { get; set; } = string.Empty;
 
         /// <summary>
-        /// Expiry month. Returned only when CC in PWMEDIA and a valid PWTOKEN are submitted in the request.	
+        /// Expiry month. Returned only when CC in PWMEDIA and a valid PWTOKEN are submitted in the request.
         /// </summary>
-        public string EXP_MM { get; set; }
+        public string EXP_MM { get; set; } = string.Empty;
 
         /// <summary>
         /// Card Expiry year. Returned only when CC in PWMEDIA and a valid PWTOKEN are submitted in the request.
         /// </summary>
-        public string EXP_YY { get; set; }
+        public string EXP_YY { get; set; } = string.Empty;
 
         /// <summary>
-        /// 	Account Holder first name. Returned only when a valid PWTOKEN is submitted in the request.	
+        /// 	Account Holder first name. Returned only when a valid PWTOKEN is submitted in the request.
         /// </summary>
-        public string FIRSTNAME { get; set; }
+        public string FIRSTNAME { get; set; } = string.Empty;
 
         /// <summary>
         /// Account Holder last name. Returned only when a valid PWTOKEN is submitted in the request.
         /// </summary>
-        public string LASTNAME { get; set; }
+        public string LASTNAME { get; set; } = string.Empty;
 
     }
 
