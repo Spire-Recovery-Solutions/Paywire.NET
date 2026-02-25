@@ -135,7 +135,15 @@ public class TransactionHeader
     /// </summary>
     public string? ROUTINGNUMBER { get; set; }
     /// <summary>
-    /// Account number of Bank Account to process payment with. Required only when ECHECK is submitted in PWMEDIA.	
+    /// Account number of Bank Account to process payment with. Required only when ECHECK is submitted in PWMEDIA.
     /// </summary>
     public string? ACCOUNTNUMBER { get; set; }
+    /// <summary>
+    /// Receipt description (0-200 chars).
+    /// </summary>
+    public string PWRECEIPTDESC { get; set; }
+    /// <summary>
+    /// Paywire cashier identifier.
+    /// </summary>
+    public string PWCASHIERID { get; set; }
 }

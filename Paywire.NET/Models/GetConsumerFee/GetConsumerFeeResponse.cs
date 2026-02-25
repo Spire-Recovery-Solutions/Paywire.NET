@@ -28,10 +28,14 @@ namespace Paywire.NET.Models.GetConsumerFee
         public double PWADJAMOUNT { get; set; }
 
         /// <summary>
-        /// The total amount of the transaction, including tax and any adjustments.	
+        /// The total amount of the transaction, including tax and any adjustments.
         /// </summary>
         public double AMOUNT { get; set; }
 
+        /// <summary>
+        /// Sale amount from request.
+        /// </summary>
+        public double PWSALEAMOUNT { get; set; }
 
         [XmlElement("CDSUMMARY")] public ConsumerFeeSummary CDSUMMARY { get; set; }
 
@@ -100,12 +104,17 @@ namespace Paywire.NET.Models.GetConsumerFee
         public double CASHTRANSACTIONAMOUNT { get; set; }
 
         /// <summary>
-        /// The adjusted amount for a Cash transaction before adding tax. Relevant for Cash Discount.	
+        /// The adjusted amount for a Cash transaction before adding tax. Relevant for Cash Discount.
         /// </summary>
         public double CASHAMOUNTBEFORETAX { get; set; }
 
         /// <summary>
-        /// The descriptive text set in the merchant configuration. To be displayed on the VPOS payment page.	
+        /// Cash adjustment amount.
+        /// </summary>
+        public double CASHADJAMOUNT { get; set; }
+
+        /// <summary>
+        /// The descriptive text set in the merchant configuration. To be displayed on the VPOS payment page.
         /// </summary>
         [XmlIgnore]
         [Obsolete("The line breaks contained in the response break XML parsing.")]

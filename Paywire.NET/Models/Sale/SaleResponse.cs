@@ -85,6 +85,14 @@ public class SaleResponse : BasePaywireResponse
     /// Indicate if the card is a debit or credit card.
     /// </summary>
     public bool ISDEBIT { get; set; }
+    /// <summary>
+    /// Processor decline code.
+    /// </summary>
+    public string RESPONSECODE { get; set; }
+    /// <summary>
+    /// Periodic plan ID.
+    /// </summary>
+    public string RECURRINGID { get; set; }
 
     [XmlElement("CDSUMMARY")] public ConsumerFeeSummary CDSUMMARY { get; set; }
 }           

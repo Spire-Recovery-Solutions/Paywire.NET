@@ -23,5 +23,13 @@ namespace Paywire.NET.Models.BinValidation
         public string BANK { get; set; }
         public string COUNTRY { get; set; }
         public string ISFSA { get; set; }
+        /// <summary>
+        /// Card sub-type (0-50 chars).
+        /// </summary>
+        public string SUBTYPE { get; set; }
+        /// <summary>
+        /// TRUE/FALSE - prepaid card indicator.
+        /// </summary>
+        public string ISPREPAID { get; set; }
     }
 }

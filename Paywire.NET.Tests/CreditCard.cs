@@ -9,6 +9,7 @@ using Paywire.NET.Models.Credit;
 using Paywire.NET.Models.Void;
 using Paywire.NET.Models.PreAuth;
 using Paywire.NET.Models.Capture;
+using Paywire.NET.Models.BinValidation;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -28,7 +29,7 @@ public class CreditCardTests : BaseTests
             PWMEDIA = "CC",
             CARDNUMBER = 4012301230123010,
             CVV2 = "123",
-            EXP_YY = "25",
+            EXP_YY = "27",
             EXP_MM = "07",
             FIRSTNAME = "John",
             LASTNAME = "Doe",
@@ -48,11 +49,13 @@ public class CreditCardTests : BaseTests
         Assert.That(response.RESULT, Is.EqualTo(PaywireResult.Approval));
     }
 
-    [Test, Order(2), Category("Customer Verification")]
+    [Test, Order(7), Category("Customer Verification")]
     public async Task VerificationTestNew()
     {
+        Assert.That(string.IsNullOrEmpty(SALE_AMOUNT), Is.False, "SALE_AMOUNT is required for this test - previous test may have failed");
+
         var request = PaywireRequestFactory.Verification(
-            Convert.ToDouble(SALE_AMOUNT), 4012301230123010, "07", "25", "123");
+            Convert.ToDouble(SALE_AMOUNT), 4012301230123010, "07", "27", "123");
         var response = await CLIENT.SendRequest<VerificationResponse>(request);
         
         if (response.RESULT == PaywireResult.Approval)
@@ -62,7 +65,43 @@ public class CreditCardTests : BaseTests
         
         Assert.That(response.RESULT, Is.EqualTo(PaywireResult.Approval));
     }
-    
+
+    [Test, Order(2), Category("BIN Validation")]
+    public async Task BinValidationTest()
+    {
+        // BIN validation uses BINNUMBER (Bank Identification Number), not CARDNUMBER
+        var request = PaywireRequestFactory.BinValidation(
+            new TransactionHeader(),
+            new Customer
+            {
+                BINNUMBER = "400057"
+            });
+
+        var response = await CLIENT.SendRequest<BinValidationResponse>(request);
+
+        Assert.That(response.RESULT, Is.EqualTo(PaywireResult.Success),
+            $"BIN validation failed: {response.RESTEXT}");
+        Assert.That(response.BIN_DETAIL, Is.Not.Null, "BIN_DETAIL should not be null");
+        Assert.That(response.BIN_DETAIL.BIN, Is.EqualTo("400057"),
+            $"Expected BIN '400057', got '{response.BIN_DETAIL.BIN}'");
+        Assert.That(response.BIN_DETAIL.BRAND, Is.Not.Null.And.Not.Empty,
+            "BRAND should be populated");
+        Assert.That(response.BIN_DETAIL.CARDTYPE, Is.Not.Null.And.Not.Empty,
+            "CARDTYPE should be populated");
+        // SUBTYPE and ISPREPAID are optional fields - may be null
+        // We test that the properties exist on the class, not that they're populated
+
+        TestContext.WriteLine(
+            $"BIN: {response.BIN_DETAIL.BIN}, " +
+            $"Brand: {response.BIN_DETAIL.BRAND}, " +
+            $"CardType: {response.BIN_DETAIL.CARDTYPE}, " +
+            $"Bank: {response.BIN_DETAIL.BANK ?? "N/A"}, " +
+            $"Country: {response.BIN_DETAIL.COUNTRY ?? "N/A"}, " +
+            $"IsFSA: {response.BIN_DETAIL.ISFSA ?? "N/A"}, " +
+            $"Subtype: {response.BIN_DETAIL.SUBTYPE ?? "N/A"}, " +
+            $"IsPrepaid: {response.BIN_DETAIL.ISPREPAID ?? "N/A"}");
+    }
+
     [Test, Order(3), Category("Credit Card")]
     public async Task ConsumerFeeTest()
     {
@@ -80,7 +119,7 @@ public class CreditCardTests : BaseTests
                 PWMEDIA = "CC",
                 CARDNUMBER = 4012301230123010,
                 CVV2 = "123",
-                EXP_YY = "25",
+                EXP_YY = "27",
                 EXP_MM = "12",
                 ADJTAXRATE = Convert.ToDouble("7"),
                 FIRSTNAME = "CHRIS",
@@ -133,7 +172,7 @@ public class CreditCardTests : BaseTests
                 PWMEDIA = "CC",
                 CARDNUMBER = 4012301230123010,
                 CVV2 = "123",
-                EXP_YY = "25",
+                EXP_YY = "27",
                 EXP_MM = "12",
                 ADJTAXRATE = Convert.ToDouble("7"),
                 FIRSTNAME = "CHRIS",
@@ -212,7 +251,7 @@ public class CreditCardTests : BaseTests
                 PWMEDIA = "CC",
                 CARDNUMBER = 4012301230123010,
                 CVV2 = "123",
-                EXP_YY = "25",
+                EXP_YY = "27",
                 EXP_MM = "12",
                 ADJTAXRATE = Convert.ToDouble("7"),
                 FIRSTNAME = "CHRIS",
@@ -264,10 +303,10 @@ public class CreditCardTests : BaseTests
     }
 
     [Test, Order(5), Category("Credit Card")]
-    public async Task OneTimeSaleTest()
+    public async Task SaleWithConsumerFeeTest()
     {
-        // Create request for credit card fee
-        var feeRequest = PaywireRequestFactory.Sale(
+        // Test credit card sale with consumer fee enabled
+        var cardSaleRequest = PaywireRequestFactory.Sale(
             new TransactionHeader
             {
                 PWSALEAMOUNT = 20.00,
@@ -280,7 +319,7 @@ public class CreditCardTests : BaseTests
                 PWMEDIA = "CC",
                 CARDNUMBER = 4012301230123010,
                 CVV2 = "123",
-                EXP_YY = "25",
+                EXP_YY = "27",
                 EXP_MM = "12",
                 FIRSTNAME = "CHRIS",
                 LASTNAME = "FROSTY",
@@ -295,11 +334,11 @@ public class CreditCardTests : BaseTests
                 PWCUSTOMID1 = "123Test"
             });
 
-        // Create request for check fee
-        var feeRequestCheck = PaywireRequestFactory.Sale(
+        // Test check (ACH) sale with consumer fee enabled
+        var checkSaleRequest = PaywireRequestFactory.Sale(
             new TransactionHeader
             {
-                PWSALEAMOUNT = 15,
+                PWSALEAMOUNT = 15.00,
                 DISABLECF = "FALSE"
             },
             new Customer
@@ -322,12 +361,40 @@ public class CreditCardTests : BaseTests
                 ZIP = "14094"
             });
 
-        // Create free request
-        var freeRequest = PaywireRequestFactory.Sale(
+        // Execute requests
+        var cardSaleResponse = await CLIENT.SendRequest<SaleResponse>(cardSaleRequest);
+        var checkSaleResponse = await CLIENT.SendRequest<SaleResponse>(checkSaleRequest);
+
+        // Store for subsequent tests
+        if (cardSaleResponse.RESULT == PaywireResult.Approval)
+        {
+            UNIQUE_ID = cardSaleResponse.PWUNIQUEID;
+            INVOICE_NUMBER = cardSaleResponse.PWINVOICENUMBER;
+            BATCH_ID = cardSaleResponse.BATCHID;
+            SALE_AMOUNT = cardSaleResponse.PWSALEAMOUNT;
+            TOKEN = cardSaleResponse.PWTOKEN;
+        }
+
+        // Assertions
+        Assert.That(cardSaleResponse.RESULT, Is.EqualTo(PaywireResult.Approval),
+            $"Card sale failed: {cardSaleResponse.RESTEXT}");
+        Assert.That(checkSaleResponse.RESULT, Is.EqualTo(PaywireResult.Approval),
+            $"Check sale failed: {checkSaleResponse.RESTEXT}");
+
+        // Verify consumer fee was applied (PWADJAMOUNT should be non-"0" for this merchant)
+        Assert.That(cardSaleResponse.PWADJAMOUNT, Is.Not.EqualTo("0"),
+            $"Expected consumer fee to be applied to card sale, got PWADJAMOUNT: {cardSaleResponse.PWADJAMOUNT}");
+    }
+
+    [Test, Order(6), Category("Credit Card")]
+    public async Task SaleWithoutConsumerFeeTest()
+    {
+        // Test sale with consumer fee disabled
+        var request = PaywireRequestFactory.Sale(
             new TransactionHeader
             {
-                PWSALEAMOUNT = 0.05,
-                DISABLECF = "FALSE"
+                PWSALEAMOUNT = 10.00,
+                DISABLECF = "TRUE"
             },
             new Customer
             {
@@ -335,11 +402,10 @@ public class CreditCardTests : BaseTests
                 PWMEDIA = "CC",
                 CARDNUMBER = 4012301230123010,
                 CVV2 = "123",
-                EXP_YY = "25",
+                EXP_YY = "27",
                 EXP_MM = "12",
                 FIRSTNAME = "CHRIS",
                 LASTNAME = "FROSTY",
-                PRIMARYPHONE = "7035551212",
                 EMAIL = "CFFROST@EMAILADDRESS.COM",
                 ADDRESS1 = "123",
                 CITY = "NORWALK",
@@ -347,45 +413,17 @@ public class CreditCardTests : BaseTests
                 ZIP = "06850"
             });
 
-        // Execute requests with timing
-        var stopwatch = Stopwatch.StartNew();
-        var res = await CLIENT.SendRequest<SaleResponse>(feeRequestCheck);
-        var feeResult = await CLIENT.SendRequest<SaleResponse>(feeRequest);
-        
-        if (feeResult.RESULT == PaywireResult.Approval)
-        {
-            UNIQUE_ID = feeResult.PWUNIQUEID;
-            INVOICE_NUMBER = feeResult.PWINVOICENUMBER;
-            BATCH_ID = feeResult.BATCHID;
-            SALE_AMOUNT = feeResult.PWSALEAMOUNT;
-            TOKEN = feeResult.PWTOKEN;
-        }
-        
-        // Create and execute pre-auth request
-        var preAuthRequest = PaywireRequestFactory.PreAuth(
-            new TransactionHeader
-            {
-                PWSALEAMOUNT = 10.0,
-                PWINVOICENUMBER = INVOICE_NUMBER
-            },
-            new Customer
-            {
-                PWMEDIA = "CC",
-                CARDNUMBER = 4012301230123010,
-                EXP_YY = "25",
-                EXP_MM = "12"
-            });
+        var response = await CLIENT.SendRequest<SaleResponse>(request);
 
-        var preAuthResponse = await CLIENT.SendRequest<PreAuthResponse>(preAuthRequest);
-        var freeResult = await CLIENT.SendRequest<SaleResponse>(freeRequest);
-        stopwatch.Stop();
-
-        // Assertions
-        Assert.That(feeResult.RESULT, Is.EqualTo(PaywireResult.Approval));
-        Assert.That(freeResult.RESULT, Is.EqualTo(PaywireResult.Declined));
+        Assert.That(response.RESULT, Is.EqualTo(PaywireResult.Approval),
+            $"Sale without consumer fee failed: {response.RESTEXT}");
+        // With DISABLECF=TRUE, PWADJAMOUNT should be "0" or "0.00"
+        var hasNoFee = response.PWADJAMOUNT == "0" || response.PWADJAMOUNT == "0.00";
+        Assert.That(hasNoFee, Is.True,
+            $"Expected no consumer fee when DISABLECF=TRUE, got PWADJAMOUNT: {response.PWADJAMOUNT}");
     }
 
-    [Test, Order(6), Category("Credit Card")]
+    [Test, Order(8), Category("Credit Card")]
     public async Task CheckSaleTest()
     {
         var request = PaywireRequestFactory.OneTimeCheckPayment(
@@ -414,7 +452,7 @@ public class CreditCardTests : BaseTests
         Assert.That(response.RESULT, Is.EqualTo(PaywireResult.Approval));
     }
 
-    [Test, Order(7), Category("Credit Card")]
+    [Test, Order(10), Category("Credit Card")]
     public async Task CardnumberCreditTest()
     {
         var request = PaywireRequestFactory.Credit(
@@ -424,7 +462,7 @@ public class CreditCardTests : BaseTests
                 PWINVOICENUMBER = INVOICE_NUMBER,
                 CARDNUMBER = "4012301230123010",
                 EXP_MM = "12",
-                EXP_YY = "25"
+                EXP_YY = "27"
             },
             new Customer
             {
@@ -436,7 +474,7 @@ public class CreditCardTests : BaseTests
         Assert.That(response.RESULT, Is.EqualTo(PaywireResult.Approval));
     }
 
-    [Test, Order(8), Category("Credit Card")]
+    [Test, Order(10), Category("Credit Card")]
     public async Task AccountNumberCreditTest()
     {
         var request = PaywireRequestFactory.Credit(
@@ -458,9 +496,12 @@ public class CreditCardTests : BaseTests
         Assert.That(response.RESULT, Is.EqualTo(PaywireResult.Approval));
     }
 
-    [Test, Order(9), Category("Credit Card")]
+    [Test, Order(11), Category("Credit Card")]
     public async Task VoidTest()
     {
+        Assert.That(string.IsNullOrEmpty(SALE_AMOUNT), Is.False, "SALE_AMOUNT is required for this test - previous test may have failed");
+        Assert.That(string.IsNullOrEmpty(UNIQUE_ID), Is.False, "UNIQUE_ID is required for this test - previous test may have failed");
+
         var request = PaywireRequestFactory.Void(
             Convert.ToDouble(SALE_AMOUNT), INVOICE_NUMBER, UNIQUE_ID);
         var response = await CLIENT.SendRequest<VoidResponse>(request);
@@ -468,7 +509,7 @@ public class CreditCardTests : BaseTests
         Assert.That(response.RESULT, Is.EqualTo(PaywireResult.Approval));
     }
 
-    [Test, Order(10)]
+    [Test, Order(12), Category("Credit Card")]
     public async Task PreAuthTest()
     {
         var request = PaywireRequestFactory.PreAuth(
@@ -485,7 +526,7 @@ public class CreditCardTests : BaseTests
                 PWMEDIA = "CC",
                 CARDNUMBER = 4012301230123010,
                 CVV2 = "123",
-                EXP_YY = "25",
+                EXP_YY = "27",
                 EXP_MM = "12",
                 FIRSTNAME = "CHRIS",
                 LASTNAME = "FROSTY",
@@ -510,7 +551,7 @@ public class CreditCardTests : BaseTests
         Assert.That(response.RESULT, Is.EqualTo(PaywireResult.Approval));
     }
 
-    [Test, Order(11), Category("Credit Card")]
+    [Test, Order(13), Category("Credit Card")]
     public async Task CaptureTest()
     {
         var request = PaywireRequestFactory.Capture(

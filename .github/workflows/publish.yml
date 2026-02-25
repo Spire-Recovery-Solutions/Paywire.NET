@@ -5,7 +5,8 @@ permissions:
 on:
   push:
     branches:
-      - main  # Trigger the workflow on push to main branch
+      - main
+      - alpha
 
 jobs:
   build:
@@ -18,7 +19,16 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
-        
+
+    - name: Set Branch-Specific Variables
+      id: branch_vars
+      run: |
+        if [[ "${{ github.ref }}" == "refs/heads/alpha" ]]; then
+          echo "version_postfix=-alpha" >> $GITHUB_ENV
+        else
+          echo "version_postfix=" >> $GITHUB_ENV
+        fi
+
     - name: Build
       run: |
         cd Paywire.NET
@@ -26,20 +36,20 @@ jobs:
         dotnet build --configuration Release --no-restore
 
     - name: Test
-      run: | 
+      run: |
         cd Paywire.NET.Tests
         dotnet test
-      env: 
+      env:
         PWCLIENTID: ${{ secrets.PWCLIENTID }}
         PWUSER: ${{ secrets.PWUSER }}
         PWKEY: ${{ secrets.PWKEY }}
-        PWPASS: ${{ secrets.PWPASS }}        
+        PWPASS: ${{ secrets.PWPASS }}
 
     - name: Pack
       run: |
         cd Paywire.NET
         # Use GitHub Run Number as the Build number in the version
-        dotnet pack --configuration Release --no-restore --output nupkg /p:Version=1.0.0.${{ github.run_number }}
+        dotnet pack --configuration Release --no-restore --output nupkg /p:Version=1.0.0.${{ github.run_number }}${{ env.version_postfix }}
 
     - name: Push to NuGet
       run: |

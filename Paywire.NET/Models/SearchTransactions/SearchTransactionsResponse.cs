@@ -64,5 +64,21 @@ public class PaywirePaymentDetail
     public string SETTLEMENTDATE { get; set; } //              2021-01-12</SETTLEMENTDATE
     public string RESPONSETEXT { get; set; } //         CVV2 Mismatch</RESPONSETEXT>
     public string DESCRIPTION { get; set; } //            Transaction custom description message.
+    /// <summary>
+    /// Original transaction ID for VOID/CREDIT transactions.
+    /// </summary>
+    public string ORGTRANSID { get; set; }
+    /// <summary>
+    /// Paywire customer identifier.
+    /// </summary>
+    public string CUSTOMERID { get; set; }
+    /// <summary>
+    /// ACH split-fee identifier.
+    /// </summary>
+    public string PWCUSTOMID3 { get; set; }
+    /// <summary>
+    /// Periodic payment indicator: C = Customer-initiated, I = Initial, R = Recurring, T = Installment.
+    /// </summary>
+    public string POSINDICATOR { get; set; }
 
 }
