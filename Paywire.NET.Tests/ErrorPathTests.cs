@@ -35,7 +35,7 @@ public class ErrorPathTests : BaseTests
             new Customer
             {
                 PWMEDIA = "CC",
-                CARDNUMBER = 4012301230123010,
+                CARDNUMBER = 4111111111111111,
                 CVV2 = "123",
                 EXP_YY = "20",
                 EXP_MM = "01",
@@ -58,7 +58,7 @@ public class ErrorPathTests : BaseTests
                 PWMEDIA = "CC",
                 CARDNUMBER = 1111111111111111,
                 CVV2 = "123",
-                EXP_YY = "27",
+                EXP_YY = "30",
                 EXP_MM = "12",
                 FIRSTNAME = "TEST",
                 LASTNAME = "BADCARD",

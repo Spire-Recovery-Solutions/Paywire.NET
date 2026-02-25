@@ -30,7 +30,7 @@ public class TokenTests : BaseTests
     [Test, Order(2), Category("Token")]
     public async Task StoreTokenTest()
     {
-        var request = PaywireRequestFactory.StoreCreditCardToken(10.00, 4012301230123010, "12", "27", "123");
+        var request = PaywireRequestFactory.StoreCreditCardToken(10.00, 4111111111111111, "12", "30", "123");
         var response = await CLIENT.SendRequest<StoreTokenResponse>(request);
 
         if (response.RESULT == PaywireResult.Approval)
@@ -53,9 +53,9 @@ public class TokenTests : BaseTests
             {
                 PWTOKEN = TOKEN,
                 PWMEDIA = "CC",
-                CARDNUMBER = 4012301230123010,
+                CARDNUMBER = 4111111111111111,
                 CVV2 = "123",
-                EXP_YY = "27",
+                EXP_YY = "30",
                 EXP_MM = "12",
                 FIRSTNAME = "CHRIS",
                 LASTNAME = "FROSTY",

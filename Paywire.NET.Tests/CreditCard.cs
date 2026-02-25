@@ -27,9 +27,9 @@ public class CreditCardTests : BaseTests
         {
             REQUESTTOKEN = "TRUE",
             PWMEDIA = "CC",
-            CARDNUMBER = 4012301230123010,
+            CARDNUMBER = 4111111111111111,
             CVV2 = "123",
-            EXP_YY = "27",
+            EXP_YY = "30",
             EXP_MM = "07",
             FIRSTNAME = "John",
             LASTNAME = "Doe",
@@ -55,7 +55,7 @@ public class CreditCardTests : BaseTests
         Assert.That(string.IsNullOrEmpty(SALE_AMOUNT), Is.False, "SALE_AMOUNT is required for this test - previous test may have failed");
 
         var request = PaywireRequestFactory.Verification(
-            Convert.ToDouble(SALE_AMOUNT), 4012301230123010, "07", "27", "123");
+            Convert.ToDouble(SALE_AMOUNT), 4111111111111111, "07", "30", "123");
         var response = await CLIENT.SendRequest<VerificationResponse>(request);
         
         if (response.RESULT == PaywireResult.Approval)
@@ -117,9 +117,9 @@ public class CreditCardTests : BaseTests
             {
                 REQUESTTOKEN = "TRUE",
                 PWMEDIA = "CC",
-                CARDNUMBER = 4012301230123010,
+                CARDNUMBER = 4111111111111111,
                 CVV2 = "123",
-                EXP_YY = "27",
+                EXP_YY = "30",
                 EXP_MM = "12",
                 ADJTAXRATE = Convert.ToDouble("7"),
                 FIRSTNAME = "CHRIS",
@@ -170,9 +170,9 @@ public class CreditCardTests : BaseTests
             {
                 REQUESTTOKEN = "TRUE",
                 PWMEDIA = "CC",
-                CARDNUMBER = 4012301230123010,
+                CARDNUMBER = 4111111111111111,
                 CVV2 = "123",
-                EXP_YY = "27",
+                EXP_YY = "30",
                 EXP_MM = "12",
                 ADJTAXRATE = Convert.ToDouble("7"),
                 FIRSTNAME = "CHRIS",
@@ -249,9 +249,9 @@ public class CreditCardTests : BaseTests
             {
                 REQUESTTOKEN = "TRUE",
                 PWMEDIA = "CC",
-                CARDNUMBER = 4012301230123010,
+                CARDNUMBER = 4111111111111111,
                 CVV2 = "123",
-                EXP_YY = "27",
+                EXP_YY = "30",
                 EXP_MM = "12",
                 ADJTAXRATE = Convert.ToDouble("7"),
                 FIRSTNAME = "CHRIS",
@@ -317,9 +317,9 @@ public class CreditCardTests : BaseTests
                 REQUESTTOKEN = "FALSE",
                 DESCRIPTION = "Description",
                 PWMEDIA = "CC",
-                CARDNUMBER = 4012301230123010,
+                CARDNUMBER = 4111111111111111,
                 CVV2 = "123",
-                EXP_YY = "27",
+                EXP_YY = "30",
                 EXP_MM = "12",
                 FIRSTNAME = "CHRIS",
                 LASTNAME = "FROSTY",
@@ -400,9 +400,9 @@ public class CreditCardTests : BaseTests
             {
                 REQUESTTOKEN = "FALSE",
                 PWMEDIA = "CC",
-                CARDNUMBER = 4012301230123010,
+                CARDNUMBER = 4111111111111111,
                 CVV2 = "123",
-                EXP_YY = "27",
+                EXP_YY = "30",
                 EXP_MM = "12",
                 FIRSTNAME = "CHRIS",
                 LASTNAME = "FROSTY",
@@ -460,9 +460,9 @@ public class CreditCardTests : BaseTests
             {
                 PWSALEAMOUNT = 0.1,
                 PWINVOICENUMBER = INVOICE_NUMBER,
-                CARDNUMBER = "4012301230123010",
+                CARDNUMBER = "4111111111111111",
                 EXP_MM = "12",
-                EXP_YY = "27"
+                EXP_YY = "30"
             },
             new Customer
             {
@@ -536,9 +536,9 @@ public class CreditCardTests : BaseTests
                 REQUESTTOKEN = "FALSE",
                 DESCRIPTION = "Description",
                 PWMEDIA = "CC",
-                CARDNUMBER = 4012301230123010,
+                CARDNUMBER = 4111111111111111,
                 CVV2 = "123",
-                EXP_YY = "27",
+                EXP_YY = "30",
                 EXP_MM = "12",
                 FIRSTNAME = "CHRIS",
                 LASTNAME = "FROSTY",

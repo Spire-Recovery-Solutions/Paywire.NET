@@ -5,61 +5,61 @@ public class Customer
     /// <summary>
     /// Customer's company name.
     /// </summary>
-    public string COMPANYNAME { get; set; } = string.Empty;
+    public string? COMPANYNAME { get; set; }
 
     /// <summary>
     /// Account Holder's Full Name
     /// </summary>
-    public string CUSTOMERNAME { get; set; } = string.Empty;
+    public string? CUSTOMERNAME { get; set; }
     /// <summary>
     /// Account Holder's first name (required for RCC).
     /// </summary>
-    public string FIRSTNAME { get; set; } = string.Empty;
+    public string? FIRSTNAME { get; set; }
     /// <summary>
     /// Account Holder's last name (required for RCC).
     /// </summary>
-    public string LASTNAME { get; set; } = string.Empty;
+    public string? LASTNAME { get; set; }
     /// <summary>
     /// Account Holder's primary address (required for RCC).
     /// </summary>
-    public string ADDRESS1 { get; set; } = string.Empty;
+    public string? ADDRESS1 { get; set; }
 
     /// <summary>
     /// Account Holder's secondary address (required for RCC).
     /// </summary>
-    public string ADDRESS2 {  get; set; } = string.Empty;
+    public string? ADDRESS2 { get; set; }
     /// <summary>
     /// Account Holder's city of residence (required for RCC).
     /// </summary>
-    public string CITY { get; set; } = string.Empty;
+    public string? CITY { get; set; }
 
     /// <summary>
     /// Account Holder's state of residence. Required if configured with Convenience Fees (required for RCC).
     /// </summary>
-    public string STATE { get; set; } = string.Empty;
+    public string? STATE { get; set; }
     /// <summary>
     /// Account Holder's country of residence (required for RCC).
     /// </summary>
-    public string COUNTRY { get; set; } = string.Empty;
+    public string? COUNTRY { get; set; }
     /// <summary>
     /// Account Holder's address postal/zip code (required for RCC) See important note on Zip Codes.
     /// </summary>
-    public string ZIP { get; set; } = string.Empty;
+    public string? ZIP { get; set; }
     /// <summary>
     /// Account Holder's email address.
     /// </summary>
-    public string EMAIL { get; set; } = string.Empty;
+    public string? EMAIL { get; set; }
     /// <summary>
     /// Account Holder's primary phone number.
     /// </summary>
-    public string PRIMARYPHONE { get; set; } = string.Empty;
+    public string? PRIMARYPHONE { get; set; }
 
 
-    public string WORKPHONE { get; set; } = string.Empty;
+    public string? WORKPHONE { get; set; }
     /// <summary>
     /// Defines the payment method.	Fixed options: CC and ECHECK.
     /// </summary>
-    public string PWMEDIA { get; set; } = string.Empty;
+    public string? PWMEDIA { get; set; }
     /// <summary>
     /// Card number to process payment with. Required only when CC is submitted in PWMEDIA.
     /// </summary>
@@ -91,11 +91,11 @@ public class Customer
     /// <summary>
     /// Creates a token and returns a PWTOKEN in the response when set to TRUE. By default, when not submitted, a PWTOKEN is returned when CC is submitted in PWMEDIA but not for ECHECK.
     /// </summary>
-    public string REQUESTTOKEN { get; set; } = string.Empty;
+    public string? REQUESTTOKEN { get; set; }
     /// <summary>
     /// SEC Code for ECHECK payments.
     /// </summary>
-    public string SECCODE { get; set; } = string.Empty;
+    public string? SECCODE { get; set; }
     /// <summary>
     /// Overrides the configured Sales Tax rate.
     /// </summary>
@@ -103,15 +103,15 @@ public class Customer
     /// <summary>
     /// Transaction custom description message.
     /// </summary>
-    public string DESCRIPTION { get; set; } = string.Empty;
+    public string? DESCRIPTION { get; set; }
     /// <summary>
     /// External Customer ID.
     /// </summary>
-    public string EXTCID { get; set; } = string.Empty;
+    public string? EXTCID { get; set; }
     /// <summary>
     /// Paywire Customer Identifier. When submitted, the created token will be associated with this customer.
     /// </summary>
-    public string PWCID { get; set; } = string.Empty;
+    public string? PWCID { get; set; }
     /// <summary>
     /// Unique token representing a customer's card or account details stored on the Paywire Gateway.
     /// </summary>
@@ -119,37 +119,37 @@ public class Customer
     /// <summary>
     /// The unique ID assigned by Paywire associated with this transaction.
     /// </summary>
-    public string PWUNIQUEID { get; set; } = string.Empty;
+    public string? PWUNIQUEID { get; set; }
 
 
-    public string POSINDICATOR { get; set; } = string.Empty;
+    public string? POSINDICATOR { get; set; }
 
     /// <summary>
     /// The number of installments when the payment is initiated by the merchant.
     /// </summary>
-    public string TOTALINSTALLMENTS { get; set; } = string.Empty;
+    public string? TOTALINSTALLMENTS { get; set; }
     /// <summary>
     /// Document number. For Brazilians, the expected document will be C.P.F. or CNPJ - Data format can be 023.472.201-01 or 02347220101.
     /// </summary>
-    public string BR_DOCUMENT { get; set; } = string.Empty;
+    public string? BR_DOCUMENT { get; set; }
     /// <summary>
     /// Available for PWCTRANSTYPE = 2 or 4, default is TRUE, Set to FALSE to allow the customer to decide to save the token or not.
     /// </summary>
-    public string FORCESAVETOKEN { get; set; } = string.Empty;
+    public string? FORCESAVETOKEN { get; set; }
     /// <summary>
     /// For store token - if TRUE will create a customer in the Paywire Vault asociated with the returned token and return the corresponding PWCID.
     /// </summary>
-    public string ADDCUSTOMER { get; set; } = string.Empty;
+    public string? ADDCUSTOMER { get; set; }
     /// <summary>
     /// The first 6 ~ 8 digits of the card number.
     /// </summary>
-    public string BINNUMBER { get; set; } = string.Empty;
+    public string? BINNUMBER { get; set; }
 
     /// <summary>
     ///
     /// </summary>
-    public string PWCTRANSTYPE { get; set; } = string.Empty;
+    public string? PWCTRANSTYPE { get; set; }
 
-    public string PWCUSTOMID1 { get; set; } = string.Empty;
+    public string? PWCUSTOMID1 { get; set; }
 
 }
