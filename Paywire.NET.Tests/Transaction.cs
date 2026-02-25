@@ -190,9 +190,9 @@ public class TransactionTests : BaseTests
             new Customer
             {
                 PWMEDIA = "CC",
-                CARDNUMBER = 4012301230123010,
+                CARDNUMBER = 4111111111111111,
                 EXP_MM = "12",
-                EXP_YY = "27",
+                EXP_YY = "30",
                 CVV2 = "123",
                 FIRSTNAME = "CHRIS",
                 LASTNAME = "FROSTY",

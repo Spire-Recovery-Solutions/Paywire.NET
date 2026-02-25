@@ -37,9 +37,9 @@ public class ExpandedIntegrationTests : BaseTests
     {
         var request = PaywireRequestFactory.OneTimeCardPayment(
             saleAmount: 10.00,
-            cardNumber: 4012301230123010,
+            cardNumber: 4111111111111111,
             expMm: "12",
-            expYy: "27",
+            expYy: "30",
             cvv2: "123",
             firstName: "TEST",
             lastName: "USER",
@@ -62,7 +62,7 @@ public class ExpandedIntegrationTests : BaseTests
     {
         // First store a token
         var storeRequest = PaywireRequestFactory.StoreCreditCardToken(
-            10.00, 4012301230123010, "12", "27", "123");
+            10.00, 4111111111111111, "12", "30", "123");
         var storeResponse = await CLIENT.SendRequest<StoreTokenResponse>(storeRequest);
 
         Assert.That(storeResponse.RESULT, Is.EqualTo(PaywireResult.Approval),
@@ -82,7 +82,7 @@ public class ExpandedIntegrationTests : BaseTests
     public async Task PreAuthSimpleTest()
     {
         var request = PaywireRequestFactory.PreAuth(
-            5.00, "NY", 4012301230123010, "12", "27", "123");
+            5.00, "NY", 4111111111111111, "12", "30", "123");
         var response = await CLIENT.SendRequest<PreAuthResponse>(request);
 
         Assert.That(response.RESULT, Is.EqualTo(PaywireResult.Approval),
@@ -98,7 +98,7 @@ public class ExpandedIntegrationTests : BaseTests
             {
                 DATE_FROM = DateTimeOffset.Now.AddDays(-30),
                 DATE_TO = DateTimeOffset.Now.AddDays(1),
-                COND_LASTFOUR = "3010",
+                COND_LASTFOUR = "1111",
                 COND_TRANSTYPE = "ALL",
                 COND_CARDTYPE = "ALL"
             });
@@ -109,10 +109,10 @@ public class ExpandedIntegrationTests : BaseTests
             $"SearchByLastFour failed: {response.RESTEXT}");
         Assert.That(response.SEARCH_RESULTS, Is.Not.Null, "SEARCH_RESULTS should not be null");
         Assert.That(response.SEARCH_RESULTS.PAYMENT_DETAILS, Is.Not.Null.And.Not.Empty,
-            "Expected results when searching by last four digits '3010'");
+            "Expected results when searching by last four digits '1111'");
 
         TestContext.WriteLine(
-            $"Found {response.SEARCH_RESULTS.PAYMENT_DETAILS.Length} transactions with last four '3010'");
+            $"Found {response.SEARCH_RESULTS.PAYMENT_DETAILS.Length} transactions with last four '1111'");
     }
 
     [Test, Order(6), Category("Search")]
@@ -121,9 +121,9 @@ public class ExpandedIntegrationTests : BaseTests
         // Do a sale first to get a known invoice number
         var saleRequest = PaywireRequestFactory.OneTimeCardPayment(
             saleAmount: 10.00,
-            cardNumber: 4012301230123010,
+            cardNumber: 4111111111111111,
             expMm: "12",
-            expYy: "27",
+            expYy: "30",
             cvv2: "123",
             firstName: "TEST",
             lastName: "SEARCH",
