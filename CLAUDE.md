@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Paywire.NET is a .NET 8.0 SDK for integrating with the Paywire payment processing API. It provides a strongly-typed, async-first client library with comprehensive support for all Paywire operations.
+Paywire.NET is a .NET 10 SDK for integrating with the Paywire payment processing API. It provides a strongly-typed, async-first client library with comprehensive support for all Paywire operations.
 
 Paywire is Payscout's proprietary payment platform that handles simple and complex payment needs. The API accepts XML requests via HTTP POST and supports various transaction types including sales, voids, credits, pre-authorizations, and tokenization.
 
@@ -13,14 +13,8 @@ Paywire is Payscout's proprietary payment platform that handles simple and compl
 
 ## Environment Setup
 
-### .NET SDK Location
-The .NET SDK is located at `~/.dotnet`. If needed, add to PATH:
-```bash
-export PATH="$HOME/.dotnet:$PATH"
-```
-
 ### SDK Version
-The project uses .NET 8.0.400 (pinned in `global.json` with `latestPatch` rollForward policy).
+The project uses .NET 10.0.100 (pinned in `global.json` with `latestPatch` rollForward policy).
 
 ## Build and Test Commands
 
@@ -56,22 +50,23 @@ dotnet pack --configuration Release --no-restore --output nupkg /p:Version=1.0.0
 Paywire.NET/
 ├── .github/
 │   ├── workflows/
-│   │   └── publish.yml              # CI/CD: Build, test, NuGet publish
+│   │   ├── publish.yml              # CI/CD: Build, test, NuGet publish
+│   │   └── pr-check.yml            # PR checks: unit tests + coverage
 │   └── dependabot.yml               # Automated dependency updates
 ├── .gitignore
 ├── CLAUDE.md                        # This file
 ├── README.md                        # Usage documentation
 ├── LICENSE                          # GPL-3.0 License
-├── global.json                      # .NET SDK version pinning (8.0.400)
-├── generate-serializers.sh          # Optional XML serializer generation script
+├── global.json                      # .NET SDK version pinning (10.0.100)
 ├── Paywire.NET/
 │   ├── Paywire.NET.sln              # Solution file
 │   ├── Paywire.NET.csproj           # Main project file
-│   ├── PaywireClient.cs             # Core API client (202 lines)
+│   ├── PaywireClient.cs             # Core API client (189 lines)
+│   ├── IPaywireClient.cs            # Client interface for DI/testing
 │   ├── PaywireClientOptions.cs      # Configuration + PaywireEndpoint enum
 │   ├── PaywireTransactionType.cs    # Transaction type constants (19 types)
 │   ├── Factories/
-│   │   └── PaywireRequestFactory.cs # Factory methods (592 lines, 25+ methods)
+│   │   └── PaywireRequestFactory.cs # Factory methods (593 lines, 25+ methods)
 │   └── Models/
 │       ├── Base/                    # Base classes and shared models
 │       │   ├── BasePaywireRequest.cs
@@ -102,14 +97,21 @@ Paywire.NET/
     ├── TokenTests.cs                # Token operations (Order 1)
     ├── CreditCard.cs                # Card transactions (Order 2)
     ├── Transaction.cs               # Transaction operations (Order 3)
-    └── Batch.cs                     # Batch operations (Order 4)
+    ├── Batch.cs                     # Batch operations (Order 4)
+    ├── ErrorPathTests.cs            # Negative/error path tests (Order 0)
+    ├── ExpandedIntegrationTests.cs  # ECHECK, search, token overloads (Order 5)
+    └── UnitTests/                   # Offline unit tests (no API needed)
+        ├── PaywireResultParsingTests.cs
+        ├── XmlSerializationTests.cs
+        ├── PaywireRequestFactoryTests.cs
+        └── TransactionTypeInferenceTests.cs
 ```
 
 ## Architecture and Code Organization
 
 ### Core Components
 
-1. **PaywireClient** (`Paywire.NET/PaywireClient.cs`): Main client class that handles all API communication. Uses RestSharp for HTTP operations with generic `SendRequest<T>()` method for type-safe requests. Includes automatic transaction type inference based on request class.
+1. **PaywireClient** (`Paywire.NET/PaywireClient.cs`): Main client class implementing `IPaywireClient`. Uses RestSharp for HTTP operations with generic `SendRequest<T>(request, CancellationToken)` method for type-safe requests. Includes automatic transaction type inference, XXE-safe XML deserialization (`DtdProcessing.Prohibit`, `XmlResolver = null`), a static `ConcurrentDictionary<Type, XmlSerializer>` cache to prevent memory leaks, and implements `IDisposable` to dispose the `RestClient`.
 
 2. **PaywireRequestFactory** (`Paywire.NET/Factories/PaywireRequestFactory.cs`): Static factory class with 25+ methods providing fluent interfaces to create all request types.
 
@@ -122,19 +124,23 @@ Paywire.NET/
 
 ### Key Patterns
 
-- **Generic Request Pattern**: `PaywireClient.SendRequest<T>()` handles all API calls generically
-- **Automatic Transaction Type Inference**: Client sets `PWTRANSACTIONTYPE` based on request class type (switch expression in `PaywireClient.cs:84-104`)
+- **Interface**: `IPaywireClient` for DI registration and testing
+- **Generic Request Pattern**: `PaywireClient.SendRequest<T>(request, ct)` handles all API calls generically with CancellationToken support
+- **Automatic Transaction Type Inference**: Client sets `PWTRANSACTIONTYPE` based on request class type (switch expression in `PaywireClient.cs`)
 - **XML Serialization**: All models serialize to/from XML using `System.Xml.Serialization` attributes
+- **Security**: XXE-safe deserialization with `DtdProcessing.Prohibit` and `XmlResolver = null`
+- **Memory Safety**: Static `ConcurrentDictionary<Type, XmlSerializer>` cache prevents OOM from dynamic assembly generation
 - **Factory Pattern**: All requests created through `PaywireRequestFactory` static methods
 - **Base Class Hierarchy**: `BasePaywireRequest` / `BasePaywireResponse` for common functionality
-- **Result Parsing**: Smart enum parsing with fallback (handles "APPROVED" vs "APPROVAL")
+- **Result Parsing**: Smart enum parsing with fallback (handles "APPROVED" vs "APPROVAL", "COMPLETED")
 - **Configuration**: Uses `PaywireClientOptions` with support for DI and configuration binding
+- **Disposable**: `PaywireClient` implements `IDisposable` to properly dispose `RestClient`
 
 ### Dependencies
 
 **Main Project (Paywire.NET)**:
 - RestSharp 112.1.0 - HTTP client library
-- Target Framework: .NET 8.0
+- Target Framework: .NET 10.0
 - Nullable: Enabled
 - ImplicitUsings: Enabled
 
@@ -165,35 +171,56 @@ Paywire.NET/
 
 ### Testing Approach
 
-Tests are **integration tests** that hit the actual Paywire staging API. They use **ordered execution** to maintain state across tests.
+The project has **57 unit tests** (no API needed) and **41 integration tests** (hit the Paywire staging API). Total: **98 tests**.
+
+**Unit Tests** (`UnitTests/` directory — run without credentials):
+
+| Test File | Tests | Purpose |
+|-----------|-------|---------|
+| `PaywireResultParsingTests.cs` | 13 | Enum parsing, fallbacks, unknown values |
+| `XmlSerializationTests.cs` | 9 | XML roundtrip, nullable handling, root attributes |
+| `PaywireRequestFactoryTests.cs` | 32 | Every factory overload's output fields |
+| `TransactionTypeInferenceTests.cs` | 3 | Request type → transaction type mapping |
+
+**Integration Tests** (require `PWCLIENTID`, `PWUSER`, `PWKEY`, `PWPASS`):
 
 | Test File | Order | Tests | Purpose |
 |-----------|-------|-------|---------|
+| `ErrorPathTests.cs` | 0 | 5 | Invalid credentials, expired card, timeout |
 | `TokenTests.cs` | 1 | 5 | GetAuthToken, StoreToken, TokenSale, TokenCredit, RemoveToken |
-| `CreditCard.cs` | 2 | 11 | Verification, ConsumerFee, Sale, Credit, Void, PreAuth, Capture |
-| `Transaction.cs` | 3 | 4 | SearchTransactions, Credit, SearchChargeback, SendReceipt |
+| `CreditCard.cs` | 2 | 12 | Verification, ConsumerFee, Sale, Credit, Void, PreAuth, Capture |
+| `Transaction.cs` | 3 | 6 | SearchTransactions, Credit, SearchChargeback, SendReceipt |
 | `Batch.cs` | 4 | 2 | BatchInquiry, CloseBatch |
+| `ExpandedIntegrationTests.cs` | 5 | 8 | ECHECK, search filters, token/preauth overloads |
 
 **Shared State** (in `BaseTests.cs`):
 - `CLIENT`, `TOKEN`, `UNIQUE_ID`, `INVOICE_NUMBER`, `BATCH_ID`, `SALE_AMOUNT`
 - `CREDIT_UNIQUE_ID`, `CREDIT_INVOICE_NUMBER`, `PRE_AUTH_UNIQUE_ID`, `PRE_AUTH_INVOICE_NUMBER`
 
+**Running unit tests only** (no credentials needed):
+```bash
+dotnet test --filter "FullyQualifiedName~UnitTests"
+```
+
 ## CI/CD Pipeline
 
-### GitHub Actions Workflow (`publish.yml`)
+### GitHub Actions Workflows
+
+**`publish.yml`** — Build, test, and publish to NuGet:
 - **Trigger**: Push to `main` or `alpha` branches
-- **Runner**: `ubuntu-latest`
-- **Steps**:
-  1. Checkout code
-  2. Setup .NET 8.0.x
-  3. Set version postfix (`-alpha` for alpha branch)
-  4. Build with Release configuration
-  5. Run tests (with Paywire credentials from secrets)
-  6. Pack NuGet with version `1.0.0.<run_number>` or `1.0.0.<run_number>-alpha`
-  7. Push to NuGet.org
+- **Runner**: `ubuntu-latest` with `timeout-minutes: 30`
+- **Concurrency**: `publish-${{ github.ref }}`, cancel-in-progress: false
+- **Steps**: Checkout (fetch-depth: 0) → Setup .NET 10.0.x → NuGet cache → Build → Test → Pack → Push to NuGet.org
+- **Version**: `1.0.0.<run_number>` (alpha branch appends `-alpha`)
+
+**`pr-check.yml`** — Unit tests on pull requests:
+- **Trigger**: `pull_request`
+- **Runs only unit tests**: `--filter "FullyQualifiedName~UnitTests"` (no API credentials needed)
+- **Artifacts**: Coverage report uploaded via `actions/upload-artifact`
+- **Note**: Only GitHub-owned and verified marketplace actions are allowed by repo policy
 
 **Required Secrets**:
-- `PWCLIENTID`, `PWUSER`, `PWKEY`, `PWPASS` - Test credentials
+- `PWCLIENTID`, `PWUSER`, `PWKEY`, `PWPASS` - Test credentials (publish workflow only)
 - `NUGET_API_KEY` - NuGet publish key
 
 ### Dependabot Configuration
@@ -225,7 +252,7 @@ Tests are **integration tests** that hit the actual Paywire staging API. They us
 
 ### Updating Dependencies
 
-When updating RestSharp or other dependencies, ensure compatibility with .NET 8.0 target framework. The project uses RestSharp 112.x which has different API than earlier versions.
+When updating RestSharp or other dependencies, ensure compatibility with the .NET 10.0 target framework. The project uses RestSharp 112.x which has different API than earlier versions.
 
 ## Known Issues and TODOs
 
@@ -242,28 +269,12 @@ Some transaction types defined in `PaywireTransactionType.cs` lack corresponding
 ### Obsolete Properties
 In `ConsumerFeeSummary.cs`, `CDDESCRIPTIONVPOS` and `CDDESCRIPTIONOSBP` are marked obsolete due to XML parsing issues with embedded line breaks.
 
-## Microsoft.XmlSerializer.Generator Configuration
+## XML Serialization
 
-**Status**: The `Microsoft.XmlSerializer.Generator` package has been completely removed from the project due to persistent issues.
-
-1. **Issue Background**: The package had a [known issue](https://github.com/dotnet/runtime/issues/90913) where it fails with "Version for package could not be resolved" when multiple .NET runtime versions are installed. This caused GitHub Actions builds to fail with error NU5026.
-
-2. **Solution Implemented**:
-   - Removed `Microsoft.XmlSerializer.Generator` package reference entirely
-   - Added `<GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>` to prevent any automatic generation attempts
-   - The project now uses runtime serialization generation exclusively
-
-3. **Performance Impact**:
-   - Without pre-generated serializers, the first XML serialization of each type is slightly slower (~100ms)
-   - Subsequent serializations are unaffected (assemblies are cached in memory)
-   - Overall application performance impact is negligible
-
-4. **Optional Warm-up**: For production applications, consider warming up serializers during startup:
-   ```csharp
-   _ = new XmlSerializer(typeof(SaleRequest));
-   _ = new XmlSerializer(typeof(SaleResponse));
-   // Add other types you frequently use
-   ```
+- `Microsoft.XmlSerializer.Generator` was removed due to a [known issue](https://github.com/dotnet/runtime/issues/90913) with multi-runtime environments
+- `<GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>` is set in the csproj
+- `PaywireClient` maintains a static `ConcurrentDictionary<Type, XmlSerializer>` cache — serializers are created once per type and reused, so no manual warm-up is needed
+- XML deserialization uses a hardened `XmlReader` with `DtdProcessing.Prohibit` and `XmlResolver = null` (XXE protection)
 
 ## Paywire Transaction Types
 
