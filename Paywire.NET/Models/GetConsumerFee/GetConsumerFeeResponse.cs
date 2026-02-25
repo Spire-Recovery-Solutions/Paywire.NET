@@ -1,5 +1,4 @@
-﻿using System.Security.AccessControl;
-using System.Xml.Serialization;
+﻿using System.Xml.Serialization;
 using Paywire.NET.Models.Base;
 
 namespace Paywire.NET.Models.GetConsumerFee

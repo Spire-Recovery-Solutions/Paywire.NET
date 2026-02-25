@@ -25,7 +25,7 @@ public class BasePaywireResponse
 
             return RAW_RESULT.ToUpper() == "APPROVED" ? PaywireResult.Approval : PaywireResult.Unknown;
         }
-        set => throw new NotImplementedException();
+        set { }
     }
 
     /// <summary>
@@ -57,4 +57,6 @@ public class BasePaywireResponse
     /// Custom third-party id to be associated with this transaction.
     /// </summary>
     public string PWCUSTOMID1 {get; set; }
+
+    public string PWCUSTOMID2 { get; set; }
 }

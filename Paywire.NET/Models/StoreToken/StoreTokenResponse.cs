@@ -51,10 +51,6 @@ namespace Paywire.NET.Models.StoreToken
         /// </summary>
         /// <see cref="https://project.paywire.com/dbtranz/docs/OSBP/files/Development.html?csharp#avs-codes"/>
         public string AVSCODE { get; set; }
-        /// <summary>
-        /// Paywire Customer Identifier. Will be returned if ADDCUSTOMER is set to TRUE in the request.
-        /// </summary>
-        public string PWCID { get; set; }
 
     }
 }

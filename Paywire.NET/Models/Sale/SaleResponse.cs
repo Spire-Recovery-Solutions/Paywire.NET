@@ -84,7 +84,7 @@ public class SaleResponse : BasePaywireResponse
     /// <summary>
     /// Indicate if the card is a debit or credit card.
     /// </summary>
-    public bool ISDEBIT { get; set; }
+    public string ISDEBIT { get; set; }
     /// <summary>
     /// Processor decline code.
     /// </summary>
