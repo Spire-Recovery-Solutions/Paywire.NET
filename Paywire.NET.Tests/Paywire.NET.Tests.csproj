@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 
     <IsPackable>false</IsPackable>
     <UserSecretsId>c42e202c-dbf9-44b8-853d-723f967c9551</UserSecretsId>

@@ -1,4 +1,4 @@
-﻿using System.Xml.Serialization;
+using System.Xml.Serialization;
 using Paywire.NET.Models.Base;
 
 namespace Paywire.NET.Models.Verification
@@ -6,9 +6,9 @@ namespace Paywire.NET.Models.Verification
     public class VerificationRequest : BasePaywireRequest
     {
         [XmlElement("CUSTOMER")]
-        public Customer CUSTOMER { get; set; }
+        public Customer CUSTOMER { get; set; } = new();
         /*
-        
+
          * PWSALEAMOUNT	int/decimal	Amount of the transaction. [In TransactionHeader]
          *
          * REQUESTTOKEN 	Returns a PWTOKEN in the response when set to TRUE.

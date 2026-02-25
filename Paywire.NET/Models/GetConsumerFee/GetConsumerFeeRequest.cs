@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,7 +15,7 @@ namespace Paywire.NET.Models.GetConsumerFee
     public class GetConsumerFeeRequest : BasePaywireRequest
     {
         //Customer Object
-        [XmlElement("CUSTOMER")] public Customer CUSTOMER { get; set; } // Put the shit below into this... 
+        [XmlElement("CUSTOMER")] public Customer CUSTOMER { get; set; } = new();
 
 
         /*
@@ -26,7 +26,7 @@ namespace Paywire.NET.Models.GetConsumerFee
          * DISABLECF		                bool	    Overrides applying a Cash Discount or Convenience Fee when set to TRUE, if configured. Note that Sales Tax will also be disabled.	Default: FALSE
          * ADJTAXRATE		                decimal	    Overrides the configured Sales Tax rate.
          * PWTOKEN		                    string	    When submitted, returns customer or token details in the response.
-         * STATE	            x           string	    Account Holder's state of residence. Required if configured with Convenience Fees.	
+         * STATE	            x           string	    Account Holder's state of residence. Required if configured with Convenience Fees.
          */
     }
 }

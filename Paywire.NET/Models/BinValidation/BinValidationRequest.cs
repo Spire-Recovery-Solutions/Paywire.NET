@@ -1,4 +1,4 @@
-﻿using Paywire.NET.Models.Base;
+using Paywire.NET.Models.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +11,6 @@ namespace Paywire.NET.Models.BinValidation
     public class BinValidationRequest : BasePaywireRequest
     {
         [XmlElement("CUSTOMER")]
-        public Customer CUSTOMER { get; set; }
+        public Customer CUSTOMER { get; set; } = new();
     }
 }

@@ -1,4 +1,4 @@
-﻿using System.Xml.Serialization;
+using System.Xml.Serialization;
 using Paywire.NET.Models.Base;
 
 namespace Paywire.NET.Models.SearchTransactions;
@@ -6,7 +6,7 @@ namespace Paywire.NET.Models.SearchTransactions;
 public class SearchTransactionsRequest : BasePaywireRequest
 {
     [XmlElement("SEARCHCONDITION")]
-    public SearchCondition SEARCH_CONDITION { get; set; }
+    public SearchCondition SEARCH_CONDITION { get; set; } = new();
 }
 
 public class SearchCondition
@@ -34,5 +34,5 @@ public class SearchCondition
     public string? COND_PWCUSTOMID1 { get; set; }
     public string? COND_PWCUSTOMID3 { get; set; }
     public string? COND_CBTYPE { get; set; }
-    public string COND_INSTITUTION { get; set; }
+    public string COND_INSTITUTION { get; set; } = string.Empty;
 }

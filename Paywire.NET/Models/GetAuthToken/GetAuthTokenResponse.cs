@@ -1,4 +1,4 @@
-﻿using System.Xml.Serialization;
+using System.Xml.Serialization;
 using Paywire.NET.Models.Base;
 
 namespace Paywire.NET.Models.GetAuthToken;
@@ -10,7 +10,7 @@ namespace Paywire.NET.Models.GetAuthToken;
 public class GetAuthTokenResponse : BasePaywireResponse
 {
     /// <summary>
-    /// The Authentication Token to be used when calling the OSBP.	
+    /// The Authentication Token to be used when calling the OSBP.
     /// </summary>
-    public string AUTHTOKEN { get; set; }
+    public string AUTHTOKEN { get; set; } = string.Empty;
 }
