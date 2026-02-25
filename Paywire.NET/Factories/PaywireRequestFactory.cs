@@ -114,6 +114,7 @@ namespace Paywire.NET.Factories
                 TRANSACTION_HEADER = new TransactionHeader { PWSALEAMOUNT = saleAmount },
                 CUSTOMER = new Customer
                 {
+                    PWMEDIA = "CC",
                     STATE = payorState,
                     CARDNUMBER = cardNumber,
                     CVV2 = cvv2,
@@ -310,7 +311,7 @@ namespace Paywire.NET.Factories
         /// <param name="state"></param>
         /// <param name="disablecf"></param>
         /// <returns></returns>
-        public static TokenSaleRequest TokenSale(double saleAmount, string token, string state, string disablecf = "FALSE")
+        public static TokenSaleRequest TokenSale(double saleAmount, string token, string state, string media = "CC", string disablecf = "FALSE")
         {
             return new TokenSaleRequest
             {
@@ -321,6 +322,7 @@ namespace Paywire.NET.Factories
                 },
                 CUSTOMER = new Customer
                 {
+                    PWMEDIA = media,
                     PWTOKEN = token,
                     STATE = state
                 }

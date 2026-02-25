@@ -72,14 +72,24 @@ public class XmlSerializationTests
     }
 
     [Test]
-    public void Customer_AdjTaxRate_DefaultSerializes()
+    public void Customer_AdjTaxRate_NullableOmittedWhenNull()
     {
         var customer = new Customer { FIRSTNAME = "Test" };
 
         var xml = Serialize(customer);
 
-        // ADJTAXRATE is a double (default 0.0) so it should always be serialized
-        Assert.That(xml, Does.Contain("<ADJTAXRATE>0</ADJTAXRATE>"));
+        // ADJTAXRATE is double? — when null (default), it should not serialize a value
+        Assert.That(xml, Does.Not.Contain("<ADJTAXRATE>0</ADJTAXRATE>"));
+    }
+
+    [Test]
+    public void Customer_AdjTaxRate_SerializedWhenSet()
+    {
+        var customer = new Customer { FIRSTNAME = "Test", ADJTAXRATE = 7.5 };
+
+        var xml = Serialize(customer);
+
+        Assert.That(xml, Does.Contain("<ADJTAXRATE>7.5</ADJTAXRATE>"));
     }
 
     [Test]

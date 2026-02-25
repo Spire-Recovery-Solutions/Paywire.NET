@@ -5,8 +5,6 @@ on:
 
 permissions:
   contents: read
-  checks: write
-  pull-requests: write
 
 concurrency:
   group: pr-${{ github.event.pull_request.number }}
@@ -44,14 +42,6 @@ jobs:
       run: |
         cd Paywire.NET.Tests
         dotnet test --no-restore --logger "trx;LogFileName=test-results.trx" --collect:"XPlat Code Coverage" --filter "FullyQualifiedName~UnitTests"
-
-    - name: Test Report
-      uses: dorny/test-reporter@v1
-      if: always()
-      with:
-        name: Unit Tests
-        path: Paywire.NET.Tests/TestResults/*.trx
-        reporter: dotnet-trx
 
     - name: Upload coverage
       uses: actions/upload-artifact@v4
