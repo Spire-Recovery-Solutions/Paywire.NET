@@ -46,7 +46,7 @@ jobs:
         dotnet test --no-restore --logger "trx;LogFileName=test-results.trx" --collect:"XPlat Code Coverage" --filter "FullyQualifiedName~UnitTests"
 
     - name: Test Report
-      uses: dorny/test-reporter@v1
+      uses: dorny/test-reporter@v2
       if: always()
       with:
         name: Unit Tests
