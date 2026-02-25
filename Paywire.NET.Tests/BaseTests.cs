@@ -43,20 +43,5 @@ public abstract class BaseTests
             AUTHENTICATION_PASSWORD = config["PWPASS"] ?? throw new InvalidOperationException("PWPASS not found in configuration"),
             ENDPOINT = PaywireEndpoint.Staging
         });
-
-        // Optional additional configuration example:
-        // Client = new PaywireClient(
-        //     new PaywireClientOptions
-        //     {
-        //         AuthenticationClientId = config["PWCLIENTID"],
-        //         AuthenticationUsername = config["PWUSER"],
-        //         AuthenticationKey = config["PWKEY"],
-        //         AuthenticationPassword = config["PWPASS"],
-        //         Endpoint = PaywireEndpoint.Staging
-        //     },
-        //     enableLogging: true,
-        //     useHttpClientFactory: true,
-        //     timeoutMilliseconds: 30000
-        // );
     }
 }
