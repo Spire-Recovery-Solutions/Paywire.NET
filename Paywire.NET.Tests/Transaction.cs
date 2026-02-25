@@ -205,7 +205,23 @@ public class TransactionTests : BaseTests
             $"Credit failed. RESULT: {response.RESULT}, RESTEXT: {response.RESTEXT}");
     }
     
-    [Test, Order(5), Category("Search")]
+    [Test, Order(5), Category("Credit Card")]
+    public async Task OverCreditTest()
+    {
+        // Try to credit more than a reasonable amount without a matching transaction
+        var request = PaywireRequestFactory.Credit(
+            new TransactionHeader
+            {
+                PWSALEAMOUNT = 999999.99,
+                PWINVOICENUMBER = "NONEXISTENT"
+            },
+            new Customer { PWMEDIA = "CC" });
+        var response = await CLIENT.SendRequest<CreditResponse>(request);
+        // Should not get approved for a massive credit on a nonexistent invoice
+        Assert.That(response.RESULT, Is.Not.EqualTo(PaywireResult.Approval).Or.EqualTo(PaywireResult.Error));
+    }
+
+    [Test, Order(6), Category("Search")]
     public async Task SearchChargebackTest()
     {
         var request = PaywireRequestFactory.SearchChargeback(
@@ -229,7 +245,7 @@ public class TransactionTests : BaseTests
         Assert.That(response.RESULT, Is.EqualTo(PaywireResult.Success));
     }
     
-    [Test, Order(6), Category("Receipt")]
+    [Test, Order(7), Category("Receipt")]
     public async Task SendReceiptTest()
     {
         var request = PaywireRequestFactory.SendReceipt(

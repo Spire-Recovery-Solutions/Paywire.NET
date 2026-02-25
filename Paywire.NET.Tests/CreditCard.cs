@@ -474,7 +474,7 @@ public class CreditCardTests : BaseTests
         Assert.That(response.RESULT, Is.EqualTo(PaywireResult.Approval));
     }
 
-    [Test, Order(10), Category("Credit Card")]
+    [Test, Order(9), Category("Credit Card")]
     public async Task AccountNumberCreditTest()
     {
         var request = PaywireRequestFactory.Credit(
@@ -507,6 +507,18 @@ public class CreditCardTests : BaseTests
         var response = await CLIENT.SendRequest<VoidResponse>(request);
 
         Assert.That(response.RESULT, Is.EqualTo(PaywireResult.Approval));
+    }
+
+    [Test, Order(14), Category("Credit Card")]
+    public async Task DoubleVoidTest()
+    {
+        Assert.That(string.IsNullOrEmpty(UNIQUE_ID), Is.False, "UNIQUE_ID required");
+        // Try voiding the already-voided transaction
+        var request = PaywireRequestFactory.Void(
+            Convert.ToDouble(SALE_AMOUNT), INVOICE_NUMBER, UNIQUE_ID);
+        var response = await CLIENT.SendRequest<VoidResponse>(request);
+        Assert.That(response.RESULT, Is.Not.EqualTo(PaywireResult.Approval),
+            "Double void should not succeed");
     }
 
     [Test, Order(12), Category("Credit Card")]
