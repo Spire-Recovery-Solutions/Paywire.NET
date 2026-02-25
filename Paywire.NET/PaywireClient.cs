@@ -4,6 +4,7 @@ using System;
 using System.Collections.Concurrent;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
@@ -27,8 +28,9 @@ using Paywire.NET.Models.Void;
 
 namespace Paywire.NET
 {
-    public class PaywireClient
+    public class PaywireClient : IPaywireClient
     {
+        private bool _disposed;
         private readonly PaywireClientOptions _paywireClientOptions;
         private readonly RestClient _restClient;
         private readonly TimeSpan _defaultTimeout = TimeSpan.FromSeconds(30);
@@ -71,8 +73,10 @@ namespace Paywire.NET
             // if (useHttpClientFactory) { ... }
         }
         
-        public async Task<T> SendRequest<T>(BasePaywireRequest request) where T : BasePaywireResponse, new()
+        public async Task<T> SendRequest<T>(BasePaywireRequest request, CancellationToken cancellationToken = default) where T : BasePaywireResponse, new()
         {
+            ObjectDisposedException.ThrowIf(_disposed, this);
+
             try
             {
                 // Setup request headers
@@ -109,7 +113,7 @@ namespace Paywire.NET
                 // Setup and execute request
                 var restRequest = new RestRequest("/API/pwapi", Method.Post);
                 restRequest.AddXmlBody(request);
-                var response = await _restClient.ExecuteAsync(restRequest);
+                var response = await _restClient.ExecuteAsync(restRequest, cancellationToken);
                 
                 // Initialize default response
                 var returnResponse = new T();
@@ -184,6 +188,22 @@ namespace Paywire.NET
                 
                 return errorResponse;
             }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed) return;
+            if (disposing)
+            {
+                _restClient?.Dispose();
+            }
+            _disposed = true;
         }
 
         /// <summary>
