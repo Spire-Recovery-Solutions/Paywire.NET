@@ -1,9 +1,11 @@
 ﻿using Paywire.NET.Models.Base;
 using RestSharp;
 using System;
+using System.Collections.Concurrent;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml;
 using System.Xml.Serialization;
 using Paywire.NET.Models.BatchInquiry;
 using Paywire.NET.Models.BinValidation;
@@ -30,6 +32,7 @@ namespace Paywire.NET
         private readonly PaywireClientOptions _paywireClientOptions;
         private readonly RestClient _restClient;
         private readonly TimeSpan _defaultTimeout = TimeSpan.FromSeconds(30);
+        private static readonly ConcurrentDictionary<Type, XmlSerializer> _serializerCache = new();
 
         public PaywireClient(PaywireClientOptions options)
         {
@@ -123,13 +126,7 @@ namespace Paywire.NET
                 }
 
                 // Setup XML deserialization
-                var emptyNamespace = new XmlSerializerNamespaces();
-                emptyNamespace.Add("", "");
-                
-                var xmlSerializer = new XmlSerializer(
-                    typeof(T), 
-                    new XmlRootAttribute("PAYMENTRESPONSE") { Namespace = "" }
-                );
+                var xmlSerializer = _serializerCache.GetOrAdd(typeof(T), t => new XmlSerializer(t, new XmlRootAttribute("PAYMENTRESPONSE") { Namespace = "" }));
 
                 // Handle response content
                 if (!string.IsNullOrEmpty(response.Content))
@@ -137,7 +134,13 @@ namespace Paywire.NET
                     try
                     {
                         using TextReader textReader = new StringReader(response.Content);
-                        var deserializedResponse = (T)xmlSerializer.Deserialize(textReader);
+                        var xmlSettings = new XmlReaderSettings
+                        {
+                            DtdProcessing = DtdProcessing.Prohibit,
+                            XmlResolver = null
+                        };
+                        using var xmlReader = XmlReader.Create(textReader, xmlSettings);
+                        var deserializedResponse = (T)xmlSerializer.Deserialize(xmlReader);
                         
                         if (deserializedResponse != null)
                         {
