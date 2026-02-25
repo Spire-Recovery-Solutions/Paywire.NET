@@ -8,17 +8,31 @@ on:
       - main
       - alpha
 
+concurrency:
+  group: publish-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 10.0.x
+
+    - name: Cache NuGet packages
+      uses: actions/cache@v4
+      with:
+        path: ~/.nuget/packages
+        key: nuget-${{ hashFiles('**/*.csproj') }}
+        restore-keys: nuget-
 
     - name: Set Branch-Specific Variables
       id: branch_vars
@@ -38,7 +52,7 @@ jobs:
     - name: Test
       run: |
         cd Paywire.NET.Tests
-        dotnet test
+        dotnet test --no-restore
       env:
         PWCLIENTID: ${{ secrets.PWCLIENTID }}
         PWUSER: ${{ secrets.PWUSER }}
@@ -54,4 +68,4 @@ jobs:
     - name: Push to NuGet
       run: |
         cd Paywire.NET
-        dotnet nuget push nupkg/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
+        dotnet nuget push nupkg/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
