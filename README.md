@@ -58,15 +58,26 @@ var request = PaywireRequestFactory.Sale(
 
 ### Decrypted Path
 
-If you decrypt the wallet payload yourself, use the decrypted fields instead:
+If you decrypt the wallet payload yourself, provide the card fields in `Customer` and the authentication fields in `DigitalWallet`:
 
 ```csharp
-var wallet = new DigitalWallet
-{
-    DWTYPE = "G",
-    ISTDES = "TRUE",
-    CAVV = "CAVV_DATA_HERE",
-    ECI = "05",
-    UCAF = "UCAF_INDICATOR"   // MasterCard only
-};
+var request = PaywireRequestFactory.Sale(
+    header: new TransactionHeader { PWSALEAMOUNT = 50.00 },
+    customer: new Customer
+    {
+        PWMEDIA = "CC",
+        CARDNUMBER = 4111111111111111,
+        EXP_MM = "12",
+        EXP_YY = "25",
+        STATE = "NY"
+    },
+    digitalWallet: new DigitalWallet
+    {
+        DWTYPE = "G",
+        ISTDES = "TRUE",
+        CAVV = "CAVV_DATA_HERE",
+        ECI = "05",
+        UCAF = "UCAF_INDICATOR"   // MasterCard only
+    }
+);
 ```
