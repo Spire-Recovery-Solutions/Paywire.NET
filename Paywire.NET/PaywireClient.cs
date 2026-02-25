@@ -30,7 +30,6 @@ namespace Paywire.NET
 {
     public class PaywireClient : IPaywireClient
     {
-        private bool _disposed;
         private readonly PaywireClientOptions _paywireClientOptions;
         private readonly RestClient _restClient;
         private readonly TimeSpan _defaultTimeout = TimeSpan.FromSeconds(30);
@@ -50,33 +49,8 @@ namespace Paywire.NET
             _restClient = new RestClient(restClientOptions);
         }
 
-        public PaywireClient(PaywireClientOptions options, bool enableLogging = false, bool useHttpClientFactory = false, int? timeoutMilliseconds = null)
+        public async Task<T> SendRequest<T>(BasePaywireRequest request, CancellationToken ct = default) where T : BasePaywireResponse, new()
         {
-            _paywireClientOptions = options;
-            var endpointUrl = GetEndpointUrl(options.ENDPOINT);
-            var timeout = timeoutMilliseconds.HasValue 
-                ? TimeSpan.FromMilliseconds(timeoutMilliseconds.Value) 
-                : _defaultTimeout;
-                
-            var restClientOptions = new RestClientOptions(endpointUrl)
-            {
-                // Don't throw on errors so we can properly handle API error responses
-                ThrowOnAnyError = false,
-                ThrowOnDeserializationError = false, 
-                Timeout = timeout,
-            };
-            
-            _restClient = new RestClient(restClientOptions);
-            
-            // Additional configuration could be applied here if needed
-            // if (enableLogging) { ... }
-            // if (useHttpClientFactory) { ... }
-        }
-        
-        public async Task<T> SendRequest<T>(BasePaywireRequest request, CancellationToken cancellationToken = default) where T : BasePaywireResponse, new()
-        {
-            ObjectDisposedException.ThrowIf(_disposed, this);
-
             try
             {
                 // Setup request headers
@@ -113,7 +87,7 @@ namespace Paywire.NET
                 // Setup and execute request
                 var restRequest = new RestRequest("/API/pwapi", Method.Post);
                 restRequest.AddXmlBody(request);
-                var response = await _restClient.ExecuteAsync(restRequest, cancellationToken);
+                var response = await _restClient.ExecuteAsync(restRequest, ct);
                 
                 // Initialize default response
                 var returnResponse = new T();
@@ -176,6 +150,7 @@ namespace Paywire.NET
 
                 return returnResponse;
             }
+            catch (OperationCanceledException) { throw; }
             catch (Exception ex)
             {
                 // Catch-all for any unexpected errors
@@ -192,18 +167,8 @@ namespace Paywire.NET
 
         public void Dispose()
         {
-            Dispose(true);
+            _restClient?.Dispose();
             GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (_disposed) return;
-            if (disposing)
-            {
-                _restClient?.Dispose();
-            }
-            _disposed = true;
         }
 
         /// <summary>
