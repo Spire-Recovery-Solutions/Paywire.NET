@@ -299,4 +299,68 @@ public class PaywireRequestFactoryTests
         var request = PaywireRequestFactory.StoreToken(header, customer);
         Assert.That(request.CUSTOMER.CARDNUMBER, Is.EqualTo(4111111111111111));
     }
+
+    [Test]
+    public void DigitalWalletSale_SetsWalletFields()
+    {
+        var request = PaywireRequestFactory.DigitalWalletSale(25.00, "A", "PAYLOAD123", firstName: "John", state: "TX");
+        Assert.That(request.DIGITAL_WALLET, Is.Not.Null);
+        Assert.That(request.DIGITAL_WALLET!.DWTYPE, Is.EqualTo("A"));
+        Assert.That(request.DIGITAL_WALLET.DWPAYLOAD, Is.EqualTo("PAYLOAD123"));
+        Assert.That(request.CUSTOMER.PWMEDIA, Is.EqualTo("CC"));
+        Assert.That(request.TRANSACTION_HEADER.PWSALEAMOUNT, Is.EqualTo(25.00));
+        Assert.That(request.CUSTOMER.FIRSTNAME, Is.EqualTo("John"));
+        Assert.That(request.CUSTOMER.STATE, Is.EqualTo("TX"));
+    }
+
+    [Test]
+    public void DigitalWalletSale_DoesNotSetCardFields()
+    {
+        var request = PaywireRequestFactory.DigitalWalletSale(10.00, "G", "PAY_DATA");
+        Assert.That(request.CUSTOMER.CARDNUMBER, Is.Null);
+        Assert.That(request.CUSTOMER.EXP_MM, Is.Null);
+        Assert.That(request.CUSTOMER.EXP_YY, Is.Null);
+        Assert.That(request.CUSTOMER.CVV2, Is.Null);
+    }
+
+    [Test]
+    public void DigitalWalletPreAuth_SetsWalletFields()
+    {
+        var request = PaywireRequestFactory.DigitalWalletPreAuth(50.00, "G", "GPAY_PAYLOAD", firstName: "Jane", state: "CA");
+        Assert.That(request.DIGITAL_WALLET, Is.Not.Null);
+        Assert.That(request.DIGITAL_WALLET!.DWTYPE, Is.EqualTo("G"));
+        Assert.That(request.DIGITAL_WALLET.DWPAYLOAD, Is.EqualTo("GPAY_PAYLOAD"));
+        Assert.That(request.CUSTOMER.PWMEDIA, Is.EqualTo("CC"));
+        Assert.That(request.TRANSACTION_HEADER.PWSALEAMOUNT, Is.EqualTo(50.00));
+    }
+
+    [Test]
+    public void Sale_WithDigitalWallet_SetsAllThreeGroups()
+    {
+        var header = new TransactionHeader { PWSALEAMOUNT = 99.00 };
+        var customer = new Customer { PWMEDIA = "CC", STATE = "NY" };
+        var wallet = new DigitalWallet { DWTYPE = "A", DWPAYLOAD = "APPLE_DATA" };
+        var request = PaywireRequestFactory.Sale(header, customer, wallet);
+        Assert.That(request.TRANSACTION_HEADER.PWSALEAMOUNT, Is.EqualTo(99.00));
+        Assert.That(request.CUSTOMER.PWMEDIA, Is.EqualTo("CC"));
+        Assert.That(request.CUSTOMER.STATE, Is.EqualTo("NY"));
+        Assert.That(request.DIGITAL_WALLET, Is.Not.Null);
+        Assert.That(request.DIGITAL_WALLET!.DWTYPE, Is.EqualTo("A"));
+        Assert.That(request.DIGITAL_WALLET.DWPAYLOAD, Is.EqualTo("APPLE_DATA"));
+    }
+
+    [Test]
+    public void PreAuth_WithDigitalWallet_SetsAllThreeGroups()
+    {
+        var header = new TransactionHeader { PWSALEAMOUNT = 200.00 };
+        var customer = new Customer { PWMEDIA = "CC", STATE = "FL" };
+        var wallet = new DigitalWallet { DWTYPE = "G", DWPAYLOAD = "GOOGLE_DATA" };
+        var request = PaywireRequestFactory.PreAuth(header, customer, wallet);
+        Assert.That(request.TRANSACTION_HEADER.PWSALEAMOUNT, Is.EqualTo(200.00));
+        Assert.That(request.CUSTOMER.PWMEDIA, Is.EqualTo("CC"));
+        Assert.That(request.CUSTOMER.STATE, Is.EqualTo("FL"));
+        Assert.That(request.DIGITAL_WALLET, Is.Not.Null);
+        Assert.That(request.DIGITAL_WALLET!.DWTYPE, Is.EqualTo("G"));
+        Assert.That(request.DIGITAL_WALLET.DWPAYLOAD, Is.EqualTo("GOOGLE_DATA"));
+    }
 }
